@@ -3,8 +3,6 @@ import { StyleSheet, View } from "react-native";
 
 import { ExternalLink } from "./ExternalLink";
 
-import Colors from "@/src/constants/Colors";
-
 import { Text } from "react-native-paper";
 
 export default function EditScreenInfo({ path }: { path: string }) {

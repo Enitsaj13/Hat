@@ -3,9 +3,9 @@ import { Link, Tabs } from "expo-router";
 import React from "react";
 import { Pressable } from "react-native";
 
-import Colors from "@/src/constants/Colors";
 import { useTheme } from "react-native-paper";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { useClientOnlyValue } from "@hooks/useClientOnlyValue";
+import { MaterialBottomTabs } from "@components/MaterialBottomTabs";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -19,18 +19,22 @@ export default function TabLayout() {
   const theme = useTheme();
 
   return (
-    <Tabs
-      screenOptions={{
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}
+    <MaterialBottomTabs
+      screenOptions={
+        {
+          // Disable the static render of the header on web
+          // to prevent a hydration error in React Navigation v6.
+          headerShown: useClientOnlyValue(false, true),
+        } as any
+      }
     >
-      <Tabs.Screen
+      <MaterialBottomTabs.Screen
         name="index"
         options={{
           title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => (
+            <TabBarIcon name="code" color={color} />
+          ),
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -46,13 +50,15 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      <MaterialBottomTabs.Screen
         name="two"
         options={{
           title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => (
+            <TabBarIcon name="code" color={color} />
+          ),
         }}
       />
-    </Tabs>
+    </MaterialBottomTabs>
   );
 }

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import EditScreenInfo from "@/src/components/EditScreenInfo";
+import EditScreenInfo from "@components/EditScreenInfo";
 
 import { Text } from "react-native-paper";
 
