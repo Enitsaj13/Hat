@@ -5,7 +5,7 @@
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
-    "ios": "expo run:ios",
+    "ios": "expo run:ios --device",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "prebuild": "npx expo prebuild",
@@ -14,7 +14,7 @@
     "lint": "eslint \"src/**/*.{js,jsx,json,md,ts,tsx}\" && prettier \"app/**/*.{js,jsx,json,md,ts,tsx}\" --check",
     "lint:fix": "eslint \"src/**/*.{js,jsx,json,md,ts,tsx}\" --fix && npm run format",
     "adb": "adb reverse tcp:9090 tcp:9090 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9001 tcp:9001 && adb reverse tcp:8081 tcp:8081",
-    "build:ios:sim": "eas build --profile preview --platform ios --local --device",
+    "build:ios:sim": "eas build --profile preview --platform ios --local",
     "build:ios:dev": "eas build --profile preview:device --platform ios --local",
     "build:ios:prod": "eas build --profile production --platform ios --local",
     "build:android:sim": "eas build --profile preview --platform android --local",
