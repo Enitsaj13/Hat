@@ -1,11 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link } from "expo-router";
+import { Link, Tabs } from "expo-router";
 import React from "react";
 import { Pressable } from "react-native";
 
 import { useTheme } from "react-native-paper";
 import { useClientOnlyValue } from "@hooks/useClientOnlyValue";
-import { MaterialBottomTabs } from "@components/MaterialBottomTabs";
+import { CombinedDefaultTheme } from "@theme/index";
+import { ThemeProvider } from "@react-navigation/native";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -19,16 +20,14 @@ export default function TabLayout() {
   const theme = useTheme();
 
   return (
-    <MaterialBottomTabs
-      screenOptions={
-        {
-          // Disable the static render of the header on web
-          // to prevent a hydration error in React Navigation v6.
-          headerShown: useClientOnlyValue(false, true),
-        } as any
-      }
+    <Tabs
+      screenOptions={{
+        // Disable the static render of the header on web
+        // to prevent a hydration error in React Navigation v6.
+        headerShown: useClientOnlyValue(false, true),
+      }}
     >
-      <MaterialBottomTabs.Screen
+      <Tabs.Screen
         name="index"
         options={{
           title: "Tab One",
@@ -50,7 +49,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <MaterialBottomTabs.Screen
+      <Tabs.Screen
         name="two"
         options={{
           title: "Tab Two",
@@ -59,6 +58,6 @@ export default function TabLayout() {
           ),
         }}
       />
-    </MaterialBottomTabs>
+    </Tabs>
   );
 }

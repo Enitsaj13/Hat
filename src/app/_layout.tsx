@@ -4,6 +4,8 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
+import { CombinedDefaultTheme } from "@theme/index";
+import { ThemeProvider } from "@react-navigation/native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,11 +45,13 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <PaperProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
+    <PaperProvider theme={CombinedDefaultTheme}>
+      <ThemeProvider value={CombinedDefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </ThemeProvider>
     </PaperProvider>
   );
 }

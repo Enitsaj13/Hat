@@ -21,6 +21,9 @@
       ],
       "@services/*": [
         "services/*"
+      ],
+      "@theme/*": [
+        "theme/*"
       ]
     }
   },
