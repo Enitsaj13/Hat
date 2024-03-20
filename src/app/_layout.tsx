@@ -4,13 +4,19 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
-import { CombinedDefaultTheme } from "@theme/index";
+import { breakpoints, CombinedDefaultTheme } from "@theme/index";
 import { ThemeProvider } from "@react-navigation/native";
+import {
+  UnistylesBreakpoints,
+  UnistylesRegistry,
+} from "react-native-unistyles";
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
+
+UnistylesRegistry.addBreakpoints(breakpoints);
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
