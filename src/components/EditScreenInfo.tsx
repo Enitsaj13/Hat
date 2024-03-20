@@ -1,9 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 
 import { ExternalLink } from "./ExternalLink";
-
-import { Text } from "react-native-paper";
 
 export default function EditScreenInfo({ path }: { path: string }) {
   return (

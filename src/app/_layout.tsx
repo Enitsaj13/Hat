@@ -1,11 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ThemeProvider } from "@react-navigation/native";
+import { breakpoints, CombinedDefaultTheme } from "@theme/index";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
-import { breakpoints, CombinedDefaultTheme } from "@theme/index";
-import { ThemeProvider } from "@react-navigation/native";
 import { UnistylesRegistry } from "react-native-unistyles";
 import "@i18n/index";
 

@@ -1,9 +1,7 @@
-import { StyleSheet, View } from "react-native";
-
 import EditScreenInfo from "@components/EditScreenInfo";
-
-import { Text } from "react-native-paper";
 import { i18n } from "@i18n/index";
+import { StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 
 export default function TabOneScreen() {
   return (
