@@ -5,8 +5,6 @@ import { Pressable } from "react-native";
 
 import { useTheme } from "react-native-paper";
 import { useClientOnlyValue } from "@hooks/useClientOnlyValue";
-import { CombinedDefaultTheme } from "@theme/index";
-import { ThemeProvider } from "@react-navigation/native";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {

@@ -6,10 +6,8 @@ import { useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
 import { breakpoints, CombinedDefaultTheme } from "@theme/index";
 import { ThemeProvider } from "@react-navigation/native";
-import {
-  UnistylesBreakpoints,
-  UnistylesRegistry,
-} from "react-native-unistyles";
+import { UnistylesRegistry } from "react-native-unistyles";
+import "@i18n/index";
 
 export {
   // Catch any errors thrown by the Layout component.

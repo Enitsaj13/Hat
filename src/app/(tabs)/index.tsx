@@ -3,11 +3,14 @@ import { StyleSheet, View } from "react-native";
 import EditScreenInfo from "@components/EditScreenInfo";
 
 import { Text } from "react-native-paper";
+import { i18n } from "@i18n/index";
 
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium">Tab One</Text>
+      <Text variant="headlineMedium">
+        Tab One {i18n.t("A1", { defaultValue: "Introduction" })}
+      </Text>
       <View style={styles.separator} />
       <EditScreenInfo path="app/(tabs)/index.tsx" />
     </View>
