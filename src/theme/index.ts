@@ -16,6 +16,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 });
 
 export const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
+// CombinedDefaultTheme.colors.background = "yellow"; // sample code to change background color
 export const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
 export const breakpoints = {
