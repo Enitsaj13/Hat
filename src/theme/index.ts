@@ -8,16 +8,24 @@ import {
   MD3DarkTheme,
   MD3LightTheme,
   adaptNavigationTheme,
+  MD3Theme,
 } from "react-native-paper";
+import { NavigationTheme } from "react-native-paper/lib/typescript/types";
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
   reactNavigationDark: NavigationDarkTheme,
 });
 
-export const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
+export const CombinedDefaultTheme: MD3Theme & NavigationTheme = merge(
+  MD3LightTheme,
+  LightTheme,
+);
 // CombinedDefaultTheme.colors.background = "yellow"; // sample code to change background color
-export const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
+export const CombinedDarkTheme: MD3Theme & NavigationTheme = merge(
+  MD3DarkTheme,
+  DarkTheme,
+);
 
 export const breakpoints = {
   xs: 0,
