@@ -1,4 +1,5 @@
 import DropdownListButton from "@components/DropdownList/index";
+import { i18n } from "@i18n/index";
 import React, { useState } from "react";
 import { Alert, View, Image, TouchableOpacity } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
@@ -20,7 +21,7 @@ const LoginScreen = () => {
       </View>
       <View style={styles.textInputContainer}>
         <TextInput
-          label="Email Address"
+          label={i18n.t("Q5", { defaultValue: "Email Address" })}
           value={email}
           keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
@@ -28,7 +29,7 @@ const LoginScreen = () => {
         />
 
         <TextInput
-          label="Password"
+          label={i18n.t("D2", { defaultValue: "Password" })}
           secureTextEntry
           value={password}
           onChangeText={(text) => setPassword(text)}
@@ -42,7 +43,7 @@ const LoginScreen = () => {
       </View>
       <View style={styles.languageContainer}>
         <Text variant="titleMedium" style={styles.languageText}>
-          Language
+          {i18n.t("D0", { defaultValue: "Language" })}
         </Text>
         <DropdownListButton
           options={[
@@ -60,7 +61,9 @@ const LoginScreen = () => {
       </View>
       <View style={styles.forgotPasswordContainer}>
         <TouchableOpacity activeOpacity={0.6}>
-          <Text variant="titleMedium">Forgot Password?</Text>
+          <Text variant="titleMedium">
+            {i18n.t("D5", { defaultValue: "Forgot Password?" })}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={{ marginTop: 20 }}>
