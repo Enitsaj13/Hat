@@ -1,5 +1,4 @@
 import {
-  NavigationContainer,
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
@@ -54,5 +53,5 @@ export const breakpoints = {
 type AppBreakpoints = typeof breakpoints;
 
 declare module "react-native-unistyles" {
-  export interface UnistylesBreakpoints extends AppBreakpoints {}
+  export interface UnistylesBreakpoints extends AppBreakpoints { }
 }

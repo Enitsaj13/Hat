@@ -14,7 +14,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <View style={styles.loginTitleContainer}>
         <Image
-          source={require('assets/images/hat-images/logo.png')}
+          source={require("assets/images/hat-images/logo.png")}
           style={{ width: 200, height: 100 }}
         />
       </View>
@@ -45,7 +45,17 @@ const LoginScreen = () => {
           Language
         </Text>
         <DropdownListButton
-          options={["English", "Bahasa Indonesia", "Czech", "Deutsch", "French", "Portugese", "Portugese BR", "Spanish", "Thai"]}
+          options={[
+            "English",
+            "Bahasa Indonesia",
+            "Czech",
+            "Deutsch",
+            "French",
+            "Portugese",
+            "Portugese BR",
+            "Spanish",
+            "Thai",
+          ]}
         />
       </View>
       <View style={styles.forgotPasswordContainer}>

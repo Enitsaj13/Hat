@@ -1,8 +1,8 @@
+import { i18n } from "@i18n/index";
 import React, { useState, FC } from "react";
 import { View, ScrollView } from "react-native";
 import { Button, Menu } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
-import { i18n } from "@i18n/index"
 
 interface DropdownListButtonProps {
   options: string[];
