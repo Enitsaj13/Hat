@@ -2,6 +2,7 @@ import EditScreenInfo from "@components/EditScreenInfo";
 import { i18n } from "@i18n/index";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 export default function TabOneScreen() {
   return (
@@ -11,6 +12,16 @@ export default function TabOneScreen() {
       </Text>
       <View style={styles.separator} />
       <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <BottomSheet snapPoints={["25%"]}>
+        <BottomSheetView
+          style={{
+            flex: 1,
+            alignItems: "center",
+          }}
+        >
+          <Text>Awesome 🎉</Text>
+        </BottomSheetView>
+      </BottomSheet>
     </View>
   );
 }
