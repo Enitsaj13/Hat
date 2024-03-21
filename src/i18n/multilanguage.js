@@ -2360,7 +2360,7 @@ export const translations = {
     SUM4: "Perdido y sin indicación no se pueden habilitar simultáneamente.",
   },
 
-  in: {
+  id: {
     A1: "Pendahuluan",
     A2: "Lewati",
     A3: "Apa yang diukur langsung diselesaikan.",

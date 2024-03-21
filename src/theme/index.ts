@@ -23,6 +23,7 @@ const colors = {
 
 const rnPaperLightTheme = { ...MD3LightTheme };
 rnPaperLightTheme.colors.onSurface = colors.textColor;
+rnPaperLightTheme.colors.onPrimary = "black";
 
 const navigationLightTheme = { ...LightTheme };
 navigationLightTheme.colors.background = colors.bgColor; // bg of the content child

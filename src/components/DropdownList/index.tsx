@@ -1,54 +1,62 @@
-import { i18n } from "@i18n/index";
 import React, { useState, FC } from "react";
 import { View, ScrollView } from "react-native";
 import { Button, Menu } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 
+type DropDownOption = {
+  key: string;
+  value: any;
+};
 interface DropdownListButtonProps {
-  options: string[];
+  options: DropDownOption[];
 }
 
-const DropdownListButton: FC<DropdownListButtonProps> = ({ options }) => {
+function DropdownListButton({ options }: DropdownListButtonProps) {
   const { styles } = useStyles(stylesheet);
 
   const [visible, setVisible] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(options[0]);
+  const [selectedValue, setSelectedValue] = useState<DropDownOption>(
+    options[0],
+  );
 
-  const openMenu = () => setVisible(true);
+  // const openMenu = () => setVisible(true);
 
-  const closeMenu = () => setVisible(false);
+  // const closeMenu = () => setVisible(false);
 
-  const handleOptionSelect = (option: string) => {
+  const handleOptionSelect = (option: DropDownOption) => {
     setSelectedValue(option);
     setVisible(false);
-    // Set the selected language
-    i18n.locale = option.toLowerCase(); // Assuming the options are language codes
   };
 
   return (
     <View style={styles.container}>
       <Menu
         visible={visible}
-        onDismiss={closeMenu}
+        onDismiss={setVisible.bind(null, false)}
         anchor={
-          <Button onPress={openMenu} mode="contained" icon="arrow-up">
-            {selectedValue}
+          <Button
+            onPress={setVisible.bind(null, true)}
+            mode="contained"
+            icon="arrow-up"
+          >
+            {selectedValue.value}
           </Button>
         }
       >
         <ScrollView showsVerticalScrollIndicator>
-          {options.map((option, index) => (
+          {options.map((option) => (
             <Menu.Item
-              key={index}
+              titleStyle={{ color: "black" }}
+              key={option.key}
               onPress={() => handleOptionSelect(option)}
-              title={option}
+              title={option.value}
             />
           ))}
         </ScrollView>
       </Menu>
     </View>
   );
-};
+}
 
 const stylesheet = createStyleSheet({
   container: {

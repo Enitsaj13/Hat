@@ -1,9 +1,21 @@
 import DropdownListButton from "@components/DropdownList/index";
 import { i18n } from "@i18n/index";
 import React, { useState } from "react";
-import { Alert, View, Image, TouchableOpacity } from "react-native";
+import { Alert, View, Image } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+
+const languages = [
+  { key: "en", value: "English" },
+  { key: "pt", value: "Portugese" },
+  { key: "fr", value: "French" },
+  { key: "de", value: "Deutsch" },
+  { key: "br", value: "Portugese BR" },
+  { key: "es", value: "Spanish" },
+  { key: "id", value: "Bahasa Indonesia" },
+  { key: "cs", value: "Czech" },
+  { key: "th", value: "Thai" },
+];
 
 const LoginScreen = () => {
   const { styles } = useStyles(stylesheet);
@@ -16,7 +28,7 @@ const LoginScreen = () => {
       <View style={styles.loginTitleContainer}>
         <Image
           source={require("@assets/images/hat-images/logo.png")}
-          style={{ width: 200, height: 100 }}
+          style={styles.loginLogoImage}
         />
       </View>
       <View style={styles.textInputContainer}>
@@ -27,7 +39,6 @@ const LoginScreen = () => {
           onChangeText={(text) => setEmail(text)}
           left={<TextInput.Icon icon="account" />}
         />
-
         <TextInput
           label={i18n.t("D2", { defaultValue: "Password" })}
           secureTextEntry
@@ -38,38 +49,24 @@ const LoginScreen = () => {
       </View>
       <View style={styles.loginButtonContainer}>
         <Button mode="contained" onPress={() => Alert.alert("Login")}>
-          LOGIN
+          {i18n.t("D3", { defaultValue: "LOGIN" })}
         </Button>
       </View>
       <View style={styles.languageContainer}>
         <Text variant="titleMedium" style={styles.languageText}>
           {i18n.t("D0", { defaultValue: "Language" })}
         </Text>
-        <DropdownListButton
-          options={[
-            "English",
-            "Bahasa Indonesia",
-            "Czech",
-            "Deutsch",
-            "French",
-            "Portugese",
-            "Portugese BR",
-            "Spanish",
-            "Thai",
-          ]}
-        />
+        <DropdownListButton options={languages} />
       </View>
       <View style={styles.forgotPasswordContainer}>
-        <TouchableOpacity activeOpacity={0.6}>
-          <Text variant="titleMedium">
-            {i18n.t("D5", { defaultValue: "Forgot Password?" })}
-          </Text>
-        </TouchableOpacity>
+        <Button mode="text">
+          {i18n.t("D5", { defaultValue: "Forgot Password?" })}
+        </Button>
       </View>
-      <View style={{ marginTop: 20 }}>
+      <View style={styles.footerImageContainer}>
         <Image
           source={require("@assets/images/hat-images/powered.png")}
-          style={{ width: 100, height: 40 }}
+          style={styles.footerImage}
         />
       </View>
     </View>
@@ -104,6 +101,17 @@ const stylesheet = createStyleSheet({
   },
   forgotPasswordContainer: {
     marginVertical: 20,
+  },
+  loginLogoImage: {
+    width: 200,
+    height: 100,
+  },
+  footerImageContainer: {
+    marginTop: 20,
+  },
+  footerImage: {
+    width: 100,
+    height: 40,
   },
 });
 
