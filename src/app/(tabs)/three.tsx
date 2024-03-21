@@ -14,7 +14,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <View style={styles.loginTitleContainer}>
         <Image
-          source={require("assets/images/hat-images/logo.png")}
+          source={require("@assets/images/hat-images/logo.png")}
           style={{ width: 200, height: 100 }}
         />
       </View>
@@ -65,7 +65,7 @@ const LoginScreen = () => {
       </View>
       <View style={{ marginTop: 20 }}>
         <Image
-          source={require("assets/images/hat-images/powered.png")}
+          source={require("@assets/images/hat-images/powered.png")}
           style={{ width: 100, height: 40 }}
         />
       </View>
