@@ -37,6 +37,7 @@ export default function TabLayout() {
                 {({ pressed }) => (
                   <FontAwesome
                     name="info-circle"
+                    color={theme.colors.primary}
                     size={25}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
