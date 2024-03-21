@@ -17,11 +17,25 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationDark: NavigationDarkTheme,
 });
 
+const colors = {
+  bgColor: "#01b482",
+  textColor: "white",
+};
+
+const rnPaperLightTheme = { ...MD3LightTheme };
+rnPaperLightTheme.colors.onSurface = colors.textColor;
+
+const navigationLightTheme = { ...LightTheme };
+navigationLightTheme.colors.background = colors.bgColor; // bg of the content child
+navigationLightTheme.colors.card = colors.bgColor; // header and tab colors
+navigationLightTheme.colors.primary = colors.textColor; // active tab color
+navigationLightTheme.colors.text = colors.textColor; // header text
+
 export const CombinedDefaultTheme: MD3Theme & NavigationTheme = merge(
-  MD3LightTheme,
-  LightTheme,
+  rnPaperLightTheme,
+  navigationLightTheme,
 );
-// CombinedDefaultTheme.colors.background = "yellow"; // sample code to change background color
+
 export const CombinedDarkTheme: MD3Theme & NavigationTheme = merge(
   MD3DarkTheme,
   DarkTheme,
