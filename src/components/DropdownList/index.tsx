@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
 import { Button, Menu } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";

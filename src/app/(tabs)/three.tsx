@@ -33,6 +33,8 @@ const LoginScreen = () => {
       </View>
       <View style={styles.textInputContainer}>
         <TextInput
+          textColor="black"
+          selectionColor="black"
           label={i18n.t("Q5", { defaultValue: "Email Address" })}
           value={email}
           keyboardType="email-address"
@@ -59,7 +61,7 @@ const LoginScreen = () => {
         <DropdownListButton options={languages} />
       </View>
       <View style={styles.forgotPasswordContainer}>
-        <Button mode="text">
+        <Button mode="text" onPress={() => Alert.alert("Forgot Password")}>
           {i18n.t("D5", { defaultValue: "Forgot Password?" })}
         </Button>
       </View>
@@ -78,7 +80,6 @@ const stylesheet = createStyleSheet({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#01b482",
   },
   loginTitleContainer: {
     marginBottom: 60,
