@@ -33,8 +33,6 @@ const LoginScreen = () => {
       </View>
       <View style={styles.textInputContainer}>
         <TextInput
-          textColor="black"
-          selectionColor="black"
           label={i18n.t("Q5", { defaultValue: "Email Address" })}
           value={email}
           keyboardType="email-address"
