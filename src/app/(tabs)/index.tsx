@@ -1,10 +1,19 @@
 import EditScreenInfo from "@components/EditScreenInfo";
 import { i18n } from "@i18n/index";
 import { StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { Text, useTheme } from "react-native-paper";
+import BottomSheet, {
+  BottomSheetModal,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { useEffect, useRef } from "react";
 
 export default function TabOneScreen() {
+  const theme = useTheme();
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  useEffect(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
   return (
     <View style={styles.container}>
       <Text variant="headlineMedium">
@@ -12,7 +21,11 @@ export default function TabOneScreen() {
       </Text>
       <View style={styles.separator} />
       <EditScreenInfo path="app/(tabs)/index.tsx" />
-      <BottomSheet snapPoints={["25%"]}>
+      <BottomSheetModal
+        snapPoints={["25%", "50%"]}
+        ref={bottomSheetModalRef}
+        backgroundStyle={{ backgroundColor: theme.colors.inverseSurface }}
+      >
         <BottomSheetView
           style={{
             flex: 1,
@@ -21,7 +34,7 @@ export default function TabOneScreen() {
         >
           <Text>Awesome 🎉</Text>
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheetModal>
     </View>
   );
 }
