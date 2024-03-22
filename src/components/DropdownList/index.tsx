@@ -19,10 +19,6 @@ function DropdownListButton({ options }: DropdownListButtonProps) {
     options[0],
   );
 
-  // const openMenu = () => setVisible(true);
-
-  // const closeMenu = () => setVisible(false);
-
   const handleOptionSelect = (option: DropDownOption) => {
     setSelectedValue(option);
     setVisible(false);
@@ -32,10 +28,10 @@ function DropdownListButton({ options }: DropdownListButtonProps) {
     <View style={styles.container}>
       <Menu
         visible={visible}
-        onDismiss={setVisible.bind(null, false)}
+        onDismiss={() => setVisible(false)}
         anchor={
           <Button
-            onPress={setVisible.bind(null, true)}
+            onPress={() => setVisible(true)}
             mode="contained"
             icon="arrow-up"
           >
