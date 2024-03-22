@@ -1,5 +1,4 @@
 import {
-  NavigationContainer,
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
@@ -24,6 +23,9 @@ const colors = {
 
 const rnPaperLightTheme = { ...MD3LightTheme };
 rnPaperLightTheme.colors.onSurface = colors.textColor;
+rnPaperLightTheme.colors.onPrimary = "black";
+rnPaperLightTheme.colors.onSurfaceVariant = colors.textColor;
+rnPaperLightTheme.colors.surfaceVariant = colors.bgColor;
 
 const navigationLightTheme = { ...LightTheme };
 navigationLightTheme.colors.background = colors.bgColor; // bg of the content child
