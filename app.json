@@ -17,14 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "hat.bbraun"
+      "bundleIdentifier": "ph.rocketspin.hat"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "hat.bbraun"
+      "package": "ph.rocketspin.hat"
     },
     "web": {
       "bundler": "metro",
