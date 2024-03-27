@@ -1,4 +1,4 @@
-import DropdownListButton from "@components/DropdownList/index";
+import DropdownListButton from "@components/DropdownList";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
 import { ILoginSchema, login, loginSchema } from "@services/login";
@@ -8,6 +8,9 @@ import { Controller, useForm } from "react-hook-form";
 import { Alert, View, Image } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { colors } from "@theme/index";
+import { useSession } from "../auth";
+import { router } from "expo-router";
 
 const languages = [
   { key: "en", value: "English" },
@@ -21,13 +24,14 @@ const languages = [
   { key: "th", value: "Thai" },
 ];
 
-const LoginScreen = () => {
+const SignInScreen = () => {
   const { styles } = useStyles(stylesheet);
+  const { signIn } = useSession();
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isLoading },
   } = useForm<ILoginSchema>({ resolver: yupResolver(loginSchema) });
 
   const onLoginPress = useCallback(async function (form: ILoginSchema) {
@@ -38,8 +42,8 @@ const LoginScreen = () => {
         result.messageFromServer || result.message,
       );
     } else {
-      // TODO redirect here to login stack
-      Alert.alert("Success", "TODO redirect here to login stack");
+      signIn(result.token!);
+      router.replace("/");
     }
   }, []);
 
@@ -84,7 +88,12 @@ const LoginScreen = () => {
         />
       </View>
       <View style={styles.loginButtonContainer}>
-        <Button mode="contained" onPress={handleSubmit(onLoginPress)}>
+        <Button
+          mode="contained"
+          onPress={handleSubmit(onLoginPress)}
+          loading={isLoading}
+          disabled={isLoading}
+        >
           {i18n.t("D3", { defaultValue: "LOGIN" })}
         </Button>
       </View>
@@ -114,6 +123,7 @@ const stylesheet = createStyleSheet({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: colors.bgColor, // TODO workaround as ThemeProvider does not work
   },
   loginTitleContainer: {
     marginBottom: 60,
@@ -150,4 +160,4 @@ const stylesheet = createStyleSheet({
   },
 });
 
-export default LoginScreen;
+export default SignInScreen;

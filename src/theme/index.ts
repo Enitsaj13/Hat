@@ -16,7 +16,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationDark: NavigationDarkTheme,
 });
 
-const colors = {
+export const colors = {
   bgColor: "#01b482",
   textColor: "white",
 };
