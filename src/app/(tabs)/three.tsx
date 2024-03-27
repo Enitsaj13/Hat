@@ -1,9 +1,13 @@
 import DropdownListButton from "@components/DropdownList/index";
 import { i18n } from "@i18n/index";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Alert, View, Image } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { Controller, useForm } from "react-hook-form";
+import { ILoginSchema, login, loginSchema } from "@services/login";
+import { yupResolver } from "@hookform/resolvers/yup";
+import isEmpty from "lodash.isempty";
 
 const languages = [
   { key: "en", value: "English" },
@@ -20,8 +24,24 @@ const languages = [
 const LoginScreen = () => {
   const { styles } = useStyles(stylesheet);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILoginSchema>({ resolver: yupResolver(loginSchema) });
+
+  const onLoginPress = useCallback(async function (form: ILoginSchema) {
+    const result = await login(form);
+    if (isEmpty(result.token)) {
+      Alert.alert(
+        i18n.t("S11", { defaultValue: "Failed" }),
+        result.messageFromServer,
+      );
+    } else {
+      // TODO redirect here to login stack
+      Alert.alert("Success", "TODO redirect here to login stack");
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -32,23 +52,39 @@ const LoginScreen = () => {
         />
       </View>
       <View style={styles.textInputContainer}>
-        <TextInput
-          label={i18n.t("Q5", { defaultValue: "Email Address" })}
-          value={email}
-          keyboardType="email-address"
-          onChangeText={(text) => setEmail(text)}
-          left={<TextInput.Icon icon="account" />}
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label={`${i18n.t("Q5", { defaultValue: "Email Address" })}${!isEmpty(errors.email?.message) ? " (" + errors.email?.message + ")" : ""}`}
+              value={value}
+              keyboardType="email-address"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              left={<TextInput.Icon icon="account" />}
+              error={!isEmpty(errors.email?.message)}
+            />
+          )}
+          name="email"
         />
-        <TextInput
-          label={i18n.t("D2", { defaultValue: "Password" })}
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          left={<TextInput.Icon icon="bottle-wine" />}
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label={`${i18n.t("D2", { defaultValue: "Password" })}${!isEmpty(errors.password?.message) ? " (" + errors.password?.message + ")" : ""}`}
+              secureTextEntry
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              left={<TextInput.Icon icon="bottle-wine" />}
+              error={!isEmpty(errors.password?.message)}
+            />
+          )}
+          name="password"
         />
       </View>
       <View style={styles.loginButtonContainer}>
-        <Button mode="contained" onPress={() => Alert.alert("Login")}>
+        <Button mode="contained" onPress={handleSubmit(onLoginPress)}>
           {i18n.t("D3", { defaultValue: "LOGIN" })}
         </Button>
       </View>
