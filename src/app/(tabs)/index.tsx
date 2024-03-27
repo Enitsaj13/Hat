@@ -1,12 +1,12 @@
 import EditScreenInfo from "@components/EditScreenInfo";
-import { i18n } from "@i18n/index";
-import { StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
 import BottomSheet, {
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import { i18n } from "@i18n/index";
 import { useEffect, useRef } from "react";
+import { StyleSheet, View } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 
 export default function TabOneScreen() {
   const theme = useTheme();

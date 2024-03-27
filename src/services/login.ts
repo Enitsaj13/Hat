@@ -1,14 +1,15 @@
+import { i18n } from "@i18n/index";
+import NetInfo from "@react-native-community/netinfo";
 import { axiosIntance } from "@services/axios";
 import { object, string } from "yup";
+
 import { UserJson, WorkerJson } from "../types";
-import { i18n } from "@i18n/index";
 
 export interface ILoginSchema {
   email: string;
   password: string;
 }
 
-// TODO error message here
 export const loginSchema = object({
   email: string()
     .required(
@@ -56,12 +57,21 @@ export interface LoginResult {
   token?: string;
   status: LoginStatus;
   messageFromServer?: string;
-  message: string;
+  message?: string;
 }
 
 export async function login(credentials: ILoginSchema): Promise<LoginResult> {
   await loginSchema.validate(credentials); // defensive programming to ensure users of this function does not pass invalid credentials
-  // TODO check internet connection here ADD31
+  const netState = await NetInfo.fetch();
+  if (!netState.isConnected) {
+    return {
+      status: LoginStatus.FAILED,
+      message: i18n.t("ADD31", {
+        defaultValue:
+          "Login: An error occurred while processing, Please try again.",
+      }),
+    };
+  }
 
   try {
     const result = await axiosIntance.postForm<LoginResponse>(
@@ -77,7 +87,6 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       return {
         status: LoginStatus.FAILED,
         messageFromServer: response.message, // "Invalid email and password."
-        message: "",
       };
     }
 
@@ -88,7 +97,6 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       status: LoginStatus.SUCCESS,
       token: response.result.user.token,
       messageFromServer: response.message,
-      message: "",
     };
   } catch (e) {
     console.log("login error", JSON.stringify(e));

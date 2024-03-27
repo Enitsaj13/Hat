@@ -1,13 +1,13 @@
 import DropdownListButton from "@components/DropdownList/index";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
+import { ILoginSchema, login, loginSchema } from "@services/login";
+import isEmpty from "lodash.isempty";
 import React, { useCallback, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Alert, View, Image } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
-import { Controller, useForm } from "react-hook-form";
-import { ILoginSchema, login, loginSchema } from "@services/login";
-import { yupResolver } from "@hookform/resolvers/yup";
-import isEmpty from "lodash.isempty";
 
 const languages = [
   { key: "en", value: "English" },
@@ -35,7 +35,7 @@ const LoginScreen = () => {
     if (isEmpty(result.token)) {
       Alert.alert(
         i18n.t("S11", { defaultValue: "Failed" }),
-        result.messageFromServer,
+        result.messageFromServer || result.message,
       );
     } else {
       // TODO redirect here to login stack

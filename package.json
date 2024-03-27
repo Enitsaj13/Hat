@@ -65,7 +65,8 @@
     "react-native-screens": "~3.29.0",
     "react-native-unistyles": "^2.5.0",
     "react-native-web": "~0.19.6",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "@react-native-community/netinfo": "11.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
