@@ -3,7 +3,8 @@ import NetInfo from "@react-native-community/netinfo";
 import { axiosIntance } from "@services/axios";
 import { object, string } from "yup";
 
-import { UserJson, WorkerJson } from "../types";
+import { SecureStorageKeys, UserJson, WorkerJson } from "../types";
+import * as SecureStorage from "expo-secure-store";
 
 export interface ILoginSchema {
   email: string;
@@ -90,12 +91,14 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       };
     }
 
-    // TODO save in expo secure storage the token
+    const token = response.result.user.token;
+    SecureStorage.setItem(SecureStorageKeys.AuthToken, token);
+
     // TODO save in watermelon db the stuff in the response
 
     return {
       status: LoginStatus.SUCCESS,
-      token: response.result.user.token,
+      token,
       messageFromServer: response.message,
     };
   } catch (e) {

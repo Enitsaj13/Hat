@@ -1,5 +1,9 @@
 export type Gender = "Male" | "Female";
 
+export enum SecureStorageKeys {
+  AuthToken = "AUTH_TOKEN",
+}
+
 export interface UserJson {
   id: number;
   cid: number;
