@@ -1,15 +1,15 @@
-import { Slot, SplashScreen } from "expo-router";
-
-import { SessionProvider } from "../auth";
-import { useFonts } from "expo-font";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useEffect } from "react";
-import { breakpoints, CombinedDefaultTheme } from "@theme/index";
-import { ThemeProvider } from "@react-navigation/native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { ThemeProvider } from "@react-navigation/native";
+import { breakpoints, CombinedDefaultTheme } from "@theme/index";
+import { useFonts } from "expo-font";
+import { Slot, SplashScreen } from "expo-router";
+import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PaperProvider } from "react-native-paper";
 import { UnistylesRegistry } from "react-native-unistyles";
+
+import { SessionProvider } from "../auth";
 
 export {
   // Catch any errors thrown by the Layout component.

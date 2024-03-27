@@ -1,6 +1,7 @@
 import { Redirect, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+
 import "@i18n/index";
 import { useSession } from "../../auth";
 
