@@ -3,10 +3,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
 import { ILoginSchema, login, loginSchema } from "@services/login";
 import isEmpty from "lodash.isempty";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, View, Image } from "react-native";
-import { Button, TextInput, Text } from "react-native-paper";
+import { Alert, Image, View } from "react-native";
+import { Button, Text, TextInput } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 
 const languages = [

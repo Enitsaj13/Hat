@@ -14,6 +14,7 @@ export default function RootLayout() {
   const { session, isLoading } = useSession();
 
   useEffect(() => {
+    console.log("isLoading", isLoading);
     if (!isLoading) {
       SplashScreen.hideAsync();
     }

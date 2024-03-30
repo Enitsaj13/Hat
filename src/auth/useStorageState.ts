@@ -51,9 +51,17 @@ export function useStorageState(key: string): UseStateHook<string> {
         console.error("Local storage is unavailable:", e);
       }
     } else {
-      SecureStore.getItemAsync(key).then((value) => {
-        setState(value);
-      });
+      SecureStore.getItemAsync(key)
+        .then((value) => {
+          setState(value);
+        })
+        .catch((e) => {
+          console.log("error while trying SecureStore.getItemAsync", e);
+          SecureStore.deleteItemAsync(key).catch((e) => {
+            console.log("error while trying SecureStore.deleteItemAsync", e);
+          });
+          setState(null);
+        });
     }
   }, [key]);
 
