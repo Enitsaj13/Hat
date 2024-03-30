@@ -60,7 +60,7 @@ export function useStorageState(key: string): UseStateHook<string> {
           SecureStore.deleteItemAsync(key).catch((e) => {
             console.log("error while trying SecureStore.deleteItemAsync", e);
           });
-          setState(null);
+          setState(null); // need to set null value here to avoid infinite splash screen bug
         });
     }
   }, [key]);
