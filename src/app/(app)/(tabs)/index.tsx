@@ -1,8 +1,5 @@
 import EditScreenInfo from "@components/EditScreenInfo";
-import BottomSheet, {
-  BottomSheetModal,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { i18n } from "@i18n/index";
 import { useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
