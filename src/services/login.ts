@@ -130,7 +130,7 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       }
 
       const appSettings = await database
-        .get<AppSetting>("users")
+        .get<AppSetting>("app_settings")
         .query(Q.take(1))
         .fetch();
       if (appSettings.length === 0) {
