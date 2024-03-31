@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PaperProvider } from "react-native-paper";
 import { UnistylesRegistry } from "react-native-unistyles";
+import { of, switchMap } from "rxjs";
 
 import { SessionProvider } from "../auth";
 
@@ -28,16 +29,16 @@ UnistylesRegistry.addBreakpoints(breakpoints);
 SplashScreen.preventAutoHideAsync();
 
 interface RootProps {
-  appSettings: AppSetting[];
+  appSetting: AppSetting;
 }
 
-export function Component({ appSettings }: RootProps) {
+export function Component({ appSetting }: RootProps) {
   const [, error] = useFonts({
     ...FontAwesome.font,
   });
 
-  console.log("appSettings in _layout", appSettings);
-  i18n.locale = getDefaultLanguage(appSettings);
+  console.log("language in _layout", appSetting?.language);
+  i18n.locale = getDefaultLanguage(appSetting);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -62,11 +63,16 @@ export function Component({ appSettings }: RootProps) {
   );
 }
 
-type WithObservableProps = ObservableifyProps<RootProps, "appSettings">;
-const Root = withObservables(["appSettings"], (props: WithObservableProps) => ({
-  appSettings: database.collections
+type WithObservableProps = ObservableifyProps<RootProps, "appSetting">;
+const Root = withObservables(["appSetting"], (props: WithObservableProps) => ({
+  appSetting: database
     .get<AppSetting>("app_settings")
     .query(Q.take(1))
-    .observe(),
-}))(Component);
+    .observe()
+    .pipe(
+      switchMap((appSettings) =>
+        appSettings.length > 0 ? appSettings[0].observe() : of(null),
+      ),
+    ),
+}))(Component as any); // as any here is workaround on typescript complaining between Observable<AppSetting> and AppSetting
 export default Root;

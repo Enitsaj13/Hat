@@ -16,14 +16,15 @@ import { Controller, useForm } from "react-hook-form";
 import { Alert, Image, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { of, switchMap } from "rxjs";
 
 import { useSession } from "../auth";
 
 interface SignInProps {
-  appSettings: AppSetting[];
+  appSetting: AppSetting;
 }
 
-function Component({ appSettings }: SignInProps) {
+function Component({ appSetting }: SignInProps) {
   const { styles } = useStyles(stylesheet);
   const { signIn } = useSession();
 
@@ -46,10 +47,10 @@ function Component({ appSettings }: SignInProps) {
     }
   }, []);
 
-  console.log("appSettings in signin", appSettings);
+  console.log("language in signin", appSetting?.language);
   const saveSelectedLanguage = useCallback(
     async (languageCode: string) => {
-      if (isEmpty(appSettings)) {
+      if (isEmpty(appSetting)) {
         await database.write(async () => {
           await database
             .get<AppSetting>("app_settings")
@@ -60,10 +61,10 @@ function Component({ appSettings }: SignInProps) {
             });
         });
       } else {
-        await appSettings[0].saveLanguage(languageCode);
+        await appSetting.saveLanguage(languageCode);
       }
     },
-    [appSettings],
+    [appSetting],
   );
 
   return (
@@ -122,7 +123,7 @@ function Component({ appSettings }: SignInProps) {
         </Text>
         <DropdownListButton
           options={languages}
-          selectedOptionKey={getDefaultLanguage(appSettings)}
+          selectedOptionKey={getDefaultLanguage(appSetting)}
           onOptionSelected={(key) => saveSelectedLanguage(key as string)}
           buttonStyle={styles.languageButton}
         />
@@ -186,12 +187,20 @@ const stylesheet = createStyleSheet({
   },
 });
 
-type WithObservableProps = ObservableifyProps<SignInProps, "appSettings">;
+type WithObservableProps = ObservableifyProps<SignInProps, "appSetting">;
 const SignInScreen = withObservables(
-  ["appSettings"],
+  ["appSetting"],
   (props: WithObservableProps) => ({
-    appSettings: database.get<AppSetting>("app_settings").query(Q.take(1)),
+    appSetting: database
+      .get<AppSetting>("app_settings")
+      .query(Q.take(1))
+      .observe()
+      .pipe(
+        switchMap((appSettings) =>
+          appSettings.length > 0 ? appSettings[0].observe() : of(null),
+        ),
+      ),
   }),
-)(Component);
+)(Component as any); // as any here is workaround on typescript complaining between Observable<AppSetting> and AppSetting
 
 export default SignInScreen;
