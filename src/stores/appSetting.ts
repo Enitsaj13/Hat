@@ -1,5 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
-import { text } from "@nozbe/watermelondb/decorators";
+import { text, writer } from "@nozbe/watermelondb/decorators";
 
 export class AppSetting extends Model {
   static table = "app_settings";
@@ -9,4 +9,14 @@ export class AppSetting extends Model {
 
   // @ts-expect-error
   @text("terms_of_use_url") termsOfUseUrl: string;
+
+  // @ts-expect-error
+  @text("language") language: string;
+
+  @writer
+  async saveLanguage(language: string) {
+    await this.update((appSetting) => {
+      appSetting.language = language;
+    });
+  }
 }

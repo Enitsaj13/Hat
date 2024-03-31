@@ -1,29 +1,38 @@
 import React, { useState } from "react";
-import { View, ScrollView } from "react-native";
+import { ScrollView, View, ViewStyle } from "react-native";
 import { Button, Menu } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 
-type DropDownOption = {
-  key: string;
+export type DropDownOptionKey = string | number;
+
+export type DropDownOption = {
+  key: DropDownOptionKey;
   value: any;
 };
+
 interface DropdownListButtonProps {
+  selectedOptionKey?: DropDownOptionKey;
+  onOptionSelected?: (key: DropDownOptionKey, value: any) => void;
   options: DropDownOption[];
+  buttonStyle?: ViewStyle;
 }
 
-function DropdownListButton({ options }: DropdownListButtonProps) {
+function DropdownListButton({
+  options,
+  selectedOptionKey,
+  onOptionSelected,
+  buttonStyle,
+}: DropdownListButtonProps) {
   const { styles } = useStyles(stylesheet);
 
   const [visible, setVisible] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<DropDownOption>(
-    options[0],
-  );
 
   const handleOptionSelect = (option: DropDownOption) => {
-    setSelectedValue(option);
+    onOptionSelected && onOptionSelected(option.key, option.value);
     setVisible(false);
   };
 
+  const selected = `${options.find((o) => o.key === selectedOptionKey)?.value || ""}`;
   return (
     <View style={styles.container}>
       <Menu
@@ -31,11 +40,12 @@ function DropdownListButton({ options }: DropdownListButtonProps) {
         onDismiss={() => setVisible(false)}
         anchor={
           <Button
+            style={buttonStyle}
             onPress={() => setVisible(true)}
             mode="contained"
             icon="arrow-up"
           >
-            {selectedValue.value}
+            {selected}
           </Button>
         }
       >

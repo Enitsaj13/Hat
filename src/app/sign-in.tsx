@@ -1,7 +1,13 @@
 import DropdownListButton from "@components/DropdownList";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { i18n } from "@i18n/index";
+import { getDefaultLanguage, i18n } from "@i18n/index";
+import { languages } from "@i18n/languages";
+import { Q } from "@nozbe/watermelondb";
+import { withObservables } from "@nozbe/watermelondb/react";
+import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { ILoginSchema, login, loginSchema } from "@services/login";
+import { AppSetting } from "@stores/appSetting";
+import { database } from "@stores/index";
 import { colors } from "@theme/index";
 import { router } from "expo-router";
 import isEmpty from "lodash.isempty";
@@ -13,19 +19,11 @@ import { createStyleSheet, useStyles } from "react-native-unistyles";
 
 import { useSession } from "../auth";
 
-const languages = [
-  { key: "en", value: "English" },
-  { key: "pt", value: "Portugese" },
-  { key: "fr", value: "French" },
-  { key: "de", value: "Deutsch" },
-  { key: "br", value: "Portugese BR" },
-  { key: "es", value: "Spanish" },
-  { key: "id", value: "Bahasa Indonesia" },
-  { key: "cs", value: "Czech" },
-  { key: "th", value: "Thai" },
-];
+interface SignInProps {
+  appSettings: AppSetting[];
+}
 
-const SignInScreen = () => {
+function Component({ appSettings }: SignInProps) {
   const { styles } = useStyles(stylesheet);
   const { signIn } = useSession();
 
@@ -47,6 +45,26 @@ const SignInScreen = () => {
       router.replace("/");
     }
   }, []);
+
+  console.log("appSettings in signin", appSettings);
+  const saveSelectedLanguage = useCallback(
+    async (languageCode: string) => {
+      if (isEmpty(appSettings)) {
+        await database.write(async () => {
+          await database
+            .get<AppSetting>("app_settings")
+            .create((appSetting) => {
+              appSetting.language = languageCode;
+              appSetting.dataPrivacyUrl = "";
+              appSetting.termsOfUseUrl = "";
+            });
+        });
+      } else {
+        await appSettings[0].saveLanguage(languageCode);
+      }
+    },
+    [appSettings],
+  );
 
   return (
     <View style={styles.container}>
@@ -102,7 +120,12 @@ const SignInScreen = () => {
         <Text variant="titleMedium" style={styles.languageText}>
           {i18n.t("D0", { defaultValue: "Language" })}
         </Text>
-        <DropdownListButton options={languages} />
+        <DropdownListButton
+          options={languages}
+          selectedOptionKey={getDefaultLanguage(appSettings)}
+          onOptionSelected={(key) => saveSelectedLanguage(key as string)}
+          buttonStyle={styles.languageButton}
+        />
       </View>
       <View style={styles.forgotPasswordContainer}>
         <Button mode="text" onPress={() => Alert.alert("Forgot Password")}>
@@ -117,7 +140,7 @@ const SignInScreen = () => {
       </View>
     </View>
   );
-};
+}
 
 const stylesheet = createStyleSheet({
   container: {
@@ -138,10 +161,12 @@ const stylesheet = createStyleSheet({
     width: "90%",
   },
   languageContainer: {
+    width: "100%",
     flexDirection: "row",
-    gap: 70 * 2,
+    justifyContent: "space-around",
     alignItems: "center",
   },
+  languageButton: { minWidth: 150 },
   languageText: {
     color: "white",
   },
@@ -160,5 +185,13 @@ const stylesheet = createStyleSheet({
     height: 40,
   },
 });
+
+type WithObservableProps = ObservableifyProps<SignInProps, "appSettings">;
+const SignInScreen = withObservables(
+  ["appSettings"],
+  (props: WithObservableProps) => ({
+    appSettings: database.get<AppSetting>("app_settings").query(Q.take(1)),
+  }),
+)(Component);
 
 export default SignInScreen;

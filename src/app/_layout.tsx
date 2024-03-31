@@ -1,6 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { getDefaultLanguage, i18n } from "@i18n/index";
+import { Q } from "@nozbe/watermelondb";
+import { withObservables } from "@nozbe/watermelondb/react";
+import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { ThemeProvider } from "@react-navigation/native";
+import { AppSetting } from "@stores/appSetting";
+import { database } from "@stores/index";
 import { breakpoints, CombinedDefaultTheme } from "@theme/index";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
@@ -20,10 +26,18 @@ UnistylesRegistry.addBreakpoints(breakpoints);
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-export default function Root() {
+
+interface RootProps {
+  appSettings: AppSetting[];
+}
+
+export function Component({ appSettings }: RootProps) {
   const [, error] = useFonts({
     ...FontAwesome.font,
   });
+
+  console.log("appSettings in _layout", appSettings);
+  i18n.locale = getDefaultLanguage(appSettings);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -47,3 +61,12 @@ export default function Root() {
     </PaperProvider>
   );
 }
+
+type WithObservableProps = ObservableifyProps<RootProps, "appSettings">;
+const Root = withObservables(["appSettings"], (props: WithObservableProps) => ({
+  appSettings: database.collections
+    .get<AppSetting>("app_settings")
+    .query(Q.take(1))
+    .observe(),
+}))(Component);
+export default Root;
