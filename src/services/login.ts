@@ -8,7 +8,7 @@ import { User } from "@stores/user";
 import { Worker } from "@stores/worker";
 import { object, string } from "yup";
 
-import { UserJson, WorkerJson } from "../types";
+import { BaseResponse, UserJson, WorkerJson } from "../types";
 
 export interface ILoginSchema {
   email: string;
@@ -44,11 +44,7 @@ export interface Member {
   full_name: string;
 }
 
-export interface LoginResponse {
-  status: number;
-  errortype: string;
-  errno: number;
-  message: string;
+export interface LoginResponse extends BaseResponse {
   result: {
     user: UserJson;
     location: {

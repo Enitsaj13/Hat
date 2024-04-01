@@ -37,3 +37,10 @@ export interface WorkerJson {
   name: string;
   id: string;
 }
+
+export interface BaseResponse {
+  status: number;
+  errortype: string;
+  errno: number;
+  message: string;
+}

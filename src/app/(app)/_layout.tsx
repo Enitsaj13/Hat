@@ -5,13 +5,17 @@ import { useEffect } from "react";
 import "@i18n/index";
 import { useSession } from "../../auth";
 
+import { useAxiosResponseInterceptor } from "@services/axios";
+
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: "(tabs)",
 };
 
 export default function RootLayout() {
-  const { session, isLoading } = useSession();
+  const { session, isLoading, signOut } = useSession();
+
+  useAxiosResponseInterceptor(signOut);
 
   useEffect(() => {
     console.log("isLoading", isLoading);
