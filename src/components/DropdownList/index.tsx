@@ -1,8 +1,10 @@
-import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { useRef, useCallback, useMemo } from "react";
+import { useRef, useCallback } from "react";
 import { View, FlatList, ViewStyle } from "react-native";
 import { useTheme, List, TouchableRipple, Button } from "react-native-paper";
+import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { colors } from "@theme/index";
+
 
 export type DropDownOptionKey = string | number;
 
@@ -45,8 +47,6 @@ function DropdownList({
     [],
   );
 
-  const snapPoints = useMemo(() => ["25%"], []);
-
   const handleOptionSelect = (option: DropDownOption) => {
     onOptionSelected && onOptionSelected(option.key, option.value);
     bottomSheetModalRef.current?.dismiss();
@@ -67,10 +67,10 @@ function DropdownList({
 
       <BottomSheetModal
         backdropComponent={renderBackdrop}
-        snapPoints={snapPoints}
+        snapPoints={["25%"]}
         ref={bottomSheetModalRef}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.primary }}
-        backgroundStyle={{ backgroundColor: theme.colors.primary }}
+        handleIndicatorStyle={styles.handleIndicatorColor}
+        style={styles.containerBottomSheetModal}
       >
         <FlatList
           data={options}
@@ -80,7 +80,7 @@ function DropdownList({
                 contentStyle={styles.languageBottomSheetContainer}
                 title={item.value}
                 titleStyle={[
-                  styles.languageText,
+                  styles.key,
                   { color: theme.colors.onPrimary },
                 ]}
               />
@@ -97,18 +97,20 @@ const stylesheet = createStyleSheet({
     alignItems: "center",
     justifyContent: "center",
   },
-  languageContainer: {
-    flexDirection: "row",
-    gap: 70 * 2,
-    alignItems: "center",
-  },
   languageBottomSheetContainer: {
     flex: 1,
     justifyContent: "center",
   },
-  languageText: {
+  key: {
     textAlign: "center",
   },
+  containerBottomSheetModal: {
+    backgroundColor: colors.textColor,
+    borderRadius: 20
+  },
+  handleIndicatorColor: {
+    backgroundColor: colors.textColor
+  }
 });
 
 export default DropdownList;
