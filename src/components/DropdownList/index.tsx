@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { ScrollView, View, ViewStyle } from "react-native";
-import { Button, Menu } from "react-native-paper";
+import { useRef, useCallback } from "react";
+import { View, FlatList, ViewStyle } from "react-native";
+import { useTheme, List, TouchableRipple, Button } from "react-native-paper";
+import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { colors } from "@theme/index";
+
 
 export type DropDownOptionKey = string | number;
 
@@ -10,56 +13,81 @@ export type DropDownOption = {
   value: any;
 };
 
-interface DropdownListButtonProps {
+interface DropdownListProps {
+  options: DropDownOption[];
   selectedOptionKey?: DropDownOptionKey;
   onOptionSelected?: (key: DropDownOptionKey, value: any) => void;
-  options: DropDownOption[];
   buttonStyle?: ViewStyle;
 }
 
-function DropdownListButton({
+function DropdownList({
   options,
   selectedOptionKey,
   onOptionSelected,
   buttonStyle,
-}: DropdownListButtonProps) {
+}: DropdownListProps) {
   const { styles } = useStyles(stylesheet);
 
-  const [visible, setVisible] = useState(false);
+  const theme = useTheme();
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={1}
+        opacity={-1}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    [],
+  );
 
   const handleOptionSelect = (option: DropDownOption) => {
     onOptionSelected && onOptionSelected(option.key, option.value);
-    setVisible(false);
+    bottomSheetModalRef.current?.dismiss();
   };
 
   const selected = `${options.find((o) => o.key === selectedOptionKey)?.value || ""}`;
+
   return (
     <View style={styles.container}>
-      <Menu
-        visible={visible}
-        onDismiss={() => setVisible(false)}
-        anchor={
-          <Button
-            style={buttonStyle}
-            onPress={() => setVisible(true)}
-            mode="contained"
-            icon="arrow-up"
-          >
-            {selected}
-          </Button>
-        }
+      <Button
+        style={buttonStyle}
+        onPress={handlePresentModalPress}
+        mode="contained"
+        icon="arrow-up"
       >
-        <ScrollView showsVerticalScrollIndicator>
-          {options.map((option) => (
-            <Menu.Item
-              titleStyle={{ color: "black" }}
-              key={option.key}
-              onPress={() => handleOptionSelect(option)}
-              title={option.value}
-            />
-          ))}
-        </ScrollView>
-      </Menu>
+        {selected}
+      </Button>
+
+      <BottomSheetModal
+        backdropComponent={renderBackdrop}
+        snapPoints={["25%"]}
+        ref={bottomSheetModalRef}
+        handleIndicatorStyle={styles.handleIndicatorColor}
+        style={styles.containerBottomSheetModal}
+      >
+        <FlatList
+          data={options}
+          renderItem={({ item }) => (
+            <TouchableRipple onPress={() => handleOptionSelect(item)}>
+              <List.Item
+                contentStyle={styles.languageBottomSheetContainer}
+                title={item.value}
+                titleStyle={[
+                  styles.key,
+                  { color: theme.colors.onPrimary },
+                ]}
+              />
+            </TouchableRipple>
+          )}
+        />
+      </BottomSheetModal>
     </View>
   );
 }
@@ -69,6 +97,20 @@ const stylesheet = createStyleSheet({
     alignItems: "center",
     justifyContent: "center",
   },
+  languageBottomSheetContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  key: {
+    textAlign: "center",
+  },
+  containerBottomSheetModal: {
+    backgroundColor: colors.textColor,
+    borderRadius: 20
+  },
+  handleIndicatorColor: {
+    backgroundColor: colors.textColor
+  }
 });
 
-export default DropdownListButton;
+export default DropdownList;

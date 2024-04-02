@@ -1,4 +1,4 @@
-import DropdownListButton from "@components/DropdownList";
+import DropdownList from "@components/DropdownList";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getDefaultLanguage, i18n } from "@i18n/index";
 import { languages } from "@i18n/languages";
@@ -100,7 +100,7 @@ function Component({ appSetting }: SignInProps) {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              left={<TextInput.Icon icon="bottle-wine" />}
+              left={<TextInput.Icon icon="key-variant" />}
               error={!isEmpty(errors.password?.message)}
             />
           )}
@@ -121,7 +121,7 @@ function Component({ appSetting }: SignInProps) {
         <Text variant="titleMedium" style={styles.languageText}>
           {i18n.t("D0", { defaultValue: "Language" })}
         </Text>
-        <DropdownListButton
+        <DropdownList
           options={languages}
           selectedOptionKey={getDefaultLanguage(appSetting)}
           onOptionSelected={(key) => saveSelectedLanguage(key as string)}
@@ -167,7 +167,9 @@ const stylesheet = createStyleSheet({
     justifyContent: "space-around",
     alignItems: "center",
   },
-  languageButton: { minWidth: 150 },
+  languageButton: {
+    minWidth: 170,
+  },
   languageText: {
     color: "white",
   },
