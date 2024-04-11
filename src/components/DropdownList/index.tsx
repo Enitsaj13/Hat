@@ -1,10 +1,10 @@
+import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { colors } from "@theme/index";
 import { useRef, useCallback } from "react";
 import { View, FlatList, ViewStyle } from "react-native";
-import { useTheme, List, TouchableRipple, Button } from "react-native-paper";
-import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTheme, List, TouchableRipple, Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
-import { colors } from "@theme/index";
-
 
 export type DropDownOptionKey = string | number;
 
@@ -12,19 +12,20 @@ export type DropDownOption = {
   key: DropDownOptionKey;
   value: any;
 };
-
 interface DropdownListProps {
   options: DropDownOption[];
   selectedOptionKey?: DropDownOptionKey;
   onOptionSelected?: (key: DropDownOptionKey, value: any) => void;
-  buttonStyle?: ViewStyle;
+  dropdownlistStyle?: ViewStyle;
+  right?: React.ReactNode;
 }
 
 function DropdownList({
   options,
   selectedOptionKey,
   onOptionSelected,
-  buttonStyle,
+  dropdownlistStyle,
+  right
 }: DropdownListProps) {
   const { styles } = useStyles(stylesheet);
 
@@ -55,15 +56,13 @@ function DropdownList({
   const selected = `${options.find((o) => o.key === selectedOptionKey)?.value || ""}`;
 
   return (
-    <View style={styles.container}>
-      <Button
-        style={buttonStyle}
-        onPress={handlePresentModalPress}
-        mode="contained"
-        icon="arrow-up"
-      >
-        {selected}
-      </Button>
+    <TouchableOpacity style={styles.container}
+      onPress={handlePresentModalPress} activeOpacity={0.8}
+    >
+      <View style={[styles.dropdownlistStyle, dropdownlistStyle]}>
+        <Text variant='bodyLarge' style={styles.textColor}>{selected}</Text>
+        {right}
+      </View>
 
       <BottomSheetModal
         backdropComponent={renderBackdrop}
@@ -79,23 +78,21 @@ function DropdownList({
               <List.Item
                 contentStyle={styles.languageBottomSheetContainer}
                 title={item.value}
-                titleStyle={[
-                  styles.key,
-                  { color: theme.colors.onPrimary },
-                ]}
+                titleStyle={[styles.key, { color: theme.colors.onPrimary }]}
+                left={() => selectedOptionKey === item.key ? <List.Icon icon="check" color="green" style={styles.leftIcon} /> : null}
               />
             </TouchableRipple>
           )}
         />
       </BottomSheetModal>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const stylesheet = createStyleSheet({
   container: {
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'space-between'
   },
   languageBottomSheetContainer: {
     flex: 1,
@@ -106,11 +103,32 @@ const stylesheet = createStyleSheet({
   },
   containerBottomSheetModal: {
     backgroundColor: colors.textColor,
-    borderRadius: 20
+    borderRadius: 20,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   handleIndicatorColor: {
-    backgroundColor: colors.textColor
+    backgroundColor: colors.textColor,
+  },
+  dropdownlistStyle: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  textColor: {
+    color: 'black'
+  },
+  leftIcon: {
+    position: 'absolute',
+    left: 90
   }
 });
 
 export default DropdownList;
+

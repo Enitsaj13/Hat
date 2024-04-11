@@ -24,7 +24,7 @@ export const colors = {
 const rnPaperLightTheme = { ...MD3LightTheme };
 rnPaperLightTheme.colors.onSurface = colors.textColor;
 rnPaperLightTheme.colors.onPrimary = "black";
-rnPaperLightTheme.colors.onSurfaceVariant = colors.textColor;
+rnPaperLightTheme.colors.onSurfaceVariant = '#475569';
 rnPaperLightTheme.colors.surfaceVariant = colors.bgColor;
 
 const navigationLightTheme = { ...LightTheme };
@@ -56,5 +56,5 @@ export const breakpoints = {
 type AppBreakpoints = typeof breakpoints;
 
 declare module "react-native-unistyles" {
-  export interface UnistylesBreakpoints extends AppBreakpoints {}
+  export interface UnistylesBreakpoints extends AppBreakpoints { }
 }
