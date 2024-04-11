@@ -9,3 +9,4 @@ export const languages = [
   { key: "cs", value: "Czech" },
   { key: "th", value: "Thai" },
 ];
+

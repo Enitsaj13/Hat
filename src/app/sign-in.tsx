@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Alert, Image, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { AntDesign as Icon } from "@expo/vector-icons";
 import { of, switchMap } from "rxjs";
 
 import { useSession } from "../auth";
@@ -85,8 +86,9 @@ function Component({ appSetting }: SignInProps) {
               keyboardType="email-address"
               onChangeText={onChange}
               onBlur={onBlur}
-              left={<TextInput.Icon icon="account" />}
+              left={<TextInput.Icon icon="account" color='white' />}
               error={!isEmpty(errors.email?.message)}
+              theme={{ colors: { onSurfaceVariant: 'white' } }}
             />
           )}
           name="email"
@@ -100,8 +102,9 @@ function Component({ appSetting }: SignInProps) {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              left={<TextInput.Icon icon="key-variant" />}
+              left={<TextInput.Icon icon="key-variant" color='white' />}
               error={!isEmpty(errors.password?.message)}
+              theme={{ colors: { onSurfaceVariant: 'white' } }}
             />
           )}
           name="password"
@@ -109,10 +112,12 @@ function Component({ appSetting }: SignInProps) {
       </View>
       <View style={styles.loginButtonContainer}>
         <Button
+          textColor="white"
           mode="contained"
           onPress={handleSubmit(onLoginPress)}
           loading={isLoading}
           disabled={isLoading}
+          style={{ backgroundColor: '#047857', borderRadius: 4 }}
         >
           {i18n.t("D3", { defaultValue: "LOGIN" })}
         </Button>
@@ -125,7 +130,8 @@ function Component({ appSetting }: SignInProps) {
           options={languages}
           selectedOptionKey={getDefaultLanguage(appSetting)}
           onOptionSelected={(key) => saveSelectedLanguage(key as string)}
-          buttonStyle={styles.languageButton}
+          dropdownlistStyle={styles.languageButtonContainer}
+          right={<Icon name="caretdown" size={12} color='gray' style={{ marginLeft: 20 }} />}
         />
       </View>
       <View style={styles.forgotPasswordContainer}>
@@ -160,6 +166,14 @@ const stylesheet = createStyleSheet({
     justifyContent: "center",
     marginVertical: 20,
     width: "90%",
+  },
+  languageButtonContainer: {
+    minWidth: 170,
+    backgroundColor: 'white',
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "space-around",
   },
   languageContainer: {
     width: "100%",
@@ -206,3 +220,7 @@ const SignInScreen = withObservables(
 )(Component as any); // as any here is workaround on typescript complaining between Observable<AppSetting> and AppSetting
 
 export default SignInScreen;
+
+
+
+
