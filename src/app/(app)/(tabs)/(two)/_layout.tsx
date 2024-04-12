@@ -1,15 +1,20 @@
 import { Stack } from "expo-router";
+import { i18n } from "@i18n/index";
 
 export default function Layout() {
   return (
     <Stack>
       <Stack.Screen
         name="Information"
-        options={{ title: "Information TODO" }}
+        options={{ title: i18n.t("INFORMATION") }}
       />
       <Stack.Screen
         name="TrainingVideos"
-        options={{ title: "Training Videos TODO" }}
+        options={{
+          title: i18n.t("H7", {
+            defaultValue: "Training Videos",
+          }),
+        }}
       />
       <Stack.Screen
         name="VideoPlayer"
@@ -21,7 +26,11 @@ export default function Layout() {
       />
       <Stack.Screen
         name="Introduction"
-        options={{ title: "Introduction TODO", headerShown: true }}
+        options={{
+          title: i18n.t("A1", {
+            defaultValue: "Introduction",
+          }),
+        }}
       />
     </Stack>
   );

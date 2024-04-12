@@ -1,7 +1,8 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import React from "react";
-import { useTheme } from "react-native-paper"; // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+import { useTheme } from "react-native-paper";
+import { i18n } from "@i18n/index"; // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -25,7 +26,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(one)"
         options={{
-          title: "Record TODO",
+          title: i18n.t("H2", {
+            defaultValue: "Record",
+          }),
           tabBarIcon: ({ color }: { color: string }) => (
             <TabBarIcon name="book" color={color} />
           ),
@@ -34,7 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(two)"
         options={{
-          title: "Information TODO",
+          title: i18n.t("INFORMATION"),
           tabBarIcon: ({ color }: { color: string }) => (
             <TabBarIcon name="info-circle" color={color} />
           ),
@@ -43,7 +46,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(three)"
         options={{
-          title: "Settings TODO",
+          title: i18n.t("SETTINGS"),
           tabBarIcon: ({ color }: { color: string }) => (
             <TabBarIcon name="cog" color={color} />
           ),
