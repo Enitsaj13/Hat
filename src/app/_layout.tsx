@@ -54,7 +54,7 @@ export function Component({ appSetting }: RootProps) {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <BottomSheetModalProvider>
             <SessionProvider>
-              <Slot />
+              <Slot initialRouteName="/(app)/(tabs)/_layout" />
             </SessionProvider>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>

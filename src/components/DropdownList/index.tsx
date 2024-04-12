@@ -25,7 +25,7 @@ function DropdownList({
   selectedOptionKey,
   onOptionSelected,
   dropdownlistStyle,
-  right
+  right,
 }: DropdownListProps) {
   const { styles } = useStyles(stylesheet);
 
@@ -56,11 +56,15 @@ function DropdownList({
   const selected = `${options.find((o) => o.key === selectedOptionKey)?.value || ""}`;
 
   return (
-    <TouchableOpacity style={styles.container}
-      onPress={handlePresentModalPress} activeOpacity={0.8}
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handlePresentModalPress}
+      activeOpacity={0.8}
     >
       <View style={[styles.dropdownlistStyle, dropdownlistStyle]}>
-        <Text variant='bodyLarge' style={styles.textColor}>{selected}</Text>
+        <Text variant="bodyLarge" style={styles.textColor}>
+          {selected}
+        </Text>
         {right}
       </View>
 
@@ -79,7 +83,15 @@ function DropdownList({
                 contentStyle={styles.languageBottomSheetContainer}
                 title={item.value}
                 titleStyle={[styles.key, { color: theme.colors.onPrimary }]}
-                left={() => selectedOptionKey === item.key ? <List.Icon icon="check" color="green" style={styles.leftIcon} /> : null}
+                left={() =>
+                  selectedOptionKey === item.key ? (
+                    <List.Icon
+                      icon="check"
+                      color="green"
+                      style={styles.leftIcon}
+                    />
+                  ) : null
+                }
               />
             </TouchableRipple>
           )}
@@ -92,7 +104,7 @@ function DropdownList({
 const stylesheet = createStyleSheet({
   container: {
     alignItems: "center",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   languageBottomSheetContainer: {
     flex: 1,
@@ -104,7 +116,7 @@ const stylesheet = createStyleSheet({
   containerBottomSheetModal: {
     backgroundColor: colors.textColor,
     borderRadius: 20,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -118,17 +130,16 @@ const stylesheet = createStyleSheet({
   },
   dropdownlistStyle: {
     padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center",
   },
   textColor: {
-    color: 'black'
+    color: "black",
   },
   leftIcon: {
-    position: 'absolute',
-    left: 90
-  }
+    position: "absolute",
+    left: 90,
+  },
 });
 
 export default DropdownList;
-

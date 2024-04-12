@@ -1,9 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useClientOnlyValue } from "@hooks/useClientOnlyValue";
-import { Link, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import React from "react";
-import { Pressable } from "react-native";
-import { useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper"; // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -19,54 +17,38 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        // headerShown: useClientOnlyValue(false, true),
-        headerShown: true,
+        headerShown: false,
       }}
     >
+      {/* Workaround code to make the initial tab work: https://github.com/expo/router/issues/763#issuecomment-1951429388  */}
+      <Tabs.Screen redirect name="index" />
       <Tabs.Screen
-        name="index"
+        name="(one)"
         options={{
-          title: "Record",
+          title: "Record TODO",
           tabBarIcon: ({ color }: { color: string }) => (
             <TabBarIcon name="book" color={color} />
-          ),
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="home"
-                    color={theme.colors.primary}
-                    size={25}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
           ),
         }}
       />
       <Tabs.Screen
-        name="Information"
+        name="(two)"
         options={{
-          title: "Information",
+          title: "Information TODO",
           tabBarIcon: ({ color }: { color: string }) => (
             <TabBarIcon name="info-circle" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="Settings"
+        name="(three)"
         options={{
-          title: "Settings",
+          title: "Settings TODO",
           tabBarIcon: ({ color }: { color: string }) => (
             <TabBarIcon name="cog" color={color} />
           ),
         }}
       />
-
     </Tabs>
   );
 }

@@ -34,13 +34,19 @@ export default function RootLayout() {
   if (!session) {
     // On web, static rendering will stop here as the user is not authenticated
     // in the headless Node process that the pages are rendered in.
-    return <Redirect href="../sign-in" />;
+    return <Redirect href="../SignIn" />;
   }
 
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false, headerTitle: '', headerBackTitleVisible: false }} />
-      <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack>
   );
 }
