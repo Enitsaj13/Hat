@@ -19,6 +19,7 @@ export const dbSchema = appSchema({
         { name: "data_privacy_url", type: "string" },
         { name: "terms_of_use_url", type: "string" },
         { name: "language", type: "string" },
+        { name: "is_introduction_viewed", type: "boolean" },
       ],
     }),
     tableSchema({

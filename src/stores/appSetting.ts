@@ -1,5 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
-import { text, writer } from "@nozbe/watermelondb/decorators";
+import { field, text, writer } from "@nozbe/watermelondb/decorators";
 
 export class AppSetting extends Model {
   static table = "app_settings";
@@ -13,10 +13,20 @@ export class AppSetting extends Model {
   // @ts-expect-error
   @text("language") language: string;
 
+  // @ts-expect-error
+  @field("is_introduction_viewed") isIntroductionViewed: boolean;
+
   @writer
   async saveLanguage(language: string) {
     await this.update((appSetting) => {
       appSetting.language = language;
+    });
+  }
+
+  @writer
+  async updateIntroductionViewed(isIntroductionViewed: boolean) {
+    await this.update((appSetting) => {
+      appSetting.isIntroductionViewed = isIntroductionViewed;
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Redirect, Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
@@ -6,13 +6,23 @@ import "@i18n/index";
 import { useSession } from "../../auth";
 
 import { useAxiosResponseInterceptor } from "@services/axios";
+import { AppSetting } from "@stores/appSetting";
+import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
+import { withObservables } from "@nozbe/watermelondb/react";
+import { database } from "@stores/index";
+import { Q } from "@nozbe/watermelondb";
+import { of, switchMap } from "rxjs";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: "(tabs)",
 };
 
-export default function RootLayout() {
+interface RootLayoutProps {
+  appSetting: AppSetting;
+}
+
+function Component({ appSetting }: RootLayoutProps) {
   const { session, isLoading, signOut } = useSession();
 
   useAxiosResponseInterceptor(signOut);
@@ -24,17 +34,23 @@ export default function RootLayout() {
     }
   }, [isLoading]);
 
+  console.log("session in (app)/_layout", session);
+  const router = useRouter();
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    if (!session) {
+      const toRedirect = appSetting?.isIntroductionViewed
+        ? "../SignIn"
+        : "../IntroductionOnceOnly";
+      router.replace(toRedirect);
+    }
+  }, [isLoading, session, appSetting?.isIntroductionViewed]);
+
   if (isLoading) {
     return null;
-  }
-
-  // Only require authentication within the (app) group's layout as users
-  // need to be able to access the (auth) group and sign in again.
-  console.log("session in (app)/_layout", session);
-  if (!session) {
-    // On web, static rendering will stop here as the user is not authenticated
-    // in the headless Node process that the pages are rendered in.
-    return <Redirect href="../SignIn" />;
   }
 
   return (
@@ -50,3 +66,21 @@ export default function RootLayout() {
     </Stack>
   );
 }
+
+type WithObservableProps = ObservableifyProps<RootLayoutProps, "appSetting">;
+const RootLayout = withObservables(
+  ["appSetting"],
+  (props: WithObservableProps) => ({
+    appSetting: database
+      .get<AppSetting>("app_settings")
+      .query(Q.take(1))
+      .observe()
+      .pipe(
+        switchMap((appSettings) =>
+          appSettings.length > 0 ? appSettings[0].observe() : of(null),
+        ),
+      ),
+  }),
+)(Component as any); // as any here is workaround on typescript complaining between Observable<AppSetting> and AppSetting
+
+export default RootLayout;
