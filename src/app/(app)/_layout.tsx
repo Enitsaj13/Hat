@@ -43,8 +43,8 @@ function Component({ appSetting }: RootLayoutProps) {
 
     if (!session) {
       const toRedirect = appSetting?.isIntroductionViewed
-        ? "../SignIn"
-        : "../IntroductionOnceOnly";
+        ? "/SignIn"
+        : "/IntroductionOnceOnly";
       router.replace(toRedirect);
     }
   }, [isLoading, session, appSetting?.isIntroductionViewed]);
