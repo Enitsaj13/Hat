@@ -1,11 +1,12 @@
+import { logout } from "@services/logout";
 import { createContext, useContext } from "react";
 
 import { useStorageState } from "./useStorageState";
-import { SecureStorageKeys } from "../types";
+import { SecureStorageKeys, SignInFunction, SignOutFunction } from "../types";
 
 const AuthContext = createContext<{
-  signIn: (token: string) => void;
-  signOut: () => void;
+  signIn: SignInFunction;
+  signOut: SignOutFunction;
   session?: string | null;
   isLoading: boolean;
 }>({
@@ -38,7 +39,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
         signIn: (token) => {
           setSession(token);
         },
-        signOut: () => {
+        signOut: async () => {
+          await logout();
           setSession(null);
         },
         session,

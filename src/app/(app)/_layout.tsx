@@ -23,9 +23,9 @@ interface RootLayoutProps {
 }
 
 function Component({ appSetting }: RootLayoutProps) {
-  const { session, isLoading, signOut } = useSession();
+  const { session, isLoading, signIn, signOut } = useSession();
 
-  useAxiosResponseInterceptor(signOut);
+  useAxiosResponseInterceptor(signIn, signOut);
 
   useEffect(() => {
     console.log("isLoading", isLoading);

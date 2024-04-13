@@ -1,14 +1,13 @@
 import { i18n } from "@i18n/index";
 import { Q } from "@nozbe/watermelondb";
 import NetInfo from "@react-native-community/netinfo";
-import { axiosIntance } from "@services/axios";
 import { AppSetting } from "@stores/appSetting";
 import { database } from "@stores/index";
 import { User } from "@stores/user";
-import { Worker } from "@stores/worker";
 import { object, string } from "yup";
 
-import { BaseResponse, UserJson, WorkerJson } from "../types";
+import { UserJson } from "../types";
+import axios from "axios";
 
 export interface ILoginSchema {
   email: string;
@@ -39,21 +38,12 @@ export enum LoginStatus {
   FAILED,
 }
 
-export interface Member {
-  id: string;
-  full_name: string;
-}
-
-export interface LoginResponse extends BaseResponse {
-  result: {
-    user: UserJson;
-    location: {
-      healthcare: Record<string, WorkerJson>;
-    };
-    members: Member[];
-    data_privacy_url: string;
-    terms_of_use_url: string;
-  };
+export interface LoginResponse {
+  user: UserJson;
+  data_privacy_url: string;
+  terms_of_use_url: string;
+  permissions: string[];
+  access_token: string;
 }
 
 export interface LoginResult {
@@ -66,15 +56,14 @@ export interface LoginResult {
 function updateUser(user: User, userResponse: UserJson) {
   user.firstName = userResponse.first_name;
   user.lastName = userResponse.last_name;
-  user.email = userResponse.email;
-  user.companyName = userResponse.company_name;
-  // eslint-disable-next-line eqeqeq
-  user.hasAcceptedAppPrivacy = userResponse.app_privacy_accepted_flag == "1";
+  user.email = userResponse.decrypted_email;
+  user.companyName = userResponse.company;
+  user.hasAcceptedAppPrivacy = userResponse.app_privacy_accepted_flag === 1;
 }
 
 function updateAppSetting(appSetting: AppSetting, response: LoginResponse) {
-  appSetting.dataPrivacyUrl = response.result.data_privacy_url;
-  appSetting.termsOfUseUrl = response.result.terms_of_use_url;
+  appSetting.dataPrivacyUrl = response.data_privacy_url;
+  appSetting.termsOfUseUrl = response.terms_of_use_url;
 }
 
 export async function login(credentials: ILoginSchema): Promise<LoginResult> {
@@ -91,27 +80,22 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
   }
 
   try {
-    const result = await axiosIntance.postForm<LoginResponse>(
-      `/login`,
+    const tempAxiosInstance = axios.create();
+    const url = `${process.env.EXPO_PUBLIC_API_URL}/mobile/login`;
+    console.log("url", url);
+    const result = await tempAxiosInstance.post<LoginResponse>(
+      url,
       credentials,
     );
     // console.log("result", result);
     const response = result.data;
     console.log("response", JSON.stringify(response));
-    if (response.status === 0) {
-      console.log("failed to login. should call logout here");
-      // TODO clear watermelon cache and SecureStorage. caller of this function should redirect to login stack
-      return {
-        status: LoginStatus.FAILED,
-        messageFromServer: response.message, // "Invalid email and password."
-      };
-    }
 
     await database.write(async () => {
       const operations = [];
       const users = await database.get<User>("users").query(Q.take(1)).fetch();
 
-      const userResponse = response.result.user;
+      const userResponse = response.user;
       if (users.length === 0) {
         operations.push(
           database
@@ -146,33 +130,12 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
         );
       }
 
-      const existingWorkers = await database
-        .get<Worker>("workers")
-        .query()
-        .fetch();
-      existingWorkers.forEach((worker) =>
-        operations.push(worker.prepareDestroyPermanently()),
-      );
-
-      const healthcare = response.result.location.healthcare;
-      const objectKeys = Object.keys(healthcare);
-      objectKeys.forEach((key) => {
-        operations.push(
-          database.get<Worker>("workers").prepareCreate((worker) => {
-            worker.serverId = healthcare[key].id;
-            worker.name = healthcare[key].name;
-            worker.listOrder = parseInt(key, 10);
-          }),
-        );
-      });
-
       await database.batch(operations);
     });
 
     return {
       status: LoginStatus.SUCCESS,
-      token: response.result.user.token,
-      messageFromServer: response.message,
+      token: response.access_token,
     };
   } catch (e) {
     console.log("login error", JSON.stringify(e));
