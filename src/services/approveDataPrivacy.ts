@@ -6,7 +6,7 @@ export async function approveDataPrivacy() {
   let result;
   try {
     result = await axiosInstance.post<BaseResponse>(
-      "/mobile/data-privacy-data",
+      "/mobile/approve-data-privacy",
     );
     console.log("result.data", result?.data);
     return result?.data?.message;
