@@ -1,108 +1,123 @@
 import DropdownList from "@components/DropdownList";
 import { AntDesign as Icon } from "@expo/vector-icons";
-import { getDefaultLanguage, i18n } from "@i18n/index";
-import { Q } from "@nozbe/watermelondb";
+import { i18n } from "@i18n/index";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
-import { AppSetting } from "@stores/appSetting";
 import { database } from "@stores/index";
-import isEmpty from "lodash.isempty";
-import { useCallback, useState } from "react";
-import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { useEffect, useState } from "react";
+import {
+  Alert,
+  Keyboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
-import { of, switchMap } from "rxjs";
+import { AuditType } from "@stores/auditType";
+import { Worker } from "@stores/worker";
+import { getHealthCareWorkers } from "@services/getHealthCareWorkers";
+import { getAuditTypes } from "@services/getAuditTypes";
 
 interface RecordProps {
-  appSetting: AppSetting;
+  workers: Worker[];
+  auditTypes: AuditType[];
 }
 
-export const typeAudit = [
-  { key: "select", value: "*Select Audit Type" },
-  { key: "endemic", value: "Endemic" },
-  { key: "pandemic", value: "Pandemic" },
-  { key: "covid19", value: "Covid 19" },
-  { key: "normal", value: "Normal" },
-];
+async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
+  const result = await Promise.allSettled([
+    getHealthCareWorkers(),
+    getAuditTypes(),
+  ]);
+  console.log("server call result", result);
+  if (result.findIndex((r) => r.status === "rejected") >= 0 && shouldRetry) {
+    Alert.alert(
+      i18n.t("S11", {
+        defaultValue: "Failed",
+      }),
+      i18n.t("ADD25", {
+        defaultValue:
+          "Your device is offline. Check connectivity settings or move to a new location with stable Internet connection.",
+      }),
+      [
+        {
+          text: "OK",
+          onPress: () => serverCall(shouldRetry, onSuccess), // recursively call to try again
+        },
+      ],
+    );
+  }
+}
 
-function Component({ appSetting }: RecordProps) {
-  const saveSelectedLanguage = useCallback(
-    async (languageCode: string) => {
-      if (isEmpty(appSetting)) {
-        await database.write(async () => {
-          await database
-            .get<AppSetting>("app_settings")
-            .create((appSetting) => {
-              appSetting.language = languageCode;
-              appSetting.dataPrivacyUrl = "";
-              appSetting.termsOfUseUrl = "";
-            });
-        });
-      } else {
-        await appSetting.saveLanguage(languageCode);
-      }
-    },
-    [appSetting],
-  );
+function Component({ workers, auditTypes }: RecordProps) {
   const { styles } = useStyles(stylesheet);
 
   const [numberOpportunities, setNumberOpportunities] = useState("");
+  const [auditType, setAuditType] = useState<number | undefined>();
+
+  const hasCachedData = workers.length !== 0 || auditTypes.length !== 0;
+  const [loading, setLoading] = useState(!hasCachedData);
+
+  useEffect(() => {
+    (async () => {
+      await serverCall(!hasCachedData, () => setLoading(false));
+    })();
+  }, []);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.textInputContainer}>
-          <TextInput
-            keyboardType="numeric"
-            label={i18n.t("Y2", {
-              defaultValue: "Number of Opportunities for this Audit:",
-            })}
-            value={numberOpportunities}
-            onChangeText={(text) => setNumberOpportunities(text)}
-            contentStyle={styles.textInput}
-            theme={{ colors: { primary: "#475569" } }}
-            textColor="#020617"
-          />
-          <DropdownList
-            options={typeAudit}
-            selectedOptionKey={getDefaultLanguage(appSetting)}
-            onOptionSelected={(key) => saveSelectedLanguage(key as string)}
-            dropdownlistStyle={styles.dropdownlistContainer}
-            right={<Icon name="caretdown" size={12} color="gray" />}
-          />
-          <Button
-            mode="outlined"
-            style={styles.recordButton}
-            onPress={() => {
-              console.log("Clicked!");
-            }}
-          >
-            <Text variant="bodyLarge">
-              {i18n.t("Y3", { defaultValue: "Begin Audit" })}
-            </Text>
-            <Icon name="arrowright" size={14} color="white" />
-          </Button>
+    <View style={{ flex: 1, position: "relative" }}>
+      {loading && (
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            { opacity: 0.75, alignItems: "center", justifyContent: "center" },
+          ]}
+        >
+          <ActivityIndicator animating size="large" />
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      )}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.textInputContainer}>
+            <TextInput
+              keyboardType="numeric"
+              label={i18n.t("Y2", {
+                defaultValue: "Number of Opportunities for this Audit:",
+              })}
+              value={numberOpportunities}
+              onChangeText={(text) => setNumberOpportunities(text)}
+              contentStyle={styles.textInput}
+              theme={{ colors: { primary: "#475569" } }}
+              textColor="#020617"
+            />
+            <DropdownList
+              options={auditTypes.map((a) => ({
+                key: a.serverId,
+                value: a.name,
+              }))}
+              onOptionSelected={(key) => setAuditType(key as number)}
+              selectedOptionKey={auditType}
+              dropdownlistStyle={styles.dropdownlistContainer}
+              right={<Icon name="caretdown" size={12} color="gray" />}
+            />
+            <Button
+              mode="outlined"
+              style={styles.recordButton}
+              onPress={() => {
+                console.log("Clicked!");
+              }}
+            >
+              <Text variant="bodyLarge">
+                {i18n.t("Y3", { defaultValue: "Begin Audit" })}
+              </Text>
+              <Icon name="arrowright" size={14} color="white" />
+            </Button>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
   );
 }
-
-type WithObservableProps = ObservableifyProps<RecordProps, "appSetting">;
-const Record = withObservables(
-  ["appSetting"],
-  (props: WithObservableProps) => ({
-    appSetting: database
-      .get<AppSetting>("app_settings")
-      .query(Q.take(1))
-      .observe()
-      .pipe(
-        switchMap((appSettings) =>
-          appSettings.length > 0 ? appSettings[0].observe() : of(null),
-        ),
-      ),
-  }),
-)(Component as any);
 
 const stylesheet = createStyleSheet({
   container: {
@@ -140,5 +155,19 @@ const stylesheet = createStyleSheet({
     padding: 4,
   },
 });
+
+// TODO see if we can observer more than 2 later
+type WithObservableProps = ObservableifyProps<
+  RecordProps,
+  "workers",
+  "auditTypes"
+>;
+const Record = withObservables(
+  ["workers", "auditTypes"],
+  (props: WithObservableProps) => ({
+    workers: database.get<Worker>("workers").query(),
+    auditTypes: database.get<AuditType>("audit_types").query(),
+  }),
+)(Component);
 
 export default Record;

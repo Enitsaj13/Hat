@@ -25,9 +25,16 @@ export const dbSchema = appSchema({
     tableSchema({
       name: "workers",
       columns: [
-        { name: "server_id", type: "string" }, // id field from the JSON response, since watermelon has special field ID
+        { name: "server_id", type: "number" }, // id field from the JSON response, since watermelon has special field ID
         { name: "name", type: "string" },
         { name: "list_order", type: "number" },
+      ],
+    }),
+    tableSchema({
+      name: "audit_types",
+      columns: [
+        { name: "server_id", type: "number" }, // id field from the JSON response, since watermelon has special field ID
+        { name: "name", type: "string" },
       ],
     }),
   ],
