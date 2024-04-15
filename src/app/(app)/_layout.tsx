@@ -12,6 +12,7 @@ import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
+import { i18n } from "@i18n/index";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -60,6 +61,15 @@ function Component({ appSetting }: RootLayoutProps) {
         options={{
           headerShown: false,
           headerTitle: "",
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="TermsOfUse"
+        options={{
+          headerTitle: i18n.t("TERMS6", {
+            defaultValue: "Terms of Use",
+          }),
           headerBackTitleVisible: false,
         }}
       />

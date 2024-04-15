@@ -8,6 +8,7 @@ import { object, string } from "yup";
 
 import { UserJson } from "../types";
 import axios from "axios";
+import { contentTypeKey, defaultContentType } from "@services/axios";
 
 export interface ILoginSchema {
   email: string;
@@ -48,6 +49,7 @@ export interface LoginResponse {
 
 export interface LoginResult {
   token?: string;
+  hasAcceptedAppPrivacy?: boolean;
   status: LoginStatus;
   messageFromServer?: string;
   message?: string;
@@ -80,7 +82,11 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
   }
 
   try {
-    const tempAxiosInstance = axios.create();
+    const tempAxiosInstance = axios.create({
+      headers: {
+        [contentTypeKey]: defaultContentType,
+      },
+    });
     const url = `${process.env.EXPO_PUBLIC_API_URL}/mobile/login`;
     console.log("url", url);
     const result = await tempAxiosInstance.post<LoginResponse>(
@@ -90,12 +96,12 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
     // console.log("result", result);
     const response = result.data;
     console.log("response", JSON.stringify(response));
+    const userResponse = response.user;
 
     await database.write(async () => {
       const operations = [];
       const users = await database.get<User>("users").query(Q.take(1)).fetch();
 
-      const userResponse = response.user;
       if (users.length === 0) {
         operations.push(
           database
@@ -136,6 +142,7 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
     return {
       status: LoginStatus.SUCCESS,
       token: response.access_token,
+      hasAcceptedAppPrivacy: userResponse.app_privacy_accepted_flag === 1,
     };
   } catch (e) {
     console.log("login error", JSON.stringify(e));

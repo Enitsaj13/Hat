@@ -11,6 +11,9 @@ export const axiosInstance = axios.create({
 
 const authKey = "Authorization";
 
+export const contentTypeKey = "Content-Type";
+export const defaultContentType = "application/json";
+
 function constructAuthHeader(token: string) {
   return `Bearer ${token}`;
 }
@@ -21,6 +24,7 @@ axiosInstance.interceptors.request.use(
       const token = await SecureStore.getItemAsync(SecureStorageKeys.AuthToken);
       if (!isEmpty(token)) {
         config.headers[authKey] = constructAuthHeader(token!);
+        config.headers[contentTypeKey] = defaultContentType;
       }
     } catch (e) {
       console.log(
@@ -49,27 +53,25 @@ export function useAxiosResponseInterceptor(
 ) {
   axiosInstance.interceptors.response.use(null, async (error) => {
     console.log("axios intercepted an error", JSON.stringify(error));
-    try {
-      const token = await SecureStore.getItemAsync(SecureStorageKeys.AuthToken);
-      if (!isEmpty(token)) {
+    const token = await SecureStore.getItemAsync(SecureStorageKeys.AuthToken);
+    if (!isEmpty(token)) {
+      try {
         const tempAxiosInstance = axios.create({
           headers: {
             [authKey]: constructAuthHeader(token!),
+            [contentTypeKey]: defaultContentType,
           },
         });
         const result = await tempAxiosInstance.post<RefreshTokenResponse>(
           `${process.env.EXPO_PUBLIC_API_URL}/auth/refresh`,
         );
         signIn(result.data.access_token);
-      } else {
-        throw new Error(
-          "Cannot call refresh token as the obtained token from secured storage is empty!",
-        );
+        return;
+      } catch (e) {
+        console.log("Error occurred while refreshing the token: ", e);
+        signOut();
       }
-    } catch (e) {
-      console.log("Error occurred while refreshing the token: ", e);
-      signOut();
-      Promise.reject(error);
     }
+    Promise.reject(error);
   });
 }

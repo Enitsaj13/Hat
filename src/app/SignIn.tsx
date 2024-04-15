@@ -44,7 +44,11 @@ function Component({ appSetting }: SignInProps) {
       );
     } else {
       signIn(result.token!);
-      router.replace("./(app)/(tabs)");
+      if (result.hasAcceptedAppPrivacy) {
+        router.replace("./(app)/(tabs)");
+      } else {
+        router.replace("./(app)/TermsOfUse");
+      }
     }
   }, []);
 
