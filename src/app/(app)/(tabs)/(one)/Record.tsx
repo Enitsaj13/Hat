@@ -1,7 +1,10 @@
 import DropdownList from "@components/DropdownList";
 import { AntDesign as Icon } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
-import { withObservables } from "@nozbe/watermelondb/react";
+import {
+  ExtractedObservables,
+  withObservables,
+} from "@nozbe/watermelondb/react";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { database } from "@stores/index";
 import { useCallback, useState } from "react";
@@ -19,11 +22,6 @@ import { Worker } from "@stores/worker";
 import { getHealthCareWorkers } from "@services/getHealthCareWorkers";
 import { getAuditTypes } from "@services/getAuditTypes";
 import { useFocusEffect } from "expo-router";
-
-interface RecordProps {
-  workers: Worker[];
-  auditTypes: AuditType[];
-}
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   const result = await Promise.allSettled([
@@ -159,18 +157,22 @@ const stylesheet = createStyleSheet({
   },
 });
 
-// TODO see if we can observer more than 2 later
-type WithObservableProps = ObservableifyProps<
-  RecordProps,
-  "workers",
-  "auditTypes"
->;
+interface ObservableProps {
+  workers: Worker[];
+  auditTypes: AuditType[];
+}
+
+const getObservables = ({ workers, auditTypes }: ObservableProps) => ({
+  workers: database.get<Worker>("workers").query(),
+  auditTypes: database.get<AuditType>("audit_types").query(),
+});
+
+interface RecordProps
+  extends ExtractedObservables<ReturnType<typeof getObservables>> {}
+
 const Record = withObservables(
   ["workers", "auditTypes"],
-  (props: WithObservableProps) => ({
-    workers: database.get<Worker>("workers").query(),
-    auditTypes: database.get<AuditType>("audit_types").query(),
-  }),
+  getObservables,
 )(Component);
 
 export default Record;
