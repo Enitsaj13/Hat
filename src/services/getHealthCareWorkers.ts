@@ -18,18 +18,18 @@ export async function getHealthCareWorkers() {
 
   const workersDb = database.get<Worker>("workers");
   const workersResponse = result.data;
-  console.log("workersResponse", JSON.stringify(workersResponse));
+  // console.log("workersResponse", JSON.stringify(workersResponse));
   await database.write(async () => {
     const operations: any[] = [];
     const existingWorkers = await workersDb.query().fetch();
 
     const existingWorkersMap = new Map<number, Worker>();
     existingWorkers.forEach((w) => existingWorkersMap.set(w.serverId, w));
-    console.log("existingWorkersMap", existingWorkersMap);
+    // console.log("existingWorkersMap", existingWorkersMap);
 
     const newWorkersMap = new Map<number, HealthCareWorkerResponse>();
     workersResponse.forEach((w) => newWorkersMap.set(w.id, w));
-    console.log("newWorkersMap", newWorkersMap);
+    // console.log("newWorkersMap", newWorkersMap);
 
     for (const [serverId, worker] of existingWorkersMap.entries()) {
       if (!newWorkersMap.has(serverId)) {

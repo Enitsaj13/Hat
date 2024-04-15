@@ -4,7 +4,7 @@ import { i18n } from "@i18n/index";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { database } from "@stores/index";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -18,6 +18,7 @@ import { AuditType } from "@stores/auditType";
 import { Worker } from "@stores/worker";
 import { getHealthCareWorkers } from "@services/getHealthCareWorkers";
 import { getAuditTypes } from "@services/getAuditTypes";
+import { useFocusEffect } from "expo-router";
 
 interface RecordProps {
   workers: Worker[];
@@ -58,11 +59,13 @@ function Component({ workers, auditTypes }: RecordProps) {
   const hasCachedData = workers.length !== 0 || auditTypes.length !== 0;
   const [loading, setLoading] = useState(!hasCachedData);
 
-  useEffect(() => {
-    (async () => {
-      await serverCall(!hasCachedData, () => setLoading(false));
-    })();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        await serverCall(!hasCachedData, () => setLoading(false));
+      })();
+    }, []),
+  );
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
