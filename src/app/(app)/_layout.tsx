@@ -2,16 +2,17 @@ import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
-import "@i18n/index";
 import { useSession } from "../../auth";
 
 import { useAxiosResponseInterceptor } from "@services/axios";
+
 import { AppSetting } from "@stores/appSetting";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
+import { User } from "@stores/user";
 import { i18n } from "@i18n/index";
 
 export const unstable_settings = {
@@ -20,10 +21,11 @@ export const unstable_settings = {
 };
 
 interface RootLayoutProps {
+  user: User;
   appSetting: AppSetting;
 }
 
-function Component({ appSetting }: RootLayoutProps) {
+function Component({ user, appSetting }: RootLayoutProps) {
   const { session, isLoading, signIn, signOut } = useSession();
 
   useAxiosResponseInterceptor(signIn, signOut);
@@ -47,6 +49,8 @@ function Component({ appSetting }: RootLayoutProps) {
         ? "/SignIn"
         : "/IntroductionOnceOnly";
       router.replace(toRedirect);
+    } else if (!user.hasAcceptedAppPrivacy) {
+      router.replace("/(app)/TermsOfUse");
     }
   }, [isLoading, session, appSetting?.isIntroductionViewed]);
 
@@ -79,8 +83,15 @@ function Component({ appSetting }: RootLayoutProps) {
 
 type WithObservableProps = ObservableifyProps<RootLayoutProps, "appSetting">;
 const RootLayout = withObservables(
-  ["appSetting"],
+  ["user", "appSetting"],
   (props: WithObservableProps) => ({
+    user: database
+      .get<User>("users")
+      .query(Q.take(1))
+      .observe()
+      .pipe(
+        switchMap((user) => (user.length > 0 ? user[0].observe() : of(null))),
+      ),
     appSetting: database
       .get<AppSetting>("app_settings")
       .query(Q.take(1))

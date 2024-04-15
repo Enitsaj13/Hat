@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import * as SecureStore from "expo-secure-store";
 import isEmpty from "lodash.isempty";
 
@@ -36,9 +36,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
 interface RefreshTokenResponse {
@@ -54,8 +52,16 @@ export function useAxiosResponseInterceptor(
   axiosInstance.interceptors.response.use(null, async (error) => {
     console.log("axios intercepted an error", JSON.stringify(error));
     const token = await SecureStore.getItemAsync(SecureStorageKeys.AuthToken);
-    if (!isEmpty(token)) {
+    const originalRequest = error.config;
+    if (
+      !isEmpty(token) &&
+      [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden].includes(
+        error.response.status,
+      ) &&
+      !originalRequest._retry
+    ) {
       try {
+        originalRequest._retry = true;
         const tempAxiosInstance = axios.create({
           headers: {
             [authKey]: constructAuthHeader(token!),
@@ -66,12 +72,15 @@ export function useAxiosResponseInterceptor(
           `${process.env.EXPO_PUBLIC_API_URL}/auth/refresh`,
         );
         signIn(result.data.access_token);
-        return;
+        axios.defaults.headers.common[authKey] = constructAuthHeader(
+          result.data.access_token,
+        );
+        return axiosInstance(originalRequest);
       } catch (e) {
         console.log("Error occurred while refreshing the token: ", e);
         signOut();
       }
     }
-    Promise.reject(error);
+    return Promise.reject(error);
   });
 }

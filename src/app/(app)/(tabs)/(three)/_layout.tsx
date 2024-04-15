@@ -13,14 +13,6 @@ export default function Layout() {
           }),
         }}
       />
-      <Stack.Screen
-        name="TermsOfUse"
-        options={{
-          title: i18n.t("TERMS6", {
-            defaultValue: "Terms of use",
-          }),
-        }}
-      />
     </Stack>
   );
 }

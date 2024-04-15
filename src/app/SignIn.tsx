@@ -10,7 +10,6 @@ import { ILoginSchema, login, loginSchema } from "@services/login";
 import { AppSetting } from "@stores/appSetting";
 import { database } from "@stores/index";
 import { colors } from "@theme/index";
-import { router } from "expo-router";
 import isEmpty from "lodash.isempty";
 import React, { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -20,6 +19,7 @@ import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { of, switchMap } from "rxjs";
 
 import { useSession } from "../auth";
+import { useRouter } from "expo-router";
 
 interface SignInProps {
   appSetting: AppSetting;
@@ -35,6 +35,7 @@ function Component({ appSetting }: SignInProps) {
     formState: { errors, isLoading },
   } = useForm<ILoginSchema>({ resolver: yupResolver(loginSchema) });
 
+  const router = useRouter();
   const onLoginPress = useCallback(async function (form: ILoginSchema) {
     const result = await login(form);
     if (isEmpty(result.token)) {
@@ -45,9 +46,9 @@ function Component({ appSetting }: SignInProps) {
     } else {
       signIn(result.token!);
       if (result.hasAcceptedAppPrivacy) {
-        router.replace("./(app)/(tabs)");
+        router.replace("/(app)/(tabs)");
       } else {
-        router.replace("./(app)/TermsOfUse");
+        router.replace("/(app)/TermsOfUse");
       }
     }
   }, []);

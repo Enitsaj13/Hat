@@ -1,5 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
-import { field, text } from "@nozbe/watermelondb/decorators";
+import { field, text, writer } from "@nozbe/watermelondb/decorators";
 
 export class User extends Model {
   static table = "users";
@@ -18,4 +18,11 @@ export class User extends Model {
 
   // @ts-expect-error
   @field("has_accepted_app_privacy") hasAcceptedAppPrivacy: boolean;
+
+  @writer
+  async updateUserHasAcceptedAppPrivacy(hasAcceptedAppPrivacy: boolean) {
+    await this.update((user) => {
+      user.hasAcceptedAppPrivacy = hasAcceptedAppPrivacy;
+    });
+  }
 }
