@@ -19,14 +19,18 @@ import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { AuditType } from "@stores/auditType";
 import { Worker } from "@stores/worker";
+import { Location } from "@stores/location";
 import { getHealthCareWorkers } from "@services/getHealthCareWorkers";
 import { getAuditTypes } from "@services/getAuditTypes";
 import { useFocusEffect } from "expo-router";
+import isEmpty from "lodash.isempty";
+import { getLocations } from "@services/getLocations";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   const result = await Promise.allSettled([
     getHealthCareWorkers(),
     getAuditTypes(),
+    getLocations(),
   ]);
   console.log("server call result", result);
   if (result.findIndex((r) => r.status === "rejected") >= 0 && shouldRetry) {
@@ -48,13 +52,14 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   }
 }
 
-function Component({ workers, auditTypes }: RecordProps) {
+function Component({ workers, auditTypes, locations }: RecordProps) {
   const { styles } = useStyles(stylesheet);
 
   const [numberOpportunities, setNumberOpportunities] = useState("");
   const [auditType, setAuditType] = useState<number | undefined>();
 
-  const hasCachedData = workers.length !== 0 || auditTypes.length !== 0;
+  const hasCachedData =
+    !isEmpty(workers) || !isEmpty(auditTypes) || !isEmpty(locations);
   const [loading, setLoading] = useState(!hasCachedData);
 
   useFocusEffect(
@@ -160,18 +165,20 @@ const stylesheet = createStyleSheet({
 interface ObservableProps {
   workers: Worker[];
   auditTypes: AuditType[];
+  locations: Location[];
 }
 
-const getObservables = ({ workers, auditTypes }: ObservableProps) => ({
+const getObservables = (props: ObservableProps) => ({
   workers: database.get<Worker>("workers").query(),
   auditTypes: database.get<AuditType>("audit_types").query(),
+  locations: database.get<Location>("locations").query(),
 });
 
 interface RecordProps
   extends ExtractedObservables<ReturnType<typeof getObservables>> {}
 
 const Record = withObservables(
-  ["workers", "auditTypes"],
+  ["workers", "auditTypes", "locations"],
   getObservables,
 )(Component);
 

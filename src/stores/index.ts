@@ -5,6 +5,7 @@ import { dbSchema } from "@stores/dbSchema";
 import { User } from "@stores/user";
 import { Worker } from "@stores/worker";
 import { AuditType } from "@stores/auditType";
+import { Location } from "@stores/location";
 
 const adapter = new SQLiteAdapter({
   schema: dbSchema,
@@ -22,5 +23,5 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses: [User, AppSetting, Worker, AuditType],
+  modelClasses: [User, AppSetting, Worker, AuditType, Location],
 });

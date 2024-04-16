@@ -37,5 +37,14 @@ export const dbSchema = appSchema({
         { name: "name", type: "string" },
       ],
     }),
+    tableSchema({
+      name: "locations",
+      columns: [
+        { name: "server_id", type: "number" }, // id field from the JSON response, since watermelon has special field ID
+        { name: "name", type: "string" },
+        { name: "sort", type: "number" },
+        { name: "parent_server_id", type: "number", isOptional: true },
+      ],
+    }),
   ],
 });
