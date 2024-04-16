@@ -1,10 +1,10 @@
-import { AntDesign as Icon } from "@expo/vector-icons";
-import { i18n } from "@i18n/index";
-import { colors } from "@theme/index";
 import { useState } from "react";
 import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { AntDesign as Icon } from "@expo/vector-icons";
+import { i18n } from "@i18n/index";
+import { colors } from "@theme/index";
 
 function PracticeMode() {
     const { styles } = useStyles(stylesheet);
