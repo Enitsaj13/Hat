@@ -1,15 +1,16 @@
-import { colors } from "@theme/index";
-import { Link } from "expo-router";
 import React from "react";
+import { Link } from "expo-router";
 import {
   GestureResponderEvent,
   Image,
   ImageSourcePropType,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import { Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { colors } from "@theme/index";
 
 interface TileProps {
   imageSource: ImageSourcePropType;
@@ -49,7 +50,7 @@ function Information() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.infoContainer}>
         <Tile
           imageSource={require("@assets/images/hat-images/charts.png")}
@@ -88,14 +89,13 @@ function Information() {
         {/*  />*/}
         {/*</Link>*/}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const stylesheet = createStyleSheet({
   container: {
     flex: 1,
-    alignItems: "center",
     marginTop: 10,
     backgroundColor: colors.bgColor,
   },
@@ -106,31 +106,21 @@ const stylesheet = createStyleSheet({
     justifyContent: "space-between",
   },
   infoImages: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
   },
   tileContainer: {
-    paddingVertical: 50,
+    paddingVertical: 30,
     alignItems: "center",
     width: "48%",
-    aspectRatio: 1,
-    borderWidth: 0.2,
+    borderWidth: 0.4,
     borderColor: colors.textColor,
     borderRadius: 10,
     marginBottom: 15,
     overflow: "hidden",
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 5,
   },
   labelText: {
     textAlign: "center",
-    fontWeight: "bold",
   },
 });
 
