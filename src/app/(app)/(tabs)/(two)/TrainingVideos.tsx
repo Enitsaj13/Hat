@@ -1,9 +1,10 @@
-import { i18n } from "@i18n/index";
-import { Link } from "expo-router";
 import React from "react";
+import { Link } from "expo-router";
 import { View } from "react-native";
 import { List, Text, TouchableRipple } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { i18n } from "@i18n/index";
+import { colors } from "@theme/index";
 
 const TrainingVideos = () => {
   const { styles } = useStyles(stylesheet);
@@ -69,22 +70,21 @@ const stylesheet = createStyleSheet({
   },
   itemContainer: {
     borderBottomWidth: 0.6,
-    borderBottomColor: "lightgray",
+    borderBottomColor: colors.lightGray,
   },
   videoHeaderContainer: {
     borderBottomWidth: 0.6,
-    borderBottomColor: "lightgray",
-    backgroundColor: "#f1f5f9",
+    borderBottomColor: colors.lightGray,
   },
   videoTitle: {
-    color: "#334155",
+    color: colors.charcoal,
     textAlign: "left",
     alignItems: "center",
     padding: 6,
     marginHorizontal: 10,
   },
   titleColor: {
-    color: "#334155",
+    color: colors.charcoal,
   },
 });
 
