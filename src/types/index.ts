@@ -32,3 +32,5 @@ export interface UserJson {
 export interface BaseResponse {
   message: string;
 }
+
+export type FieldType = "DROPDOWN" | "TOGGLE";

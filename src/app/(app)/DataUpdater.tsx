@@ -18,6 +18,7 @@ import { getCompanyConfig } from "@services/getCompanyConfig";
 import { ActivityIndicator } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useFocusEffect } from "expo-router";
+import { getObligatoryFields } from "@services/getObligatoryFields";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   const result = await Promise.allSettled([
@@ -25,6 +26,7 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
     getAuditTypes(),
     getLocations(),
     getCompanyConfig(), // company config + institution actions
+    getObligatoryFields(),
   ]);
   console.log("server call result", result);
   if (result.findIndex((r) => r.status === "rejected") >= 0 && shouldRetry) {

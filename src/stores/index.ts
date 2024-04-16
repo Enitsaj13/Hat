@@ -8,6 +8,8 @@ import { AuditType } from "@stores/auditType";
 import { Location } from "@stores/location";
 import { CompanyConfig } from "@stores/companyConfig";
 import { InstitutionAction } from "@stores/institutionAction";
+import { ObligatoryField } from "@stores/obligatoryField";
+import { ObligatoryFieldOption } from "@stores/obligatoryFieldOption";
 
 const adapter = new SQLiteAdapter({
   schema: dbSchema,
@@ -33,5 +35,7 @@ export const database = new Database({
     Location,
     CompanyConfig,
     InstitutionAction,
+    ObligatoryField,
+    ObligatoryFieldOption,
   ],
 });
