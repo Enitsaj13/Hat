@@ -50,7 +50,7 @@ function Information() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <View style={styles.infoContainer}>
         <Tile
           imageSource={require("@assets/images/hat-images/charts.png")}
@@ -81,22 +81,14 @@ function Information() {
             onPress={() => handleTilePress("Revisit Introduction")}
           />
         </Link>
-        {/*<Link href="/PracticeMode" asChild>*/}
-        {/*  <Tile*/}
-        {/*    imageSource={require("@assets/images/hat-images/simulator.png")}*/}
-        {/*    label="Practice Mode"*/}
-        {/*    onPress={() => handleTilePress("Practice Mode")}*/}
-        {/*  />*/}
-        {/*</Link>*/}
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const stylesheet = createStyleSheet({
   container: {
     flex: 1,
-    marginTop: 10,
     backgroundColor: colors.bgColor,
   },
   infoContainer: {
