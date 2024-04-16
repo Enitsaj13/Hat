@@ -69,6 +69,7 @@ function DropdownList({
       </View>
 
       <BottomSheetModal
+        enableContentPanningGesture={false} // used to scroll bottom sheet on android
         backdropComponent={renderBackdrop}
         snapPoints={["25%"]}
         ref={bottomSheetModalRef}
