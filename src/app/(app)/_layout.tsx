@@ -51,10 +51,15 @@ function Component({ user, appSetting }: RootLayoutProps) {
         ? "/SignIn"
         : "/IntroductionOnceOnly";
       router.replace(toRedirect);
-    } else if (!user.hasAcceptedAppPrivacy) {
+    } else if (!user?.hasAcceptedAppPrivacy) {
       router.replace("/(app)/TermsOfUse");
     }
-  }, [isLoading, session, appSetting?.isIntroductionViewed]);
+  }, [
+    isLoading,
+    session,
+    user?.hasAcceptedAppPrivacy,
+    appSetting?.isIntroductionViewed,
+  ]);
 
   if (isLoading) {
     return null;
