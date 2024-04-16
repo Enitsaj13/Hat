@@ -11,12 +11,13 @@ import { Worker } from "@stores/worker";
 import { Location } from "@stores/location";
 import { getHealthCareWorkers } from "@services/getHealthCareWorkers";
 import { getAuditTypes } from "@services/getAuditTypes";
-import { useFocusEffect } from "expo-router";
 import { getLocations } from "@services/getLocations";
 import { CompanyConfig } from "@stores/companyConfig";
 import { InstitutionAction } from "@stores/institutionAction";
 import { getCompanyConfig } from "@services/getCompanyConfig";
 import { ActivityIndicator } from "react-native-paper";
+import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { useFocusEffect } from "expo-router";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   const result = await Promise.allSettled([
@@ -42,6 +43,8 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
         },
       ],
     );
+  } else {
+    onSuccess();
   }
 }
 
@@ -52,6 +55,7 @@ function Component({
   locationsCount,
   institutionActionsCount,
 }: DataUpdaterProps) {
+  const { styles } = useStyles(stylesheet);
   const hasCachedData =
     auditTypesCount > 0 &&
     companyConfigCount > 0 &&
@@ -69,22 +73,25 @@ function Component({
   );
 
   return loading ? (
-    <View
-      style={[
-        StyleSheet.absoluteFill,
-        {
-          opacity: 0.75,
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          height: "100%",
-        },
-      ]}
-    >
+    <View style={[StyleSheet.absoluteFill, styles.container]}>
       <ActivityIndicator animating size="large" />
     </View>
   ) : null;
 }
+
+const stylesheet = createStyleSheet({
+  container: {
+    opacity: 0.75,
+    backgroundColor: "silver",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    zIndex: 999999,
+    borderColor: "red",
+    borderWidth: 1,
+  },
+});
 
 interface ObservableProps {
   auditTypesCount?: number;
