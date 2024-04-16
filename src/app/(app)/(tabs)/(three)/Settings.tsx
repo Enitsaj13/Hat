@@ -1,23 +1,39 @@
+import React from "react";
+import {
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  Linking,
+} from "react-native";
+import { List, Text } from "react-native-paper";
+import { Link } from "expo-router";
+import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { useSession } from "src/auth";
 import {
   Entypo as Icon,
   MaterialIcons as LogoutIcon,
 } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
-import { Link } from "expo-router";
-import React from "react";
-import { Image, SafeAreaView, TouchableOpacity, View } from "react-native";
-import { List, Text } from "react-native-paper";
-import { createStyleSheet, useStyles } from "react-native-unistyles";
-
-import { useSession } from "../../../../auth";
 
 const Settings = () => {
   const { styles } = useStyles(stylesheet);
   const { signOut } = useSession();
 
+  const onPressImprint = async () => {
+    const url = "https://www.bbraun.com/en/imprint.html";
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      console.log("Unable to open URL using Linking");
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.accountContainer}>
         <Image
           style={styles.accountImg}
@@ -34,22 +50,24 @@ const Settings = () => {
           onPress={() => {
             console.log("Clicked!");
           }}
-          style={styles.paddingContainer}
+          style={{ height: 50 }}
         >
           <List.Item
-            contentStyle={styles.rowContainer}
             title={i18n.t("Q2", { defaultValue: "Account Information" })}
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.centerContainer}>
-                <Icon name="chevron-right" size={20} color="black" />
+                <Icon name="chevron-right" size={16} color={colors.midNight} />
               </View>
             )}
             left={() => (
               <View
-                style={[styles.iconContainer, { backgroundColor: "#ecfdf5" }]}
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.lilyWhite },
+                ]}
               >
-                <Icon name="user" size={20} color="#10b981" />
+                <Icon name="user" size={16} color={colors.bgColor} />
               </View>
             )}
           />
@@ -58,22 +76,24 @@ const Settings = () => {
           onPress={() => {
             console.log("Clicked!");
           }}
-          style={styles.paddingContainer}
+          style={{ height: 50 }}
         >
           <List.Item
-            contentStyle={styles.rowContainer}
             title={i18n.t("Q7", { defaultValue: "Change Password" })}
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.centerContainer}>
-                <Icon name="chevron-right" size={22} color="black" />
+                <Icon name="chevron-right" size={16} color={colors.midNight} />
               </View>
             )}
             left={() => (
               <View
-                style={[styles.iconContainer, { backgroundColor: "#fff1f2" }]}
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.chantilly },
+                ]}
               >
-                <Icon name="lock" size={22} color="#ed6faa" />
+                <Icon name="lock" size={16} color={colors.blushPink} />
               </View>
             )}
           />
@@ -82,22 +102,24 @@ const Settings = () => {
           onPress={() => {
             console.log("Clicked!");
           }}
-          style={styles.paddingContainer}
+          style={{ height: 50 }}
         >
           <List.Item
-            contentStyle={styles.rowContainer}
             title={i18n.t("D0", { defaultValue: "Language" })}
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.centerContainer}>
-                <Icon name="chevron-right" size={22} color="black" />
+                <Icon name="chevron-right" size={16} color={colors.midNight} />
               </View>
             )}
             left={() => (
               <View
-                style={[styles.iconContainer, { backgroundColor: "#fffbeb" }]}
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.lemonChiffon },
+                ]}
               >
-                <Icon name="globe" size={22} color="#FEB65D" />
+                <Icon name="globe" size={16} color={colors.sunshade} />
               </View>
             )}
           />
@@ -107,47 +129,85 @@ const Settings = () => {
             onPress={() => {
               console.log("Clicked!");
             }}
-            style={styles.paddingContainer}
+            style={{ height: 50 }}
           >
             <List.Item
-              contentStyle={styles.rowContainer}
               title={i18n.t("D4", { defaultValue: "Subscribe Now" })}
               titleStyle={styles.settingsText}
               right={() => (
                 <View style={styles.centerContainer}>
-                  <Icon name="chevron-right" size={22} color="black" />
+                  <Icon
+                    name="chevron-right"
+                    size={16}
+                    color={colors.midNight}
+                  />
                 </View>
               )}
               left={() => (
                 <View
-                  style={[styles.iconContainer, { backgroundColor: "#f5f3ff" }]}
+                  style={[
+                    styles.iconContainer,
+                    { backgroundColor: colors.lavenderMist },
+                  ]}
                 >
-                  <Icon name="rocket" size={22} color="#8b5cf6" />
+                  <Icon name="rocket" size={16} color={colors.mediumPurple} />
                 </View>
               )}
             />
           </TouchableOpacity>
         </Link>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("Clicked!");
-          }}
-          style={styles.paddingContainer}
-        >
+
+        <TouchableOpacity onPress={onPressImprint} style={{ height: 50 }}>
           <List.Item
-            contentStyle={styles.rowContainer}
-            title="Data Privacy"
+            title="Imprint"
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.centerContainer}>
-                <Icon name="chevron-right" size={22} color="black" />
+                <Icon name="chevron-right" size={16} color={colors.midNight} />
               </View>
             )}
             left={() => (
               <View
-                style={[styles.iconContainer, { backgroundColor: "#CAE3F1" }]}
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.paleBlue },
+                ]}
               >
-                <LogoutIcon name="privacy-tip" size={22} color="#0ea5e9" />
+                <LogoutIcon
+                  name="info"
+                  size={16}
+                  color={colors.vividCerulean}
+                />
+              </View>
+            )}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("Clicked!");
+          }}
+          style={{ height: 50 }}
+        >
+          <List.Item
+            title="Data Privacy Policies"
+            titleStyle={styles.settingsText}
+            right={() => (
+              <View style={styles.centerContainer}>
+                <Icon name="chevron-right" size={16} color={colors.midNight} />
+              </View>
+            )}
+            left={() => (
+              <View
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.whiteSmoke },
+                ]}
+              >
+                <LogoutIcon
+                  name="privacy-tip"
+                  size={16}
+                  color={colors.steelGrey}
+                />
               </View>
             )}
           />
@@ -157,112 +217,126 @@ const Settings = () => {
             onPress={() => {
               console.log("Clicked!");
             }}
-            style={styles.paddingContainer}
+            style={{ height: 50 }}
           >
             <List.Item
-              contentStyle={styles.rowContainer}
               title={i18n.t("TERMS6", { defaultValue: "Terms of Use" })}
               titleStyle={styles.settingsText}
               right={() => (
                 <View style={styles.centerContainer}>
-                  <Icon name="chevron-right" size={22} color="black" />
+                  <Icon
+                    name="chevron-right"
+                    size={16}
+                    color={colors.midNight}
+                  />
                 </View>
               )}
               left={() => (
                 <View
-                  style={[styles.iconContainer, { backgroundColor: "#ecfdf5" }]}
+                  style={[
+                    styles.iconContainer,
+                    { backgroundColor: colors.lilyWhite },
+                  ]}
                 >
-                  <LogoutIcon name="policy" size={22} color="#10b981" />
+                  <LogoutIcon name="policy" size={16} color={colors.bgColor} />
                 </View>
               )}
             />
           </TouchableOpacity>
         </Link>
-        <TouchableOpacity onPress={signOut} style={styles.paddingContainer}>
+        <TouchableOpacity onPress={signOut} style={{ height: 50 }}>
           <List.Item
-            contentStyle={styles.rowContainer}
             title={i18n.t("AI10", { defaultValue: "Logout" })}
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.centerContainer}>
-                <Icon name="chevron-right" size={22} color="black" />
+                <Icon name="chevron-right" size={16} color={colors.midNight} />
               </View>
             )}
             left={() => (
               <View
-                style={[styles.iconContainer, { backgroundColor: "#fff1f2" }]}
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.chantilly },
+                ]}
               >
-                <LogoutIcon name="logout" size={22} color="#f43f5e" />
+                <LogoutIcon name="logout" size={16} color={colors.terracotta} />
               </View>
             )}
           />
         </TouchableOpacity>
       </List.Section>
-    </SafeAreaView>
+      <View style={styles.copyrightContainer}>
+        <Text style={styles.copyrightText}>
+          Copyright © B. Braun Melsungen AG
+        </Text>
+      </View>
+    </View>
   );
 };
 
 const stylesheet = createStyleSheet({
   container: {
     flex: 1,
-    alignItems: "center",
     backgroundColor: "white",
   },
   accountContainer: {
     flexDirection: "row",
-    borderRadius: 20,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   accountImg: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
+    width: 40,
+    height: 40,
+    borderRadius: 40,
     backgroundColor: colors.bgColor,
-    alignSelf: "center",
-    marginTop: 20,
-    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
   accountTextContainer: {
-    top: 24,
     marginHorizontal: 20,
   },
   accountName: {
     fontSize: 18,
-    color: "black",
+    color: colors.midNight,
   },
   accountSubName: {
     fontSize: 14,
     textAlign: "left",
     top: 5,
-    color: "black",
-  },
-  rowContainer: {
-    marginRight: 120,
-    paddingVertical: 10,
-  },
-  arrow: {
-    padding: 10,
+    color: colors.midNight,
   },
   iconContainer: {
-    backgroundColor: colors.bgColor,
-    borderRadius: 40,
-    height: 50,
-    width: 50,
+    borderRadius: 20,
+    height: 30,
+    width: 30,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 10,
+    marginLeft: 20,
   },
   centerContainer: {
     justifyContent: "center",
     alignItems: "center",
   },
   settingsText: {
-    fontSize: 18,
-    color: "black",
+    fontSize: 16,
+    color: colors.midNight,
   },
-  paddingContainer: {
-    paddingHorizontal: 40,
+  copyrightContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.mediumPurple,
+    padding: 12,
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+  },
+  copyrightText: {
+    fontWeight: "500",
+    color: colors.textColor,
+    fontSize: 16,
   },
 });
 
