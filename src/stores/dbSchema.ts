@@ -46,5 +46,23 @@ export const dbSchema = appSchema({
         { name: "parent_server_id", type: "number", isOptional: true },
       ],
     }),
+    tableSchema({
+      name: "company_configs",
+      columns: [
+        { name: "enable_indication_field", type: "boolean" },
+        { name: "enable_obligatory_fields", type: "boolean" },
+        { name: "enable_optional_fields", type: "boolean" },
+        { name: "enable_audit_types", type: "boolean" },
+      ],
+    }),
+    tableSchema({
+      name: "institution_actions",
+      columns: [
+        { name: "action_code", type: "string" },
+        { name: "action", type: "string" },
+        { name: "sort", type: "number" },
+        { name: "checked", type: "boolean" },
+      ],
+    }),
   ],
 });

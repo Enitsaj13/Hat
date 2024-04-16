@@ -5,7 +5,6 @@ import {
   ExtractedObservables,
   withObservables,
 } from "@nozbe/watermelondb/react";
-import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { database } from "@stores/index";
 import { useCallback, useState } from "react";
 import {
@@ -25,12 +24,18 @@ import { getAuditTypes } from "@services/getAuditTypes";
 import { useFocusEffect } from "expo-router";
 import isEmpty from "lodash.isempty";
 import { getLocations } from "@services/getLocations";
+import { CompanyConfig } from "@stores/companyConfig";
+import { InstitutionAction } from "@stores/institutionAction";
+import { Q } from "@nozbe/watermelondb";
+import { of, switchMap } from "rxjs";
+import { getCompanyConfig } from "@services/getCompanyConfig";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   const result = await Promise.allSettled([
     getHealthCareWorkers(),
     getAuditTypes(),
     getLocations(),
+    getCompanyConfig(), // company config + institution actions
   ]);
   console.log("server call result", result);
   if (result.findIndex((r) => r.status === "rejected") >= 0 && shouldRetry) {
@@ -52,14 +57,25 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   }
 }
 
-function Component({ workers, auditTypes, locations }: RecordProps) {
+function Component({
+  auditTypes,
+  companyConfig,
+
+  workersCount,
+  locationsCount,
+  institutionActionsCount,
+}: RecordProps) {
   const { styles } = useStyles(stylesheet);
 
   const [numberOpportunities, setNumberOpportunities] = useState("");
   const [auditType, setAuditType] = useState<number | undefined>();
 
   const hasCachedData =
-    !isEmpty(workers) || !isEmpty(auditTypes) || !isEmpty(locations);
+    !isEmpty(auditTypes) &&
+    !isEmpty(companyConfig) &&
+    workersCount > 0 &&
+    locationsCount > 0 &&
+    institutionActionsCount > 0;
   const [loading, setLoading] = useState(!hasCachedData);
 
   useFocusEffect(
@@ -67,7 +83,7 @@ function Component({ workers, auditTypes, locations }: RecordProps) {
       (async () => {
         await serverCall(!hasCachedData, () => setLoading(false));
       })();
-    }, []),
+    }, [hasCachedData]),
   );
 
   return (
@@ -96,16 +112,18 @@ function Component({ workers, auditTypes, locations }: RecordProps) {
               theme={{ colors: { primary: "#475569" } }}
               textColor="#020617"
             />
-            <DropdownList
-              options={auditTypes.map((a) => ({
-                key: a.serverId,
-                value: a.name,
-              }))}
-              onOptionSelected={(key) => setAuditType(key as number)}
-              selectedOptionKey={auditType}
-              dropdownlistStyle={styles.dropdownlistContainer}
-              right={<Icon name="caretdown" size={12} color="gray" />}
-            />
+            {isEmpty(companyConfig) || companyConfig.enableAuditTypes ? (
+              <DropdownList
+                options={auditTypes.map((a) => ({
+                  key: a.serverId,
+                  value: a.name,
+                }))}
+                onOptionSelected={(key) => setAuditType(key as number)}
+                selectedOptionKey={auditType}
+                dropdownlistStyle={styles.dropdownlistContainer}
+                right={<Icon name="caretdown" size={12} color="gray" />}
+              />
+            ) : null}
             <Button
               mode="outlined"
               style={styles.recordButton}
@@ -163,22 +181,45 @@ const stylesheet = createStyleSheet({
 });
 
 interface ObservableProps {
-  workers: Worker[];
   auditTypes: AuditType[];
-  locations: Location[];
+  companyConfig?: CompanyConfig | undefined;
+
+  workersCount: number;
+  locationsCount: number;
+  institutionActionsCount: number;
 }
 
 const getObservables = (props: ObservableProps) => ({
-  workers: database.get<Worker>("workers").query(),
   auditTypes: database.get<AuditType>("audit_types").query(),
-  locations: database.get<Location>("locations").query(),
+  companyConfig: database
+    .get<CompanyConfig>("company_configs")
+    .query(Q.take(1))
+    .observe()
+    .pipe(
+      switchMap((companyConfig) =>
+        companyConfig.length > 0 ? companyConfig[0].observe() : of(null),
+      ),
+    ),
+
+  workersCount: database.get<Worker>("workers").query().observeCount(),
+  locationsCount: database.get<Location>("locations").query().observeCount(),
+  institutionActionsCount: database
+    .get<InstitutionAction>("institution_actions")
+    .query()
+    .observeCount(),
 });
 
 interface RecordProps
   extends ExtractedObservables<ReturnType<typeof getObservables>> {}
 
 const Record = withObservables(
-  ["workers", "auditTypes", "locations"],
+  [
+    "auditTypes",
+    "companyConfig",
+    "workersCount",
+    "locationsCount",
+    "institutionActionsCount",
+  ],
   getObservables,
 )(Component);
 
