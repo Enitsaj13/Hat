@@ -1,6 +1,6 @@
 import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { useSession } from "../../auth";
 
@@ -14,6 +14,8 @@ import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
 import { User } from "@stores/user";
 import { i18n } from "@i18n/index";
+import { View } from "react-native";
+import DataUpdater from "@app/(app)/DataUpdater";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -59,25 +61,28 @@ function Component({ user, appSetting }: RootLayoutProps) {
   }
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
-          headerTitle: "",
-          headerBackTitleVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="TermsOfUse"
-        options={{
-          headerTitle: i18n.t("TERMS6", {
-            defaultValue: "Terms of Use",
-          }),
-          headerBackTitleVisible: false,
-        }}
-      />
-    </Stack>
+    <View style={{ flex: 1, position: "relative" }}>
+      <DataUpdater />
+      <Stack>
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+            headerTitle: "",
+            headerBackTitleVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="TermsOfUse"
+          options={{
+            headerTitle: i18n.t("TERMS6", {
+              defaultValue: "Terms of Use",
+            }),
+            headerBackTitleVisible: false,
+          }}
+        />
+      </Stack>
+    </View>
   );
 }
 
