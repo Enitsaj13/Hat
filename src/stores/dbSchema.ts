@@ -84,5 +84,22 @@ export const dbSchema = appSchema({
         { name: "obligatory_field_server_id", type: "number" },
       ],
     }),
+    tableSchema({
+      name: "optional_fields",
+      columns: [
+        { name: "server_id", type: "number" },
+        { name: "name", type: "string" },
+        { name: "field_type", type: "string" },
+        { name: "sort", type: "number" },
+      ],
+    }),
+    tableSchema({
+      name: "optional_field_options",
+      columns: [
+        { name: "server_id", type: "number" },
+        { name: "name", type: "string" },
+        { name: "optional_field_server_id", type: "number" },
+      ],
+    }),
   ],
 });

@@ -10,6 +10,8 @@ import { CompanyConfig } from "@stores/companyConfig";
 import { InstitutionAction } from "@stores/institutionAction";
 import { ObligatoryField } from "@stores/obligatoryField";
 import { ObligatoryFieldOption } from "@stores/obligatoryFieldOption";
+import { OptionalField } from "@stores/optionalField";
+import { OptionalFieldOption } from "@stores/optionalFieldOption";
 
 const adapter = new SQLiteAdapter({
   schema: dbSchema,
@@ -37,5 +39,7 @@ export const database = new Database({
     InstitutionAction,
     ObligatoryField,
     ObligatoryFieldOption,
+    OptionalField,
+    OptionalFieldOption,
   ],
 });

@@ -1,33 +1,30 @@
 import { axiosInstance } from "@services/axios";
 import { database } from "@stores/index";
-import { ObligatoryField } from "@stores/obligatoryField";
 import { FieldType } from "../types";
-import { ObligatoryFieldOption } from "@stores/obligatoryFieldOption";
+import { OptionalField } from "@stores/optionalField";
+import { OptionalFieldOption } from "@stores/optionalFieldOption";
 
-export interface ObligatoryFieldOptionResponse {
-  id: number;
+export interface OptionalFieldOptionResponse {
+  optional_field_option_id: number;
+  optional_field_id: number;
   option_name: string;
-  sort: number;
 }
 
-export interface ObligatoryFieldResponse {
-  id: number;
+export interface OptionalFieldResponse {
+  optional_field_id: number;
   name: string;
   field_type: FieldType;
-  obligatory_field_sort: number;
-  is_all_required: number;
-  actions: string[];
-  options?: ObligatoryFieldOptionResponse[];
+  options?: OptionalFieldOptionResponse[];
 }
 
 // TODO handle 422
-export async function getObligatoryFields() {
-  const result = await axiosInstance.get<ObligatoryFieldResponse[]>(
-    "/mobile/obligatory-fields",
+export async function getOptionalFields() {
+  const result = await axiosInstance.get<OptionalFieldResponse[]>(
+    "/mobile/optional-fields",
   );
-  const db = database.get<ObligatoryField>("obligatory_fields");
-  const dbObligatoryOption = database.get<ObligatoryFieldOption>(
-    "obligatory_field_options",
+  const db = database.get<OptionalField>("optional_fields");
+  const dbOptionalOption = database.get<OptionalFieldOption>(
+    "optional_field_options",
   );
   const response = result.data;
 
@@ -35,11 +32,11 @@ export async function getObligatoryFields() {
     const operations: any[] = [];
     const existing = await db.query().fetch();
 
-    const existingMap = new Map<number, ObligatoryField>();
+    const existingMap = new Map<number, OptionalField>();
     existing.forEach((i) => existingMap.set(i.serverId, i));
 
-    const newMap = new Map<number, ObligatoryFieldResponse>();
-    response.forEach((i) => newMap.set(i.id, i));
+    const newMap = new Map<number, OptionalFieldResponse>();
+    response.forEach((i) => newMap.set(i.optional_field_id, i));
 
     for (const [serverId, existing] of existingMap.entries()) {
       if (!newMap.has(serverId)) {
@@ -54,21 +51,17 @@ export async function getObligatoryFields() {
       if (!existingMap.has(id)) {
         operations.push(
           db.prepareCreate((newData) => {
-            newData.serverId = response.id;
+            newData.serverId = response.optional_field_id;
             newData.name = response.name;
             newData.fieldType = response.field_type;
-            newData.sort = response.obligatory_field_sort;
-            newData.isAllActionRequired = response.is_all_required === 1;
-            newData.actions = response.actions;
 
             response.options?.forEach((responseOption) => {
               operations.push(
-                dbObligatoryOption.prepareCreate((option) => {
-                  option.serverId = responseOption.id;
+                dbOptionalOption.prepareCreate((option) => {
+                  option.serverId = responseOption.optional_field_option_id;
                   option.name = responseOption.option_name;
-                  option.sort = responseOption.sort;
 
-                  option.obligatoryFieldServerId = response.id;
+                  option.optionalFieldServerId = response.optional_field_id;
                 }),
               );
             });
@@ -80,17 +73,16 @@ export async function getObligatoryFields() {
           existing?.prepareUpdate((e) => {
             e.name = response.name;
             e.fieldType = response.field_type;
-            e.sort = response.obligatory_field_sort;
-            e.isAllActionRequired = response.is_all_required === 1;
-            e.actions = response.actions;
           }),
         );
 
-        const existingOptionMap = new Map<number, ObligatoryFieldOption>();
+        const existingOptionMap = new Map<number, OptionalFieldOption>();
         existingOptionMap.forEach((i) => existingOptionMap.set(i.serverId, i));
 
-        const newOptionMap = new Map<number, ObligatoryFieldOptionResponse>();
-        response.options?.forEach((i) => newOptionMap.set(i.id, i));
+        const newOptionMap = new Map<number, OptionalFieldOptionResponse>();
+        response.options?.forEach((i) =>
+          newOptionMap.set(i.optional_field_option_id, i),
+        );
 
         for (const [serverId, existingOption] of existingOptionMap.entries()) {
           if (!newOptionMap.has(serverId)) {
@@ -101,11 +93,10 @@ export async function getObligatoryFields() {
         for (const [optionId, responseOption] of newOptionMap.entries()) {
           if (!existingOptionMap.has(optionId)) {
             operations.push(
-              dbObligatoryOption.prepareCreate((newData) => {
-                newData.serverId = responseOption.id;
+              dbOptionalOption.prepareCreate((newData) => {
+                newData.serverId = responseOption.optional_field_option_id;
                 newData.name = responseOption.option_name;
-                newData.sort = responseOption.sort;
-                newData.obligatoryFieldServerId = response.id;
+                newData.optionalFieldServerId = response.optional_field_id;
               }),
             );
           } else {
@@ -113,7 +104,6 @@ export async function getObligatoryFields() {
             operations.push(
               existingOption?.prepareUpdate((e) => {
                 e.name = responseOption.option_name;
-                e.sort = responseOption.sort;
               }),
             );
           }
