@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { createStyleSheet } from "react-native-unistyles";
 import { AppSetting } from "@stores/appSetting";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
@@ -57,19 +58,18 @@ const stylesheet = createStyleSheet({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: colors.textColor,
   },
   centeredView: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    marginTop: 40
   },
   continueButton: {
     backgroundColor: colors.bgColor,
     borderRadius: 4,
   },
   continueButtonText: {
-    color: "white",
+    color: colors.textColor
   },
 });
 

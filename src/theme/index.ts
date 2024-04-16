@@ -19,6 +19,24 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 export const colors = {
   bgColor: "#01b482",
   textColor: "white",
+  lightGray: "#e2e8f0",
+  cadetGrey: "#94a3b8",
+  midNight: "#020617",
+  steelGrey: "#475569",
+  lilyWhite: "#ecfdf5",
+  chantilly: "#fff1f2",
+  blushPink: "#ed6faa",
+  lemonChiffon: "#fffbeb",
+  sunshade: "#feb65d",
+  lavenderMist: "#f5f3ff",
+  mediumPurple: "#8b5cf6",
+  paleBlue: "#cae3f1",
+  vividCerulean: "#0ea5e9",
+  terracotta: "#f43f5e",
+  cerulean: "#0369a1",
+  babyBlue: "#e0f2fe",
+  whiteSmoke: "#f5f5f5",
+  charcoal: "#334155",
 };
 
 const rnPaperLightTheme = { ...MD3LightTheme };
@@ -56,5 +74,5 @@ export const breakpoints = {
 type AppBreakpoints = typeof breakpoints;
 
 declare module "react-native-unistyles" {
-  export interface UnistylesBreakpoints extends AppBreakpoints {}
+  export interface UnistylesBreakpoints extends AppBreakpoints { }
 }
