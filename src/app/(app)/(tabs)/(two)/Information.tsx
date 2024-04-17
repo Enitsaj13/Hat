@@ -6,7 +6,6 @@ import {
   ImageSourcePropType,
   TouchableOpacity,
   View,
-  ScrollView,
 } from "react-native";
 import { Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
