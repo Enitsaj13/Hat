@@ -18,13 +18,18 @@ import { getCompanyConfig } from "@services/getCompanyConfig";
 import { ActivityIndicator } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useFocusEffect } from "expo-router";
+import { getObligatoryFields } from "@services/getObligatoryFields";
+import { getOptionalFields } from "@services/getOptionalFields";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
+  // TODO get the returned on getCompanyConfig and deal with 422s of the other
   const result = await Promise.allSettled([
-    getHealthCareWorkers(),
-    getAuditTypes(),
-    getLocations(),
     getCompanyConfig(), // company config + institution actions
+    getAuditTypes(),
+    getObligatoryFields(),
+    getOptionalFields(),
+    getHealthCareWorkers(),
+    getLocations(),
   ]);
   console.log("server call result", result);
   if (result.findIndex((r) => r.status === "rejected") >= 0 && shouldRetry) {

@@ -64,5 +64,42 @@ export const dbSchema = appSchema({
         { name: "checked", type: "boolean" },
       ],
     }),
+    tableSchema({
+      name: "obligatory_fields",
+      columns: [
+        { name: "server_id", type: "number" },
+        { name: "name", type: "string" },
+        { name: "field_type", type: "string" },
+        { name: "sort", type: "number" },
+        { name: "actions", type: "string" },
+        { name: "is_all_action_required", type: "boolean" },
+      ],
+    }),
+    tableSchema({
+      name: "obligatory_field_options",
+      columns: [
+        { name: "server_id", type: "number" },
+        { name: "name", type: "string" },
+        { name: "sort", type: "number" },
+        { name: "obligatory_field_server_id", type: "number" },
+      ],
+    }),
+    tableSchema({
+      name: "optional_fields",
+      columns: [
+        { name: "server_id", type: "number" },
+        { name: "name", type: "string" },
+        { name: "field_type", type: "string" },
+        { name: "sort", type: "number" },
+      ],
+    }),
+    tableSchema({
+      name: "optional_field_options",
+      columns: [
+        { name: "server_id", type: "number" },
+        { name: "name", type: "string" },
+        { name: "optional_field_server_id", type: "number" },
+      ],
+    }),
   ],
 });

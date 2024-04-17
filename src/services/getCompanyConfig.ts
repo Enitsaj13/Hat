@@ -17,9 +17,10 @@ export interface CompanyConfigResponse {
   obligatory_fields_flag: number;
   optional_fields_flag: number;
   enable_audit_types_flag: number;
-  actions?: CompanyActionResponse[] | undefined; // TODO already requested to aljon to make this an empty array instead of undefined
+  actions: CompanyActionResponse[];
 }
 
+// TODO return the CompanyConfig object from here to be used on the caller if should retry
 export async function getCompanyConfig() {
   const result = await axiosInstance.get<CompanyConfigResponse>(
     "/mobile/company-config",
@@ -54,8 +55,7 @@ export async function getCompanyConfig() {
       }),
     );
 
-    // TODO when this becomes an empty array, remove the null check
-    response.actions?.forEach((i) => {
+    response.actions.forEach((i) => {
       operations.push(
         dbInstitutionActions.prepareCreate((newData) => {
           newData.action = i.action;
