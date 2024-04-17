@@ -12,9 +12,7 @@ const Introduction = () => {
     <View style={styles.container}>
       <View style={styles.introductionContainer}>
         <View style={styles.titleContainer}>
-          <Text
-            variant="headlineLarge"
-            style={styles.title}>
+          <Text variant="headlineLarge" style={styles.title}>
             What gets measured gets done.
           </Text>
         </View>
@@ -49,18 +47,18 @@ const stylesheet = createStyleSheet({
   },
   title: {
     fontWeight: "500",
-    color: colors.midNight
+    color: colors.midNight,
   },
   descriptionContainer: {
-    marginVertical: 20
+    marginVertical: 20,
   },
   contactContainer: {
-    marginTop: 10
+    marginTop: 10,
   },
   descriptionText: {
     fontSize: 16,
     color: colors.midNight,
-    textAlign: 'justify'
+    textAlign: "justify",
   },
 });
 

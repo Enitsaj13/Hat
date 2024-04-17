@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  Linking,
-} from "react-native";
+import { Image, TouchableOpacity, View, Linking } from "react-native";
 import { List, Text } from "react-native-paper";
 import { Link } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
@@ -157,7 +151,10 @@ const Settings = () => {
           </TouchableOpacity>
         </Link>
 
-        <TouchableOpacity onPress={onPressImprint} style={styles.listItemContainer}>
+        <TouchableOpacity
+          onPress={onPressImprint}
+          style={styles.listItemContainer}
+        >
           <List.Item
             title="Imprint"
             titleStyle={styles.settingsText}
@@ -303,7 +300,7 @@ const stylesheet = createStyleSheet({
     color: colors.midNight,
   },
   listItemContainer: {
-    height: 50
+    height: 50,
   },
   accountSubName: {
     fontSize: 14,
@@ -332,8 +329,8 @@ const stylesheet = createStyleSheet({
     alignItems: "center",
     backgroundColor: colors.mediumPurple,
     padding: 12,
-    width: '100%',
-    position: 'absolute',
+    width: "100%",
+    position: "absolute",
     bottom: 0,
   },
   copyrightText: {

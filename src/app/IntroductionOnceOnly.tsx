@@ -25,9 +25,11 @@ function Component({ appSetting }: IntroductionScreenProps) {
   const handleContinue = async () => {
     if (isEmpty(appSetting)) {
       await database.write(async () => {
-        await database.get<AppSetting>("app_settings").create((newAppSetting) => {
-          newAppSetting.isIntroductionViewed = true;
-        });
+        await database
+          .get<AppSetting>("app_settings")
+          .create((newAppSetting) => {
+            newAppSetting.isIntroductionViewed = true;
+          });
       });
     } else {
       await appSetting.updateIntroductionViewed(true);
@@ -52,7 +54,7 @@ function Component({ appSetting }: IntroductionScreenProps) {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const stylesheet = createStyleSheet({
   container: {
@@ -62,14 +64,14 @@ const stylesheet = createStyleSheet({
   },
   centeredView: {
     alignItems: "center",
-    marginTop: 40
+    marginTop: 40,
   },
   continueButton: {
     backgroundColor: colors.bgColor,
     borderRadius: 4,
   },
   continueButtonText: {
-    color: colors.textColor
+    color: colors.textColor,
   },
 });
 
@@ -93,6 +95,3 @@ const IntroductionScreen = withObservables(
 )(Component as any); // as any here is workaround on typescript complaining between Observable<AppSetting> and AppSetting
 
 export default IntroductionScreen;
-
-
-

@@ -40,7 +40,10 @@ function Component({ user, appSetting }: TermsOfUseProps) {
 
   return (
     <View style={styles.container}>
-      <WebView style={styles.webView} source={{ uri: appSetting.termsOfUseUrl }} />
+      <WebView
+        style={styles.webView}
+        source={{ uri: appSetting.termsOfUseUrl }}
+      />
       <View style={styles.buttonContainer}>
         <Button mode="contained" onPress={signOut} style={styles.button}>
           {i18n.t("G47", {
@@ -55,7 +58,7 @@ function Component({ user, appSetting }: TermsOfUseProps) {
       </View>
     </View>
   );
-};
+}
 
 const stylesheet = createStyleSheet({
   container: {
@@ -105,5 +108,3 @@ const TermsOfUse = withObservables(
 )(Component as any); // as any here is workaround on typescript complaining between Observable<> and User, AppSetting
 
 export default TermsOfUse;
-
-
