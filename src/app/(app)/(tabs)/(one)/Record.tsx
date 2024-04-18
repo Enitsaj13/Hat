@@ -9,6 +9,7 @@ import { database } from "@stores/index";
 import { useState } from "react";
 import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
+import { Link } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { AuditType } from "@stores/auditType";
 import isEmpty from "lodash.isempty";
@@ -104,6 +105,20 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
             <Icon name="arrowright" size={14} color="white" />
           </Button>
         </View>
+        <View style={styles.practiceButtonContainer}>
+          <Link href="/PracticeMode" asChild>
+            <Button
+              mode="text"
+              onPress={() => {
+                console.log("Clicked!");
+              }}
+            >
+              <Text style={styles.practiceButton}>
+                Try on {i18n.t("H6", { defaultValue: "Practice Mode" })}
+              </Text>
+            </Button>
+          </Link>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -189,7 +204,7 @@ const getObservables = (props: ObservableProps) => ({
 });
 
 interface RecordProps
-  extends ExtractedObservables<ReturnType<typeof getObservables>> {}
+  extends ExtractedObservables<ReturnType<typeof getObservables>> { }
 
 const Record = withObservables(
   ["auditTypes", "companyConfig"],

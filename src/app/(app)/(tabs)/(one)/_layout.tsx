@@ -12,6 +12,14 @@ export default function Layout() {
           }),
         }}
       />
+      <Stack.Screen
+        name="PracticeMode"
+        options={{
+          title: i18n.t("H6", {
+            defaultValue: "Practice Mode",
+          }),
+        }}
+      />
     </Stack>
   );
 }
