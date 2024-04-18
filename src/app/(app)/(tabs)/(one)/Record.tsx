@@ -1,53 +1,27 @@
 import DropdownList from "@components/DropdownList";
 import { AntDesign as Icon } from "@expo/vector-icons";
-import { getDefaultLanguage, i18n } from "@i18n/index";
-import { Q } from "@nozbe/watermelondb";
-import { withObservables } from "@nozbe/watermelondb/react";
-import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
-import { AppSetting } from "@stores/appSetting";
+import { i18n } from "@i18n/index";
+import {
+  ExtractedObservables,
+  withObservables,
+} from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
-import { colors } from "@theme/index";
-import { Link } from "expo-router";
-import isEmpty from "lodash.isempty";
-import { useCallback, useState } from "react";
-import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
-import { Button, TextInput, Text } from "react-native-paper";
+import { useState } from "react";
+import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
+import { Button, Text, TextInput } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { AuditType } from "@stores/auditType";
+import isEmpty from "lodash.isempty";
+import { CompanyConfig } from "@stores/companyConfig";
+import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
-interface RecordProps {
-  appSetting: AppSetting;
-}
+import { colors } from "@theme/index";
 
-export const typeAudit = [
-  { key: "select", value: "*Select Audit Type" },
-  { key: "endemic", value: "Endemic" },
-  { key: "pandemic", value: "Pandemic" },
-  { key: "covid19", value: "Covid 19" },
-  { key: "normal", value: "Normal" },
-];
-
-function Component({ appSetting }: RecordProps) {
-  const saveSelectedLanguage = useCallback(
-    async (languageCode: string) => {
-      if (isEmpty(appSetting)) {
-        await database.write(async () => {
-          await database
-            .get<AppSetting>("app_settings")
-            .create((appSetting) => {
-              appSetting.language = languageCode;
-              appSetting.dataPrivacyUrl = "";
-              appSetting.termsOfUseUrl = "";
-            });
-        });
-      } else {
-        await appSetting.saveLanguage(languageCode);
-      }
-    },
-    [appSetting],
-  );
+function Component({ auditTypes, companyConfig }: RecordProps) {
   const { styles } = useStyles(stylesheet);
 
   const [numberOpportunities, setNumberOpportunities] = useState("");
+  const [auditType, setAuditType] = useState<number | undefined>();
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -55,7 +29,7 @@ function Component({ appSetting }: RecordProps) {
         <View style={styles.recordContainer}>
           <View style={styles.rowContainer}>
             <Text variant="bodyLarge" style={styles.recordText}>
-              Target Opportunies
+              {i18n.t("AH2", { defaultValue: "Target Opportunies" })}
             </Text>
             <Text variant="bodyLarge" style={styles.recordText}>
               50
@@ -63,7 +37,7 @@ function Component({ appSetting }: RecordProps) {
           </View>
           <View style={styles.rowContainer}>
             <Text variant="bodyLarge" style={styles.recordText}>
-              Balance Remaining
+              {i18n.t("DL7", { defaultValue: "Balance Remaining" })}
             </Text>
             <Text variant="bodyLarge" style={styles.recordText}>
               50
@@ -71,7 +45,7 @@ function Component({ appSetting }: RecordProps) {
           </View>
           <View style={styles.rowContainer}>
             <Text variant="bodyLarge" style={styles.recordText}>
-              Complete Target By
+              {i18n.t("DL8", { defaultValue: "Complete Target By" })}
             </Text>
             <Text variant="bodyLarge" style={styles.recordText}>
               March 31, 2023
@@ -79,7 +53,7 @@ function Component({ appSetting }: RecordProps) {
           </View>
           <View style={styles.rowContainer}>
             <Text variant="bodyLarge" style={styles.recordText}>
-              Last Submission On
+              {i18n.t("DL9", { defaultValue: "Last Submission On" })}
             </Text>
             <Text variant="bodyLarge" style={styles.recordText}>
               50
@@ -105,13 +79,18 @@ function Component({ appSetting }: RecordProps) {
             underlineColorAndroid={colors.cadetGrey}
             textColor="black"
           />
-          <DropdownList
-            options={typeAudit}
-            selectedOptionKey={getDefaultLanguage(appSetting)}
-            onOptionSelected={(key) => saveSelectedLanguage(key as string)}
-            dropdownlistStyle={styles.dropdownlistContainer}
-            right={<Icon name="caretdown" size={12} color="gray" />}
-          />
+          {isEmpty(companyConfig) || companyConfig.enableAuditTypes ? (
+            <DropdownList
+              options={auditTypes.map((a) => ({
+                key: a.serverId,
+                value: a.name,
+              }))}
+              onOptionSelected={(key) => setAuditType(key as number)}
+              selectedOptionKey={auditType}
+              dropdownlistStyle={styles.dropdownlistContainer}
+              right={<Icon name="caretdown" size={12} color="gray" />}
+            />
+          ) : null}
           <Button
             mode="outlined"
             style={styles.recordButton}
@@ -125,38 +104,10 @@ function Component({ appSetting }: RecordProps) {
             <Icon name="arrowright" size={14} color="white" />
           </Button>
         </View>
-        <View style={styles.practiceButtonContainer}>
-          <Link href="/PracticeMode" asChild>
-            <Button
-              mode="text"
-              onPress={() => {
-                console.log("Clicked!");
-              }}
-            >
-              <Text style={styles.practiceButton}>Try on Practice Mode</Text>
-            </Button>
-          </Link>
-        </View>
       </View>
     </TouchableWithoutFeedback>
   );
 }
-
-type WithObservableProps = ObservableifyProps<RecordProps, "appSetting">;
-const Record = withObservables(
-  ["appSetting"],
-  (props: WithObservableProps) => ({
-    appSetting: database
-      .get<AppSetting>("app_settings")
-      .query(Q.take(1))
-      .observe()
-      .pipe(
-        switchMap((appSettings) =>
-          appSettings.length > 0 ? appSettings[0].observe() : of(null),
-        ),
-      ),
-  }),
-)(Component as any);
 
 const stylesheet = createStyleSheet({
   container: {
@@ -218,5 +169,31 @@ const stylesheet = createStyleSheet({
     textDecorationColor: "purple",
   },
 });
+
+interface ObservableProps {
+  auditTypes: AuditType[];
+  companyConfig?: CompanyConfig | undefined;
+}
+
+const getObservables = (props: ObservableProps) => ({
+  auditTypes: database.get<AuditType>("audit_types").query(),
+  companyConfig: database
+    .get<CompanyConfig>("company_configs")
+    .query(Q.take(1))
+    .observe()
+    .pipe(
+      switchMap((companyConfig) =>
+        companyConfig.length > 0 ? companyConfig[0].observe() : of(null),
+      ),
+    ),
+});
+
+interface RecordProps
+  extends ExtractedObservables<ReturnType<typeof getObservables>> {}
+
+const Record = withObservables(
+  ["auditTypes", "companyConfig"],
+  getObservables,
+)(Component);
 
 export default Record;
