@@ -204,7 +204,7 @@ const getObservables = (props: ObservableProps) => ({
 });
 
 interface RecordProps
-  extends ExtractedObservables<ReturnType<typeof getObservables>> { }
+  extends ExtractedObservables<ReturnType<typeof getObservables>> {}
 
 const Record = withObservables(
   ["auditTypes", "companyConfig"],
