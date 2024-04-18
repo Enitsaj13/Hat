@@ -1,6 +1,6 @@
-import Introduction from "@components/Introduction";
 import React from "react";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { createStyleSheet } from "react-native-unistyles";
 import { AppSetting } from "@stores/appSetting";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
@@ -12,6 +12,8 @@ import { Button } from "react-native-paper";
 import { useRouter } from "expo-router";
 import isEmpty from "lodash.isempty";
 import { i18n } from "@i18n/index";
+import Introduction from "@components/Introduction";
+import { colors } from "@theme/index";
 
 interface IntroductionScreenProps {
   appSetting: AppSetting;
@@ -19,29 +21,31 @@ interface IntroductionScreenProps {
 
 function Component({ appSetting }: IntroductionScreenProps) {
   const router = useRouter();
+
+  const handleContinue = async () => {
+    if (isEmpty(appSetting)) {
+      await database.write(async () => {
+        await database
+          .get<AppSetting>("app_settings")
+          .create((newAppSetting) => {
+            newAppSetting.isIntroductionViewed = true;
+          });
+      });
+    } else {
+      await appSetting.updateIntroductionViewed(true);
+    }
+    router.replace("/SignIn");
+  };
+
   return (
     <SafeAreaView style={stylesheet.container}>
       <Introduction />
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={stylesheet.centeredView}>
         <Button
           mode="contained"
-          onPress={async () => {
-            if (isEmpty(appSetting)) {
-              await database.write(async () => {
-                await database
-                  .get<AppSetting>("app_settings")
-                  .create((appSetting) => {
-                    appSetting.isIntroductionViewed = true;
-                  });
-              });
-              router.replace("/SignIn");
-            } else {
-              await appSetting.updateIntroductionViewed(true);
-              router.replace("/SignIn");
-            }
-          }}
-          style={{ backgroundColor: "#047857", borderRadius: 4 }}
-          labelStyle={{ color: "white" }}
+          onPress={handleContinue}
+          style={stylesheet.continueButton}
+          labelStyle={stylesheet.continueButtonText}
         >
           {i18n.t("R4", {
             defaultValue: "Continue",
@@ -56,7 +60,18 @@ const stylesheet = createStyleSheet({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: colors.textColor,
+  },
+  centeredView: {
+    alignItems: "center",
+    marginTop: 40,
+  },
+  continueButton: {
+    backgroundColor: colors.bgColor,
+    borderRadius: 4,
+  },
+  continueButtonText: {
+    color: colors.textColor,
   },
 });
 

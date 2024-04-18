@@ -1,8 +1,9 @@
-import { Link } from "expo-router";
 import React from "react";
 import { FlatList, View } from "react-native";
 import { List, Text, TouchableRipple } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { Link } from "expo-router";
+import { colors } from "@theme/index";
 
 const VideosLanguages = () => {
   const { styles } = useStyles(stylesheet);
@@ -28,7 +29,7 @@ const VideosLanguages = () => {
     <Link href="/VideoPlayer" asChild>
       <TouchableRipple style={styles.itemContainer}>
         <List.Item
-          titleStyle={{ color: "#334155" }}
+          titleStyle={{ color: colors.charcoal }}
           title={item}
           titleNumberOfLines={1}
         />
@@ -46,7 +47,6 @@ const VideosLanguages = () => {
       <FlatList
         data={languages}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()} // Use index as key (not recommended for production)
         contentContainerStyle={{ flexGrow: 1 }}
       />
     </View>
@@ -60,15 +60,14 @@ const stylesheet = createStyleSheet({
   },
   itemContainer: {
     borderBottomWidth: 0.6,
-    borderBottomColor: "lightgray",
+    borderBottomColor: colors.lightGray,
   },
   videoHeaderContainer: {
     borderBottomWidth: 0.6,
-    borderBottomColor: "lightgray",
-    backgroundColor: "#f1f5f9",
+    borderBottomColor: colors.lightGray,
   },
   videoTitle: {
-    color: "#334155",
+    color: colors.charcoal,
     textAlign: "left",
     padding: 6,
     marginHorizontal: 10,

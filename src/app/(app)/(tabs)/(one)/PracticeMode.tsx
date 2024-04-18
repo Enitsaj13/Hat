@@ -1,9 +1,10 @@
-import { AntDesign as Icon } from "@expo/vector-icons";
-import { i18n } from "@i18n/index";
 import { useState } from "react";
 import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { AntDesign as Icon } from "@expo/vector-icons";
+import { i18n } from "@i18n/index";
+import { colors } from "@theme/index";
 
 function PracticeMode() {
   const { styles } = useStyles(stylesheet);
@@ -14,7 +15,7 @@ function PracticeMode() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.practiceModeContainer}>
-          <Icon name="infocirlce" color="#0369a1" size={25} />
+          <Icon name="infocirlce" color={colors.cerulean} size={25} />
           <Text variant="bodyLarge" style={styles.practiceNoteText}>
             NOTE: You are on practice mode.
           </Text>
@@ -26,19 +27,24 @@ function PracticeMode() {
             value={numberOpportunities}
             onChangeText={(text) => setNumberOpportunities(text)}
             contentStyle={styles.textInput}
-            theme={{ colors: { placeholder: "#475569", primary: "#475569" } }}
-            underlineColor="#f5f5f5"
-            underlineColorAndroid="black"
-            textColor="#020617"
+            theme={{
+              colors: {
+                placeholder: colors.steelGrey,
+                primary: colors.steelGrey,
+              },
+            }}
+            underlineColor={colors.whiteSmoke}
+            underlineColorAndroid={colors.midNight}
+            textColor={colors.midNight}
           />
           <Button
             mode="outlined"
             style={styles.practiceModeButton}
-            onPress={() => {
-              console.log("Clicked!");
-            }}
+            onPress={() => {}}
           >
-            {i18n.t("Y3", { defaultValue: "Begin Audit" })}
+            <Text variant="bodyLarge">
+              {i18n.t("Y3", { defaultValue: "Begin Audit" })}
+            </Text>
             <Icon name="arrowright" size={14} color="white" />
           </Button>
         </View>
@@ -58,25 +64,25 @@ const stylesheet = createStyleSheet({
     marginTop: 20,
   },
   textInput: {
-    height: 80,
     backgroundColor: "white",
-    borderWidth: 0.2,
+    borderWidth: 0.4,
+    borderColor: colors.cadetGrey,
+    height: 80,
     borderRadius: 2,
-    borderColor: "#94a3b8",
   },
   practiceModeContainer: {
     flexDirection: "row",
-    backgroundColor: "#e0f2fe",
+    backgroundColor: colors.babyBlue,
     paddingVertical: 15,
     width: "100%",
     paddingHorizontal: 20,
   },
   practiceNoteText: {
-    color: "#0369a1",
+    color: colors.cerulean,
     marginLeft: 10,
   },
   practiceModeButton: {
-    backgroundColor: "#01b482",
+    backgroundColor: colors.bgColor,
     marginTop: 20,
     borderWidth: 0,
     borderRadius: 4,

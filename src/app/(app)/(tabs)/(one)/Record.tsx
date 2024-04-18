@@ -9,12 +9,14 @@ import { database } from "@stores/index";
 import { useState } from "react";
 import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
+import { Link } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { AuditType } from "@stores/auditType";
 import isEmpty from "lodash.isempty";
 import { CompanyConfig } from "@stores/companyConfig";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
+import { colors } from "@theme/index";
 
 function Component({ auditTypes, companyConfig }: RecordProps) {
   const { styles } = useStyles(stylesheet);
@@ -25,6 +27,40 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+        <View style={styles.recordContainer}>
+          <View style={styles.rowContainer}>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              {i18n.t("AH2", { defaultValue: "Target Opportunies" })}
+            </Text>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              50
+            </Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              {i18n.t("DL7", { defaultValue: "Balance Remaining" })}
+            </Text>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              50
+            </Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              {i18n.t("DL8", { defaultValue: "Complete Target By" })}
+            </Text>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              March 31, 2023
+            </Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              {i18n.t("DL9", { defaultValue: "Last Submission On" })}
+            </Text>
+            <Text variant="bodyLarge" style={styles.recordText}>
+              50
+            </Text>
+          </View>
+        </View>
         <View style={styles.textInputContainer}>
           <TextInput
             keyboardType="numeric"
@@ -34,8 +70,15 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
             value={numberOpportunities}
             onChangeText={(text) => setNumberOpportunities(text)}
             contentStyle={styles.textInput}
-            theme={{ colors: { primary: "#475569" } }}
-            textColor="#020617"
+            theme={{
+              colors: {
+                placeholder: colors.cadetGrey,
+                primary: colors.cadetGrey,
+              },
+            }}
+            underlineColor="white"
+            underlineColorAndroid={colors.cadetGrey}
+            textColor="black"
           />
           {isEmpty(companyConfig) || companyConfig.enableAuditTypes ? (
             <DropdownList
@@ -52,15 +95,22 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
           <Button
             mode="outlined"
             style={styles.recordButton}
-            onPress={() => {
-              console.log("Clicked!");
-            }}
+            onPress={() => {}}
           >
             <Text variant="bodyLarge">
               {i18n.t("Y3", { defaultValue: "Begin Audit" })}
             </Text>
             <Icon name="arrowright" size={14} color="white" />
           </Button>
+        </View>
+        <View style={styles.practiceButtonContainer}>
+          <Link href="/PracticeMode" asChild>
+            <Button mode="text" onPress={() => {}}>
+              <Text style={styles.practiceButton}>
+                Try on {i18n.t("H6", { defaultValue: "Practice Mode" })}
+              </Text>
+            </Button>
+          </Link>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -75,19 +125,18 @@ const stylesheet = createStyleSheet({
   },
   textInputContainer: {
     width: "95%",
-    marginTop: 40,
   },
   textInput: {
-    height: 80,
     backgroundColor: "white",
-    borderWidth: 0.2,
+    borderWidth: 0.4,
+    borderColor: colors.cadetGrey,
+    height: 80,
     borderRadius: 2,
-    borderColor: "#94a3b8",
   },
   dropdownlistContainer: {
-    borderWidth: 0.2,
+    borderWidth: 0.4,
     borderRadius: 0,
-    borderColor: "gray",
+    borderColor: colors.cadetGrey,
     marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
@@ -96,11 +145,36 @@ const stylesheet = createStyleSheet({
     padding: 14,
   },
   recordButton: {
-    backgroundColor: "#01b482",
+    backgroundColor: colors.bgColor,
     marginTop: 20,
     borderWidth: 0,
     borderRadius: 4,
     padding: 4,
+  },
+  recordContainer: {
+    gap: 10,
+    width: "96%",
+    marginVertical: 20,
+    borderWidth: 2,
+    padding: 10,
+    borderColor: "purple",
+  },
+  rowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  recordText: {
+    color: "black",
+  },
+  practiceButtonContainer: {
+    position: "absolute",
+    bottom: 0,
+  },
+  practiceButton: {
+    color: "black",
+    fontSize: 18,
+    textDecorationLine: "underline",
+    textDecorationColor: "purple",
   },
 });
 
