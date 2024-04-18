@@ -265,7 +265,7 @@ const Settings = () => {
       </List.Section>
       <View style={styles.copyrightContainer}>
         <Text style={styles.copyrightText}>
-          Copyright © B. Braun Melsungen AG
+          {i18n.t("COPYRIGHT")} © B. Braun Melsungen AG
         </Text>
       </View>
     </View>

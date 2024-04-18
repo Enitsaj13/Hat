@@ -389,8 +389,9 @@ export const translations = {
     SUM2: "Summary data sent to your email.",
     SUM3: "Are you sure you want to send this to your email?",
     SUM4: "Missed & Without Indication cannot be simultaneously enabled.",
-    INFORMATION: "Information",
-    SETTINGS: "Settings",
+    INFORMATION: "Information", // TODO
+    SETTINGS: "Settings", // TODO
+    COPYRIGHT: "Copyright" // TODO
   },
 
   pt: {
@@ -1183,7 +1184,6 @@ export const translations = {
     SUM4: "L'indication manquée et l'indication sans ne peuvent pas être activées simultanément",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO    
-
     COPYRIGHT: "Copyright" // TODO
   },
 
@@ -2375,7 +2375,6 @@ export const translations = {
     SUM4: "Perdido y sin indicación no se pueden habilitar simultáneamente.",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
-
     COPYRIGHT: "Copyright" // TODO
   },
 
