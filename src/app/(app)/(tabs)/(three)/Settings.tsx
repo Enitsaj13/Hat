@@ -40,12 +40,7 @@ const Settings = () => {
         </View>
       </View>
       <List.Section>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("Clicked!");
-          }}
-          style={styles.listItemContainer}
-        >
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q2", { defaultValue: "Account Information" })}
             titleStyle={styles.settingsText}
@@ -66,12 +61,7 @@ const Settings = () => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("Clicked!");
-          }}
-          style={styles.listItemContainer}
-        >
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q7", { defaultValue: "Change Password" })}
             titleStyle={styles.settingsText}
@@ -92,12 +82,7 @@ const Settings = () => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("Clicked!");
-          }}
-          style={styles.listItemContainer}
-        >
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("D0", { defaultValue: "Language" })}
             titleStyle={styles.settingsText}
@@ -119,12 +104,7 @@ const Settings = () => {
           />
         </TouchableOpacity>
         <Link href="/SubscribeNow" asChild>
-          <TouchableOpacity
-            onPress={() => {
-              console.log("Clicked!");
-            }}
-            style={styles.listItemContainer}
-          >
+          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("D4", { defaultValue: "Subscribe Now" })}
               titleStyle={styles.settingsText}
@@ -179,14 +159,9 @@ const Settings = () => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("Clicked!");
-          }}
-          style={styles.listItemContainer}
-        >
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
-            title="Data Privacy Policies"
+            title={i18n.t("TERMS8", { defaultValue: "Data Privacy Policies" })}
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.centerContainer}>
@@ -210,12 +185,7 @@ const Settings = () => {
           />
         </TouchableOpacity>
         <Link href="/TermsOfUse" asChild>
-          <TouchableOpacity
-            onPress={() => {
-              console.log("Clicked!");
-            }}
-            style={styles.listItemContainer}
-          >
+          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("TERMS6", { defaultValue: "Terms of Use" })}
               titleStyle={styles.settingsText}

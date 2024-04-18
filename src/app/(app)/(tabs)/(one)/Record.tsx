@@ -95,9 +95,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
           <Button
             mode="outlined"
             style={styles.recordButton}
-            onPress={() => {
-              console.log("Clicked!");
-            }}
+            onPress={() => {}}
           >
             <Text variant="bodyLarge">
               {i18n.t("Y3", { defaultValue: "Begin Audit" })}
@@ -107,12 +105,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
         </View>
         <View style={styles.practiceButtonContainer}>
           <Link href="/PracticeMode" asChild>
-            <Button
-              mode="text"
-              onPress={() => {
-                console.log("Clicked!");
-              }}
-            >
+            <Button mode="text" onPress={() => {}}>
               <Text style={styles.practiceButton}>
                 Try on {i18n.t("H6", { defaultValue: "Practice Mode" })}
               </Text>

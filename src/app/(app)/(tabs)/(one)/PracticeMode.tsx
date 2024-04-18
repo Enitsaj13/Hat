@@ -40,9 +40,7 @@ function PracticeMode() {
           <Button
             mode="outlined"
             style={styles.practiceModeButton}
-            onPress={() => {
-              console.log("Clicked!");
-            }}
+            onPress={() => {}}
           >
             <Text variant="bodyLarge">
               {i18n.t("Y3", { defaultValue: "Begin Audit" })}

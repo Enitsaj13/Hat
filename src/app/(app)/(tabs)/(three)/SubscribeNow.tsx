@@ -172,9 +172,9 @@ const SubscribeNowScreen = () => {
           <Button
             mode="outlined"
             style={styles.subscribeButton}
-            onPress={() => console.log("Successful!")}
+            onPress={() => {}}
           >
-            SEND MESSAGE
+            {i18n.t("B11", { defaultValue: "SEND MESSAGE" })}
           </Button>
         </View>
       </ScrollView>

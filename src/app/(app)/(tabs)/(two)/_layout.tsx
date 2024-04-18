@@ -14,15 +14,22 @@ export default function Layout() {
           title: i18n.t("H7", {
             defaultValue: "Training Videos",
           }),
+          headerBackTitleVisible: false,
         }}
       />
       <Stack.Screen
         name="VideoPlayer"
-        options={{ title: "Video Player TODO" }}
+        options={{
+          title: "Video Player TODO",
+          headerBackTitleVisible: false,
+        }}
       />
       <Stack.Screen
         name="VideosLanguage"
-        options={{ title: "Videos Language TODO" }}
+        options={{
+          title: "Videos Language TODO",
+          headerBackTitleVisible: false,
+        }}
       />
       <Stack.Screen
         name="Introduction"
@@ -30,6 +37,7 @@ export default function Layout() {
           title: i18n.t("A1", {
             defaultValue: "Introduction",
           }),
+          headerBackTitleVisible: false,
         }}
       />
     </Stack>
