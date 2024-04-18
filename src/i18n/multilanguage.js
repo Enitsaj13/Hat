@@ -391,7 +391,7 @@ export const translations = {
     SUM4: "Missed & Without Indication cannot be simultaneously enabled.",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
-    COPYRIGHT: "Copyright" // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   pt: {
@@ -787,7 +787,7 @@ export const translations = {
     SUM4: "Perdidos e sem indicação não podem ser ativados simultaneamente.",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
-    COPYRIGHT: "Copyright" // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   fr: {
@@ -1183,8 +1183,8 @@ export const translations = {
     SUM3: "Êtes-vous sûr de vouloir envoyer ces données à votre adresse e-mail ?",
     SUM4: "L'indication manquée et l'indication sans ne peuvent pas être activées simultanément",
     INFORMATION: "Information", // TODO
-    SETTINGS: "Settings", // TODO    
-    COPYRIGHT: "Copyright" // TODO
+    SETTINGS: "Settings", // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   de: {
@@ -1581,8 +1581,8 @@ export const translations = {
     SUM3: "Sind Sie sicher, dass Sie dies an Ihre E-Mail Adresse senden möchten?",
     SUM4: 'Verpasst" & "Ohne Indokation" können nicht gleichzeitig ausgewählt werden.',
     INFORMATION: "Information", // TODO
-    SETTINGS: "Settings", // TODO    
-    COPYRIGHT: "Copyright" // TODO
+    SETTINGS: "Settings", // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   br: {
@@ -1978,7 +1978,7 @@ export const translations = {
     SUM4: "Perdidos e sem indicação não podem ser ativados simultaneamente.",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
-    COPYRIGHT: "Copyright" // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   es: {
@@ -2375,7 +2375,7 @@ export const translations = {
     SUM4: "Perdido y sin indicación no se pueden habilitar simultáneamente.",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
-    COPYRIGHT: "Copyright" // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   id: {
@@ -2771,7 +2771,7 @@ export const translations = {
     SUM4: "Terlewat & Tanpa Indikasi tidak dapat diaktifkan secara bersamaan.",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
-    COPYRIGHT: "Copyright" // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   cs: {
@@ -3165,8 +3165,8 @@ export const translations = {
     SUM3: "Jste si jistý/á, že chcete tyto údaje zaslat na váš e-mail?",
     SUM4: "Vynechat a Bez indikace nelze aktivovat současně.",
     INFORMATION: "Information", // TODO
-    SETTINGS: "Settings", // TODO    
-    COPYRIGHT: "Copyright" // TODO
+    SETTINGS: "Settings", // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 
   th: {
@@ -3559,7 +3559,7 @@ export const translations = {
     SUM3: "คุณมั่นใจใช่ไหมว่าจะส่งข้อมูลนี้ไปที่อีเมลของคุณ",
     SUM4: "ข้อมูลที่ขาดหายและไม่ได้ระบุข้อบ่งชี้ไม่สามารถเปิดใช้งานพร้อมกันได้",
     INFORMATION: "Information", // TODO
-    SETTINGS: "Settings", // TODO    
-    COPYRIGHT: "Copyright" // TODO
+    SETTINGS: "Settings", // TODO
+    COPYRIGHT: "Copyright", // TODO
   },
 };
