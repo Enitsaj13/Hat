@@ -52,16 +52,13 @@ function Component({ user, appSetting }: RootLayoutProps) {
         : "/IntroductionOnceOnly";
       router.replace(toRedirect);
     } else if (!user?.hasAcceptedAppPrivacy) {
+      router.replace("/(app)/TermsOfUse");
     }
-    // if (appSetting != null) {
-    //   router.replace("/(app)/TermsOfUse");
-    // }
   }, [
     isLoading,
     session,
     user?.hasAcceptedAppPrivacy,
     appSetting?.isIntroductionViewed,
-    // appSetting
   ]);
 
   if (isLoading) {
