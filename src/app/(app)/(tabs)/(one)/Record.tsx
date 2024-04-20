@@ -133,6 +133,7 @@ const stylesheet = createStyleSheet({
     backgroundColor: "white",
   },
   textInputContainer: {
+    marginTop: 20,
     width: "95%",
   },
   textInput: {
@@ -155,10 +156,10 @@ const stylesheet = createStyleSheet({
   },
   recordButton: {
     backgroundColor: colors.bgColor,
-    marginTop: 20,
     borderWidth: 0,
     borderRadius: 4,
     padding: 4,
+    marginTop: 20,
   },
   recordContainer: {
     gap: 10,
