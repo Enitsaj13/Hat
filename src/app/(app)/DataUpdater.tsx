@@ -13,16 +13,16 @@ import { getHealthCareWorkers } from "@services/getHealthCareWorkers";
 import { getAuditTypes } from "@services/getAuditTypes";
 import { getLocations } from "@services/getLocations";
 import { CompanyConfig } from "@stores/companyConfig";
-import { InstitutionAction } from "@stores/institutionAction";
 import { getCompanyConfig } from "@services/getCompanyConfig";
 import { ActivityIndicator } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useFocusEffect } from "expo-router";
 import { getObligatoryFields } from "@services/getObligatoryFields";
 import { getOptionalFields } from "@services/getOptionalFields";
+import { ObligatoryField } from "@stores/obligatoryField";
+import { OptionalField } from "@stores/optionalField";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
-  // TODO get the returned on getCompanyConfig and deal with 422s of the other
   const result = await Promise.allSettled([
     getCompanyConfig(), // company config + institution actions
     getAuditTypes(),
@@ -31,42 +31,66 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
     getHealthCareWorkers(),
     getLocations(),
   ]);
+
   console.log("server call result", result);
-  if (result.findIndex((r) => r.status === "rejected") >= 0 && shouldRetry) {
-    Alert.alert(
-      i18n.t("S11", {
-        defaultValue: "Failed",
-      }),
-      i18n.t("ADD25", {
-        defaultValue:
-          "Your device is offline. Check connectivity settings or move to a new location with stable Internet connection.",
-      }),
-      [
-        {
-          text: "OK",
-          onPress: () => serverCall(shouldRetry, onSuccess), // recursively call to try again
-        },
-      ],
-    );
-  } else {
-    onSuccess();
+  if (result[0].status === "fulfilled") {
+    const companyConfig = result[0].value;
+
+    const isAuditTypeSuccess =
+      !companyConfig.enableAuditTypes || result[1].status === "fulfilled";
+    const isObligatoryFieldsSuccess =
+      !companyConfig.enableObligatoryFields || result[2].status === "fulfilled";
+    const isOptionalFieldsSuccess =
+      !companyConfig.enableOptionalFields || result[3].status === "fulfilled";
+
+    const rest = result.slice(4).map((r) => r.status === "fulfilled");
+
+    const hasOneApiCallFailed =
+      !isAuditTypeSuccess ||
+      !isObligatoryFieldsSuccess ||
+      !isOptionalFieldsSuccess ||
+      rest.findIndex((r) => !r) >= 0;
+
+    console.log("hasOneApiCallFailed", hasOneApiCallFailed);
+    if (!shouldRetry || !hasOneApiCallFailed) {
+      onSuccess();
+      return;
+    }
   }
+
+  Alert.alert(
+    i18n.t("S11", {
+      defaultValue: "Failed",
+    }),
+    i18n.t("ADD25", {
+      defaultValue:
+        "Your device is offline. Check connectivity settings or move to a new location with stable Internet connection.",
+    }),
+    [
+      {
+        text: "OK",
+        onPress: () => serverCall(shouldRetry, onSuccess), // recursively call to try again
+      },
+    ],
+  );
 }
 
 function Component({
   auditTypesCount,
   companyConfigCount,
+  obligatoryFieldsCount,
+  optionalFieldsCount,
   workersCount,
   locationsCount,
-  institutionActionsCount,
 }: DataUpdaterProps) {
   const { styles } = useStyles(stylesheet);
   const hasCachedData =
-    auditTypesCount > 0 &&
     companyConfigCount > 0 &&
+    auditTypesCount > 0 &&
+    obligatoryFieldsCount > 0 &&
+    optionalFieldsCount > 0 &&
     workersCount > 0 &&
-    locationsCount > 0 &&
-    institutionActionsCount > 0;
+    locationsCount > 0;
   const [loading, setLoading] = useState(!hasCachedData);
 
   useFocusEffect(
@@ -99,28 +123,33 @@ const stylesheet = createStyleSheet({
 });
 
 interface ObservableProps {
-  auditTypesCount?: number;
   companyConfigCount?: number;
+  auditTypesCount?: number;
+  obligatoryFieldsCount?: number;
+  optionalFieldsCount?: number;
   workersCount?: number;
   locationsCount?: number;
-  institutionActionsCount?: number;
 }
 
 const getObservables = (props: ObservableProps) => ({
-  auditTypesCount: database
-    .get<AuditType>("audit_types")
-    .query()
-    .observeCount(),
   companyConfigCount: database
     .get<CompanyConfig>("company_configs")
     .query()
     .observeCount(),
-  workersCount: database.get<Worker>("workers").query().observeCount(),
-  locationsCount: database.get<Location>("locations").query().observeCount(),
-  institutionActionsCount: database
-    .get<InstitutionAction>("institution_actions")
+  auditTypesCount: database
+    .get<AuditType>("audit_types")
     .query()
     .observeCount(),
+  obligatoryFieldsCount: database
+    .get<ObligatoryField>("obligatory_fields")
+    .query()
+    .observeCount(),
+  optionalFieldsCount: database
+    .get<OptionalField>("optional_fields")
+    .query()
+    .observeCount(),
+  workersCount: database.get<Worker>("workers").query().observeCount(),
+  locationsCount: database.get<Location>("locations").query().observeCount(),
 });
 
 interface DataUpdaterProps
@@ -130,9 +159,10 @@ const DataUpdater = withObservables(
   [
     "auditTypesCount",
     "companyConfigCount",
+    "obligatoryFieldsCount",
+    "optionalFieldsCount",
     "workersCount",
     "locationsCount",
-    "institutionActionsCount",
   ],
   getObservables,
 )(Component);

@@ -2,6 +2,7 @@ import { axiosInstance } from "@services/axios";
 import { database } from "@stores/index";
 import { CompanyConfig } from "@stores/companyConfig";
 import { InstitutionAction } from "@stores/institutionAction";
+import { Q } from "@nozbe/watermelondb";
 
 export interface CompanyActionResponse {
   action: string;
@@ -21,7 +22,7 @@ export interface CompanyConfigResponse {
 }
 
 // TODO return the CompanyConfig object from here to be used on the caller if should retry
-export async function getCompanyConfig() {
+export async function getCompanyConfig(): Promise<CompanyConfig> {
   const result = await axiosInstance.get<CompanyConfigResponse>(
     "/mobile/company-config",
   );
@@ -68,4 +69,7 @@ export async function getCompanyConfig() {
 
     await database.batch(operations);
   });
+
+  const updatedConfigs = await dbCompanyConfig.query(Q.take(1)).fetch();
+  return updatedConfigs[0];
 }
