@@ -42,6 +42,7 @@ function Component({ user, appSetting }: TermsOfUseProps) {
     <View style={styles.container}>
       <WebView
         style={styles.webView}
+        originWhitelist={["*"]}
         source={{ uri: appSetting.termsOfUseUrl }}
       />
       <View style={styles.buttonContainer}>
