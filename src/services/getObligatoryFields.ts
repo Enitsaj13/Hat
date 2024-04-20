@@ -3,6 +3,7 @@ import { database } from "@stores/index";
 import { ObligatoryField } from "@stores/obligatoryField";
 import { FieldType } from "../types";
 import { ObligatoryFieldOption } from "@stores/obligatoryFieldOption";
+import { Q } from "@nozbe/watermelondb";
 
 export interface ObligatoryFieldOptionResponse {
   id: number;
@@ -75,9 +76,9 @@ export async function getObligatoryFields() {
           }),
         );
       } else {
-        const existing = existingMap.get(id);
+        const existing = existingMap.get(id)!;
         operations.push(
-          existing?.prepareUpdate((e) => {
+          existing.prepareUpdate((e) => {
             e.name = response.name;
             e.fieldType = response.field_type;
             e.sort = response.obligatory_field_sort;
@@ -87,19 +88,28 @@ export async function getObligatoryFields() {
         );
 
         const existingOptionMap = new Map<number, ObligatoryFieldOption>();
-        existingOptionMap.forEach((i) => existingOptionMap.set(i.serverId, i));
+        const existingOptions = await dbObligatoryOption
+          .query(Q.where("obligatory_field_server_id", existing.serverId))
+          .fetch();
+        existingOptions.forEach((i) => existingOptionMap.set(i.serverId, i));
 
         const newOptionMap = new Map<number, ObligatoryFieldOptionResponse>();
         response.options?.forEach((i) => newOptionMap.set(i.id, i));
 
-        for (const [serverId, existingOption] of existingOptionMap.entries()) {
-          if (!newOptionMap.has(serverId)) {
+        for (const [
+          optionServerId,
+          existingOption,
+        ] of existingOptionMap.entries()) {
+          if (!newOptionMap.has(optionServerId)) {
             operations.push(existingOption.prepareDestroyPermanently());
           }
         }
 
-        for (const [optionId, responseOption] of newOptionMap.entries()) {
-          if (!existingOptionMap.has(optionId)) {
+        for (const [
+          responseOptionId,
+          responseOption,
+        ] of newOptionMap.entries()) {
+          if (!existingOptionMap.has(responseOptionId)) {
             operations.push(
               dbObligatoryOption.prepareCreate((newData) => {
                 newData.serverId = responseOption.id;
@@ -109,9 +119,9 @@ export async function getObligatoryFields() {
               }),
             );
           } else {
-            const existingOption = existingOptionMap.get(id);
+            const existingOption = existingOptionMap.get(responseOptionId)!;
             operations.push(
-              existingOption?.prepareUpdate((e) => {
+              existingOption.prepareUpdate((e) => {
                 e.name = responseOption.option_name;
                 e.sort = responseOption.sort;
               }),

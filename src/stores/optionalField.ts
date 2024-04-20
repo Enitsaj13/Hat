@@ -7,7 +7,10 @@ export class OptionalField extends Model {
   static table = "optional_fields";
 
   static associations = {
-    options: { type: "has_many", foreignKey: "optional_field_server_id" },
+    optional_field_options: {
+      type: "has_many",
+      foreignKey: "optional_field_server_id",
+    },
   } as const;
 
   // @ts-expect-error
