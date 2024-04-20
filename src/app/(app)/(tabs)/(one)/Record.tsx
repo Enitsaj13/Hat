@@ -17,6 +17,8 @@ import { CompanyConfig } from "@stores/companyConfig";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
 import { colors } from "@theme/index";
+import { getUserTargetSettings } from "@services/getUserTargetTarget";
+import { useQuery } from "react-query";
 
 function Component({ auditTypes, companyConfig }: RecordProps) {
   const { styles } = useStyles(stylesheet);
@@ -24,43 +26,14 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
   const [numberOpportunities, setNumberOpportunities] = useState("");
   const [auditType, setAuditType] = useState<number | undefined>();
 
+  const { data: userTargetSettings, isLoading: isUserTargetLoading } = useQuery(
+    "userTargetSettings",
+    getUserTargetSettings,
+  );
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <View style={styles.recordContainer}>
-          <View style={styles.rowContainer}>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              {i18n.t("AH2", { defaultValue: "Target Opportunies" })}
-            </Text>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              50
-            </Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              {i18n.t("DL7", { defaultValue: "Balance Remaining" })}
-            </Text>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              50
-            </Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              {i18n.t("DL8", { defaultValue: "Complete Target By" })}
-            </Text>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              March 31, 2023
-            </Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              {i18n.t("DL9", { defaultValue: "Last Submission On" })}
-            </Text>
-            <Text variant="bodyLarge" style={styles.recordText}>
-              50
-            </Text>
-          </View>
-        </View>
         <View style={styles.textInputContainer}>
           <TextInput
             keyboardType="numeric"
@@ -103,6 +76,42 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
             <Icon name="arrowright" size={14} color="white" />
           </Button>
         </View>
+        {!isUserTargetLoading && (
+          <View style={styles.recordContainer}>
+            <View style={styles.rowContainer}>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {i18n.t("AH2", { defaultValue: "Target Opportunities" })}
+              </Text>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {userTargetSettings?.targetOpportunities}
+              </Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {i18n.t("DL7", { defaultValue: "Balance Remaining" })}
+              </Text>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {userTargetSettings?.balance}
+              </Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {i18n.t("DL8", { defaultValue: "Complete Target By" })}
+              </Text>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {userTargetSettings?.endDate}
+              </Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {i18n.t("DL9", { defaultValue: "Last Submission On" })}
+              </Text>
+              <Text variant="bodyLarge" style={styles.recordText}>
+                {userTargetSettings?.lastOpportunity}
+              </Text>
+            </View>
+          </View>
+        )}
         <View style={styles.practiceButtonContainer}>
           <Link href="/PracticeMode" asChild>
             <Button mode="text" onPress={() => {}}>

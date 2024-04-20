@@ -21,7 +21,6 @@ export interface CompanyConfigResponse {
   actions: CompanyActionResponse[];
 }
 
-// TODO return the CompanyConfig object from here to be used on the caller if should retry
 export async function getCompanyConfig(): Promise<CompanyConfig> {
   const result = await axiosInstance.get<CompanyConfigResponse>(
     "/mobile/company-config",

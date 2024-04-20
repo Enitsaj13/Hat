@@ -15,6 +15,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PaperProvider } from "react-native-paper";
 import { UnistylesRegistry } from "react-native-unistyles";
 import { of, switchMap } from "rxjs";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import { SessionProvider } from "../auth";
 
@@ -31,6 +32,8 @@ SplashScreen.preventAutoHideAsync();
 interface RootProps {
   appSetting: AppSetting;
 }
+
+const queryClient = new QueryClient();
 
 export function Component({ appSetting }: RootProps) {
   const [, error] = useFonts({
@@ -49,17 +52,19 @@ export function Component({ appSetting }: RootProps) {
 
   // Set up the auth context and render our layout inside of it.
   return (
-    <PaperProvider theme={CombinedDefaultTheme}>
-      <ThemeProvider value={CombinedDefaultTheme}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <SessionProvider>
-              <Slot />
-            </SessionProvider>
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </ThemeProvider>
-    </PaperProvider>
+    <QueryClientProvider client={queryClient}>
+      <PaperProvider theme={CombinedDefaultTheme}>
+        <ThemeProvider value={CombinedDefaultTheme}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+              <SessionProvider>
+                <Slot />
+              </SessionProvider>
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </PaperProvider>
+    </QueryClientProvider>
   );
 }
 
