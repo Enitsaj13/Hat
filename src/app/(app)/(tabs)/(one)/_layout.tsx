@@ -14,6 +14,14 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="Locations/[selectedLocationServerId]"
+        options={{
+          title: i18n.t("LC2", {
+            defaultValue: "Location",
+          }),
+        }}
+      />
+      <Stack.Screen
         name="PracticeMode"
         options={{
           title: i18n.t("H6", {

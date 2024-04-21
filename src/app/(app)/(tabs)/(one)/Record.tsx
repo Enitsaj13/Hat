@@ -57,7 +57,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
   const {
     control,
     handleSubmit,
-    formState: { isLoading },
+    formState: { isLoading, isValid },
   } = useForm<IBatchObservationSchema>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -98,7 +98,10 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
         console.log(
           "creating batch observation is successful, redirecting to locations",
         );
-        // router.push("/(app)/(tabs)/(one)/locations")
+        router.push({
+          pathname: "/(app)/(tabs)/(one)/Locations/[selectedLocationServerId]",
+          params: { selectedLocationServerId: -1 },
+        });
       } catch (e) {
         console.log("error while call create batch endpoint", e);
         showRetryAlert();
@@ -118,11 +121,9 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
             }) => (
               <TextInput
                 keyboardType="numeric"
-                label={
-                  i18n.t("Y2", {
-                    defaultValue: "Number of Opportunities for this Audit:",
-                  }) + (invalid ? "(" + error?.message + ")" : "")
-                }
+                label={i18n.t("Y2", {
+                  defaultValue: "Number of Opportunities for this Audit:",
+                })}
                 value={value?.toString()}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -165,7 +166,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
             style={styles.recordButton}
             onPress={handleSubmit(onBeginAuditPress)}
             loading={isLoading}
-            disabled={isLoading}
+            disabled={isLoading && !isValid}
           >
             <Text variant="bodyLarge">
               {i18n.t("Y3", { defaultValue: "Begin Audit" })}
