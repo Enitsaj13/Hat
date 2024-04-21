@@ -99,8 +99,8 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
           "creating batch observation is successful, redirecting to locations",
         );
         router.push({
-          pathname: "/(app)/(tabs)/(one)/Locations/[selectedLocationServerId]",
-          params: { selectedLocationServerId: -1 },
+          pathname: "/(app)/(tabs)/(one)/Locations/[serverId]",
+          params: { serverId: -1 },
         });
       } catch (e) {
         console.log("error while call create batch endpoint", e);

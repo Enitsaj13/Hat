@@ -14,7 +14,7 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="Locations/[selectedLocationServerId]"
+        name="Locations/[serverId]"
         options={{
           title: i18n.t("LC2", {
             defaultValue: "Location",
