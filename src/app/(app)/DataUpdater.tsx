@@ -1,11 +1,10 @@
-import { i18n } from "@i18n/index";
 import {
   ExtractedObservables,
   withObservables,
 } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { useCallback, useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { AuditType } from "@stores/auditType";
 import { Worker } from "@stores/worker";
 import { Location } from "@stores/location";
@@ -21,6 +20,7 @@ import { getObligatoryFields } from "@services/getObligatoryFields";
 import { getOptionalFields } from "@services/getOptionalFields";
 import { ObligatoryField } from "@stores/obligatoryField";
 import { OptionalField } from "@stores/optionalField";
+import { showRetryAlert } from "@utils/showRetryAlert";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   const result = await Promise.allSettled([
@@ -58,21 +58,8 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
     }
   }
 
-  Alert.alert(
-    i18n.t("S11", {
-      defaultValue: "Failed",
-    }),
-    i18n.t("ADD25", {
-      defaultValue:
-        "Your device is offline. Check connectivity settings or move to a new location with stable Internet connection.",
-    }),
-    [
-      {
-        text: "OK",
-        onPress: () => serverCall(shouldRetry, onSuccess), // recursively call to try again
-      },
-    ],
-  );
+  // recursively call to try again
+  showRetryAlert(() => serverCall(shouldRetry, onSuccess));
 }
 
 function Component({

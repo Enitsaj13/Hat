@@ -6,10 +6,9 @@ import {
   withObservables,
 } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
-import { useState } from "react";
 import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
-import { Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { AuditType } from "@stores/auditType";
 import isEmpty from "lodash.isempty";
@@ -19,56 +18,151 @@ import { of, switchMap } from "rxjs";
 import { colors } from "@theme/index";
 import { getUserTargetSettings } from "@services/getUserTargetTarget";
 import { useQuery } from "react-query";
+import { useBatchObservation } from "@hooks/useBatchObservation";
+import { number, object } from "yup";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useCallback } from "react";
+import { createBatchObservationGuid } from "@services/createBatchObservationGuid";
+import { showRetryAlert } from "@utils/showRetryAlert";
+
+interface IBatchObservationSchema {
+  targetOpportunities: number;
+  auditType?: number;
+}
 
 function Component({ auditTypes, companyConfig }: RecordProps) {
   const { styles } = useStyles(stylesheet);
 
-  const [numberOpportunities, setNumberOpportunities] = useState("");
-  const [auditType, setAuditType] = useState<number | undefined>();
+  const validationSchema = object({
+    targetOpportunities: number().required(
+      i18n.t("AG32", {
+        defaultValue: "Required",
+      }),
+    ),
+    auditType: number().test({
+      name: "required2",
+      message: i18n.t("AG32", {
+        defaultValue: "Required",
+      }),
+      test(value) {
+        if (companyConfig?.enableAuditTypes) {
+          return value != null && value > 0;
+        }
+        return true;
+      },
+    }),
+  });
 
+  const {
+    control,
+    handleSubmit,
+    formState: { isLoading },
+  } = useForm<IBatchObservationSchema>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      auditType: !isEmpty(auditTypes) ? auditTypes[0].serverId : undefined,
+    },
+  });
+
+  const { batchObservationState, setBatchObservationState } =
+    useBatchObservation();
+
+  const navigation = useNavigation();
+  console.log("record is focused", navigation.isFocused());
   const { data: userTargetSettings, isLoading: isUserTargetLoading } = useQuery(
     "userTargetSettings",
     getUserTargetSettings,
+    {
+      enabled: navigation.isFocused(),
+    },
+  );
+
+  if (
+    !isEmpty(userTargetSettings) &&
+    batchObservationState.balance !== userTargetSettings!.balance
+  ) {
+    setBatchObservationState((prev) => ({
+      ...prev,
+      balance: userTargetSettings?.balance,
+    }));
+  }
+
+  const onBeginAuditPress = useCallback(
+    async (form: IBatchObservationSchema) => {
+      try {
+        const guid = await createBatchObservationGuid();
+        setBatchObservationState((prev) => ({ ...prev, ...form, guid }));
+        console.log(
+          "creating batch observation is successful, redirecting to locations",
+        );
+      } catch (e) {
+        console.log("error while call create batch endpoint", e);
+        showRetryAlert();
+      }
+    },
+    [],
   );
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.textInputContainer}>
-          <TextInput
-            keyboardType="numeric"
-            label={i18n.t("Y2", {
-              defaultValue: "Number of Opportunities for this Audit:",
-            })}
-            value={numberOpportunities}
-            onChangeText={(text) => setNumberOpportunities(text)}
-            contentStyle={styles.textInput}
-            theme={{
-              colors: {
-                placeholder: colors.cadetGrey,
-                primary: colors.cadetGrey,
-              },
-            }}
-            underlineColor="white"
-            underlineColorAndroid={colors.cadetGrey}
-            textColor="black"
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                keyboardType="numeric"
+                label={
+                  i18n.t("Y2", {
+                    defaultValue: "Number of Opportunities for this Audit:",
+                  }) + (invalid ? "(" + error?.message + ")" : "")
+                }
+                value={value?.toString()}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                contentStyle={styles.textInput}
+                theme={{
+                  colors: {
+                    placeholder: colors.cadetGrey,
+                    primary: colors.cadetGrey,
+                  },
+                }}
+                underlineColor="white"
+                underlineColorAndroid={colors.cadetGrey}
+                textColor="black"
+                error={invalid}
+              />
+            )}
+            name="targetOpportunities"
+            control={control}
           />
           {isEmpty(companyConfig) || companyConfig.enableAuditTypes ? (
-            <DropdownList
-              options={auditTypes.map((a) => ({
-                key: a.serverId,
-                value: a.name,
-              }))}
-              onOptionSelected={(key) => setAuditType(key as number)}
-              selectedOptionKey={auditType}
-              dropdownlistStyle={styles.dropdownlistContainer}
-              right={<Icon name="caretdown" size={12} color="gray" />}
+            <Controller
+              render={({ field: { onChange, value } }) => (
+                <DropdownList
+                  options={auditTypes.map((a) => ({
+                    key: a.serverId,
+                    value: a.name,
+                  }))}
+                  onOptionSelected={onChange}
+                  selectedOptionKey={value}
+                  dropdownlistStyle={styles.dropdownlistContainer}
+                  right={<Icon name="caretdown" size={12} color="gray" />}
+                />
+              )}
+              name="auditType"
+              control={control}
             />
           ) : null}
           <Button
             mode="outlined"
             style={styles.recordButton}
-            onPress={() => {}}
+            onPress={handleSubmit(onBeginAuditPress)}
+            loading={isLoading}
+            disabled={isLoading}
           >
             <Text variant="bodyLarge">
               {i18n.t("Y3", { defaultValue: "Begin Audit" })}

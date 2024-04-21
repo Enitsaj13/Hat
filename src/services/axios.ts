@@ -56,7 +56,7 @@ export function useAxiosResponseInterceptor(
     if (
       !isEmpty(token) &&
       [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden].includes(
-        error.response.status,
+        error.response?.status,
       ) &&
       !originalRequest._retry
     ) {
