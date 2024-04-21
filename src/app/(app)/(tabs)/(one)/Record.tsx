@@ -8,7 +8,7 @@ import {
 import { database } from "@stores/index";
 import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
-import { Link, useNavigation } from "expo-router";
+import { Link, usePathname, useRouter } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { AuditType } from "@stores/auditType";
 import isEmpty from "lodash.isempty";
@@ -67,14 +67,15 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
 
   const { batchObservationState, setBatchObservationState } =
     useBatchObservation();
+  // console.log("batchObservationState", batchObservationState);
 
-  const navigation = useNavigation();
-  console.log("record is focused", navigation.isFocused());
+  const path = usePathname();
+  console.log("path", path);
   const { data: userTargetSettings, isLoading: isUserTargetLoading } = useQuery(
     "userTargetSettings",
     getUserTargetSettings,
     {
-      enabled: navigation.isFocused(),
+      enabled: path === "/Record",
     },
   );
 
@@ -88,6 +89,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
     }));
   }
 
+  const router = useRouter();
   const onBeginAuditPress = useCallback(
     async (form: IBatchObservationSchema) => {
       try {
@@ -96,6 +98,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
         console.log(
           "creating batch observation is successful, redirecting to locations",
         );
+        // router.push("/(app)/(tabs)/(one)/locations")
       } catch (e) {
         console.log("error while call create batch endpoint", e);
         showRetryAlert();
@@ -170,7 +173,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
             <Icon name="arrowright" size={14} color="white" />
           </Button>
         </View>
-        {!isUserTargetLoading && (
+        {!isUserTargetLoading && !isEmpty(userTargetSettings) && (
           <View style={styles.recordContainer}>
             <View style={styles.rowContainer}>
               <Text variant="bodyLarge" style={styles.recordText}>
