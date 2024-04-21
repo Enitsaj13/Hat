@@ -1,22 +1,68 @@
-import React, { useState } from "react";
-import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useCallback } from "react";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  ISubscribeNowSchema,
+  subcribeNowSchema,
+  subscribeNow,
+} from "@services/subscribeNow";
 
 const SubscribeNowScreen = () => {
   const { styles } = useStyles(stylesheet);
 
-  const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
-  const [email, setEmail] = useState("");
-  const [designation, setDesignation] = useState("");
-  const [department, setDepartment] = useState("");
-  const [hospital, setHospital] = useState("");
-  const [numberBed, setNumberBed] = useState("");
-  const [address, setAddress] = useState("");
-  const [country, setCountry] = useState("");
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: { isLoading, isValid, isSubmitSuccessful },
+  } = useForm<ISubscribeNowSchema>({
+    resolver: yupResolver(subcribeNowSchema),
+  });
+
+  if (isSubmitSuccessful) {
+    reset();
+  }
+
+  const submitForm = useCallback(async (form: ISubscribeNowSchema) => {
+    try {
+      await subscribeNow(form);
+      Alert.alert(
+        i18n.t("R3", { defaultValue: "Successful" }),
+        i18n.t("ADD12", { defaultValue: "Your message successfully sent." }),
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              reset({
+                name: "",
+                contactNumber: "",
+                email: "",
+                designation: "",
+                department: "",
+                hospital: "",
+                numberOfBeds: "" as any,
+                address: "",
+                country: "",
+              });
+            },
+          },
+        ],
+      );
+    } catch (e) {
+      console.log("error occurred while submitting a subscribe now form", e);
+    }
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -29,150 +75,278 @@ const SubscribeNowScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.textInputContainer}>
-          <TextInput
-            label={i18n.t("B3", { defaultValue: "Name" })}
-            value={name}
-            onChangeText={(text) => setName(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B3", { defaultValue: "Name" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="name"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("B4", { defaultValue: "Contact Number" })}
-            value={contact}
-            keyboardType="phone-pad"
-            onChangeText={(text) => setContact(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B4", { defaultValue: "Contact Number" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                keyboardType="phone-pad"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="contactNumber"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("D1", { defaultValue: "Email Address" })}
-            value={email}
-            keyboardType="email-address"
-            onChangeText={(text) => setEmail(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("D1", { defaultValue: "Email Address" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="email"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("B5", { defaultValue: "Designation" })}
-            value={designation}
-            onChangeText={(text) => setDesignation(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B5", { defaultValue: "Designation" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="designation"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("B6", { defaultValue: "Department" })}
-            value={department}
-            onChangeText={(text) => setDepartment(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B6", { defaultValue: "Department" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="department"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("B7", { defaultValue: "Hospital" })}
-            value={hospital}
-            onChangeText={(text) => setHospital(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B7", { defaultValue: "Hospital" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="hospital"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("B8", { defaultValue: "No. of Beds" })}
-            value={numberBed}
-            keyboardType="phone-pad"
-            onChangeText={(text) => setNumberBed(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B8", { defaultValue: "No. of Beds" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                value={value?.toString()}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="numberOfBeds"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("B9", { defaultValue: "Address" })}
-            value={address}
-            onChangeText={(text) => setAddress(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B9", { defaultValue: "Address" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="address"
+            control={control}
           />
-          <TextInput
-            label={i18n.t("B10", { defaultValue: "Country" })}
-            value={country}
-            onChangeText={(text) => setCountry(text)}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
+          <Controller
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, error },
+            }) => (
+              <TextInput
+                label={
+                  i18n.t("B10", { defaultValue: "Country" }) +
+                  (invalid ? `(${error?.message})` : "")
+                }
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={invalid}
+                theme={{
+                  colors: {
+                    placeholder: colors.steelGrey,
+                    primary: colors.steelGrey,
+                  },
+                }}
+                underlineColor={colors.whiteSmoke}
+                underlineColorAndroid={colors.whiteSmoke}
+                textColor={colors.midNight}
+                contentStyle={styles.textInput}
+              />
+            )}
+            name="country"
+            control={control}
           />
         </View>
         <View style={styles.buttonContainer}>
           <Button
             mode="outlined"
             style={styles.subscribeButton}
-            onPress={() => {}}
+            onPress={handleSubmit(submitForm)}
+            loading={isLoading}
+            disabled={isLoading && !isValid}
           >
             {i18n.t("B11", { defaultValue: "SEND MESSAGE" })}
           </Button>
