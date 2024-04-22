@@ -91,7 +91,11 @@ function Component({ user, appSetting }: RootLayoutProps) {
   );
 }
 
-type WithObservableProps = ObservableifyProps<RootLayoutProps, "appSetting">;
+type WithObservableProps = ObservableifyProps<
+  RootLayoutProps,
+  "user",
+  "appSetting"
+>;
 const RootLayout = withObservables(
   ["user", "appSetting"],
   (props: WithObservableProps) => ({

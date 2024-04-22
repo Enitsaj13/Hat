@@ -1,22 +1,33 @@
 import React from "react";
-import { Image, TouchableOpacity, View, Linking } from "react-native";
+import { Image, Linking, TouchableOpacity, View } from "react-native";
 import { List, Text } from "react-native-paper";
 import { Link } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useSession } from "src/auth";
 import {
   Entypo as Icon,
-  MaterialIcons as LogoutIcon,
+  MaterialIcons as MaterialIcon,
 } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
+import { User } from "@stores/user";
+import { AppSetting } from "@stores/appSetting";
+import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
+import { withObservables } from "@nozbe/watermelondb/react";
+import { database } from "@stores/index";
+import { Q } from "@nozbe/watermelondb";
+import { of, switchMap } from "rxjs";
 
-const Settings = () => {
+interface SettingsProps {
+  user: User;
+  appSetting: AppSetting;
+}
+
+const Component = ({ user, appSetting }: SettingsProps) => {
   const { styles } = useStyles(stylesheet);
   const { signOut } = useSession();
 
-  const onPressImprint = async () => {
-    const url = "https://www.bbraun.com/en/imprint.html";
+  const openUrl = async (url: string) => {
     const supported = await Linking.canOpenURL(url);
 
     if (supported) {
@@ -35,8 +46,10 @@ const Settings = () => {
           resizeMode="contain"
         />
         <View style={styles.accountTextContainer}>
-          <Text style={styles.accountName}>Jastine Formentera</Text>
-          <Text style={styles.accountSubName}>rocketspin@gmail.com</Text>
+          <Text
+            style={styles.accountName}
+          >{`${user.firstName} ${user.lastName}`}</Text>
+          <Text style={styles.accountSubName}>{user.email}</Text>
         </View>
       </View>
       <List.Section>
@@ -132,7 +145,7 @@ const Settings = () => {
         </Link>
 
         <TouchableOpacity
-          onPress={onPressImprint}
+          onPress={() => openUrl("https://www.bbraun.com/en/imprint.html")}
           style={styles.listItemContainer}
         >
           <List.Item
@@ -150,7 +163,7 @@ const Settings = () => {
                   { backgroundColor: colors.paleBlue },
                 ]}
               >
-                <LogoutIcon
+                <MaterialIcon
                   name="info"
                   size={18}
                   color={colors.vividCerulean}
@@ -159,7 +172,10 @@ const Settings = () => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity
+          onPress={() => openUrl(appSetting.dataPrivacyUrl)}
+          style={styles.listItemContainer}
+        >
           <List.Item
             title={i18n.t("TERMS8", { defaultValue: "Data Privacy Policies" })}
             titleStyle={styles.settingsText}
@@ -175,7 +191,7 @@ const Settings = () => {
                   { backgroundColor: colors.whiteSmoke },
                 ]}
               >
-                <LogoutIcon
+                <MaterialIcon
                   name="privacy-tip"
                   size={18}
                   color={colors.steelGrey}
@@ -184,33 +200,30 @@ const Settings = () => {
             )}
           />
         </TouchableOpacity>
-        <Link href="/TermsOfUse" asChild>
-          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
-            <List.Item
-              title={i18n.t("TERMS6", { defaultValue: "Terms of Use" })}
-              titleStyle={styles.settingsText}
-              right={() => (
-                <View style={styles.centerContainer}>
-                  <Icon
-                    name="chevron-right"
-                    size={18}
-                    color={colors.midNight}
-                  />
-                </View>
-              )}
-              left={() => (
-                <View
-                  style={[
-                    styles.iconContainer,
-                    { backgroundColor: colors.lilyWhite },
-                  ]}
-                >
-                  <LogoutIcon name="policy" size={18} color={colors.bgColor} />
-                </View>
-              )}
-            />
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity
+          onPress={() => openUrl(appSetting.termsOfUseUrl)}
+          style={styles.listItemContainer}
+        >
+          <List.Item
+            title={i18n.t("TERMS6", { defaultValue: "Terms of Use" })}
+            titleStyle={styles.settingsText}
+            right={() => (
+              <View style={styles.centerContainer}>
+                <Icon name="chevron-right" size={18} color={colors.midNight} />
+              </View>
+            )}
+            left={() => (
+              <View
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.lilyWhite },
+                ]}
+              >
+                <MaterialIcon name="policy" size={18} color={colors.bgColor} />
+              </View>
+            )}
+          />
+        </TouchableOpacity>
         <TouchableOpacity onPress={signOut} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("AI10", { defaultValue: "Logout" })}
@@ -227,7 +240,11 @@ const Settings = () => {
                   { backgroundColor: colors.chantilly },
                 ]}
               >
-                <LogoutIcon name="logout" size={18} color={colors.terracotta} />
+                <MaterialIcon
+                  name="logout"
+                  size={18}
+                  color={colors.terracotta}
+                />
               </View>
             )}
           />
@@ -309,5 +326,32 @@ const stylesheet = createStyleSheet({
     fontSize: 16,
   },
 });
+
+type WithObservableProps = ObservableifyProps<
+  SettingsProps,
+  "user",
+  "appSetting"
+>;
+const Settings = withObservables(
+  ["user", "appSetting"],
+  (props: WithObservableProps) => ({
+    user: database
+      .get<User>("users")
+      .query(Q.take(1))
+      .observe()
+      .pipe(
+        switchMap((user) => (user.length > 0 ? user[0].observe() : of(null))),
+      ),
+    appSetting: database
+      .get<AppSetting>("app_settings")
+      .query(Q.take(1))
+      .observe()
+      .pipe(
+        switchMap((appSettings) =>
+          appSettings.length > 0 ? appSettings[0].observe() : of(null),
+        ),
+      ),
+  }),
+)(Component as any); // as any here is workaround on typescript complaining between Observable<AppSetting> and AppSetting
 
 export default Settings;
