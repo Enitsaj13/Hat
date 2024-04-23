@@ -1,9 +1,9 @@
-import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { colors } from "@theme/index";
-import { useRef, useCallback } from "react";
-import { View, FlatList, ViewStyle } from "react-native";
+import { useCallback, useRef } from "react";
+import { FlatList, View, ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useTheme, List, TouchableRipple, Text } from "react-native-paper";
+import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 
 export type DropDownOptionKey = string | number;
@@ -12,6 +12,7 @@ export type DropDownOption = {
   key: DropDownOptionKey;
   value: any;
 };
+
 interface DropdownListProps {
   options: DropDownOption[];
   selectedOptionKey?: DropDownOptionKey;
@@ -27,7 +28,7 @@ function DropdownList({
   dropdownlistStyle,
   right,
 }: DropdownListProps) {
-  const { styles } = useStyles(stylesheet);
+  const { styles } = useStyles(dropdownStylesheet);
 
   const theme = useTheme();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -102,7 +103,7 @@ function DropdownList({
   );
 }
 
-const stylesheet = createStyleSheet({
+export const dropdownStylesheet = createStyleSheet({
   container: {
     alignItems: "center",
     justifyContent: "space-between",

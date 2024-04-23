@@ -1,6 +1,6 @@
-import React from "react";
-import { Image, Linking, TouchableOpacity, View } from "react-native";
-import { List, Text } from "react-native-paper";
+import React, { useCallback, useRef } from "react";
+import { FlatList, Image, Linking, TouchableOpacity, View } from "react-native";
+import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { Link } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useSession } from "src/auth";
@@ -17,6 +17,9 @@ import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
+import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
+import { dropdownStylesheet } from "@components/DropdownList";
+import { languages } from "@i18n/languages";
 
 interface SettingsProps {
   user: User;
@@ -24,8 +27,24 @@ interface SettingsProps {
 }
 
 const Component = ({ user, appSetting }: SettingsProps) => {
+  const theme = useTheme();
   const { styles } = useStyles(stylesheet);
+  const { styles: dropdownStyles } = useStyles(dropdownStylesheet);
   const { signOut } = useSession();
+
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={1}
+        opacity={-1}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    [],
+  );
 
   const openUrl = async (url: string) => {
     const supported = await Linking.canOpenURL(url);
@@ -95,7 +114,10 @@ const Component = ({ user, appSetting }: SettingsProps) => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity
+          onPress={() => bottomSheetModalRef.current?.present()}
+          style={styles.listItemContainer}
+        >
           <List.Item
             title={i18n.t("D0", { defaultValue: "Language" })}
             titleStyle={styles.settingsText}
@@ -115,6 +137,44 @@ const Component = ({ user, appSetting }: SettingsProps) => {
               </View>
             )}
           />
+          <BottomSheetModal
+            enableContentPanningGesture={false} // used to scroll bottom sheet on android
+            backdropComponent={renderBackdrop}
+            snapPoints={["25%"]}
+            ref={bottomSheetModalRef}
+            handleIndicatorStyle={dropdownStyles.handleIndicatorColor}
+            style={dropdownStyles.containerBottomSheetModal}
+          >
+            <FlatList
+              data={languages}
+              renderItem={({ item }) => (
+                <TouchableRipple
+                  onPress={() => {
+                    appSetting.saveLanguage(item.key);
+                    bottomSheetModalRef.current?.dismiss();
+                  }}
+                >
+                  <List.Item
+                    contentStyle={dropdownStyles.languageBottomSheetContainer}
+                    title={item.value}
+                    titleStyle={[
+                      dropdownStyles.key,
+                      { color: theme.colors.onPrimary },
+                    ]}
+                    left={() =>
+                      appSetting.language === item.key ? (
+                        <List.Icon
+                          icon="check"
+                          color="green"
+                          style={dropdownStyles.leftIcon}
+                        />
+                      ) : null
+                    }
+                  />
+                </TouchableRipple>
+              )}
+            />
+          </BottomSheetModal>
         </TouchableOpacity>
         <Link href="/SubscribeNow" asChild>
           <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
