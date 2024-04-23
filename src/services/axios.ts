@@ -77,8 +77,35 @@ export function useAxiosResponseInterceptor(
         );
         return axiosInstance(originalRequest);
       } catch (e) {
+        // Auto logout kicking in
         console.log("Error occurred while refreshing the token: ", e);
         signOut();
+
+        // delete all user-dependent data
+        /*
+        await database.get("users").query().destroyAllPermanently();
+        await database.get("audit_types").query().destroyAllPermanently();
+        await database.get("company_configs").query().destroyAllPermanently();
+        await database
+          .get("institution_actions")
+          .query()
+          .destroyAllPermanently();
+        await database.get("locations").query().destroyAllPermanently();
+        await database
+          .get("obligatory_field_options")
+          .query()
+          .destroyAllPermanently();
+        await database.get("obligatory_fields").query().destroyAllPermanently();
+        await database
+          .get("optional_field_options")
+          .query()
+          .destroyAllPermanently();
+        await database
+          .get("optional_field_options")
+          .query()
+          .destroyAllPermanently();
+        await database.get("workers").query().destroyAllPermanently();
+         */
       }
     }
     return Promise.reject(error);
