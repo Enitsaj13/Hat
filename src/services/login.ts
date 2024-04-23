@@ -7,7 +7,7 @@ import { User } from "@stores/user";
 import { object, string } from "yup";
 
 import { UserJson } from "../types";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { contentTypeKey, defaultContentType } from "@services/axios";
 
 export interface ILoginSchema {
@@ -144,14 +144,18 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       token: response.access_token,
       hasAcceptedAppPrivacy: userResponse.app_privacy_accepted_flag === 1,
     };
-  } catch (e) {
+  } catch (e: any) {
     console.log("login error", JSON.stringify(e));
+    const message =
+      e.status === HttpStatusCode.Unauthorized
+        ? i18n.t("INVALID_CREDENTIALS")
+        : i18n.t("ADD13", {
+            defaultValue:
+              "Login: An error occurred while processing, Please try again.",
+          });
     return {
       status: LoginStatus.FAILED,
-      message: i18n.t("ADD13", {
-        defaultValue:
-          "Login: An error occurred while processing, Please try again.",
-      }),
+      message,
     };
   }
 }

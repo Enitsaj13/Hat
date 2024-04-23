@@ -392,6 +392,8 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   pt: {
@@ -788,6 +790,8 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   fr: {
@@ -1185,6 +1189,8 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   de: {
@@ -1583,6 +1589,8 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   br: {
@@ -1979,6 +1987,8 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   es: {
@@ -2376,6 +2386,8 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   id: {
@@ -2771,7 +2783,9 @@ export const translations = {
     SUM4: "Terlewat & Tanpa Indikasi tidak dapat diaktifkan secara bersamaan.",
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
-    COPYRIGHT: "Copyright", // TODO
+    COPYRIGHT: "Copyright", // TODO7
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   cs: {
@@ -3167,6 +3181,8 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 
   th: {
@@ -3561,5 +3577,7 @@ export const translations = {
     INFORMATION: "Information", // TODO
     SETTINGS: "Settings", // TODO
     COPYRIGHT: "Copyright", // TODO
+    INVALID_CREDENTIALS:
+      "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
   },
 };
