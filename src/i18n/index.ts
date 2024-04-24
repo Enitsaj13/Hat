@@ -11,3 +11,7 @@ export function getDefaultLanguage(appSetting: AppSetting) {
     appSetting?.language || Localization.getLocales()[0].languageCode || "en"
   );
 }
+
+export const i18nOptions = {
+  countFormatOptions: { precision: 0 },
+};

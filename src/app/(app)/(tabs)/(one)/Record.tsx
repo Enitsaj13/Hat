@@ -1,6 +1,6 @@
 import DropdownList from "@components/DropdownList";
 import { AntDesign as Icon } from "@expo/vector-icons";
-import { i18n } from "@i18n/index";
+import { i18n, i18nOptions } from "@i18n/index";
 import {
   ExtractedObservables,
   withObservables,
@@ -181,7 +181,10 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
                 {i18n.t("AH2", { defaultValue: "Target Opportunities" })}
               </Text>
               <Text variant="bodyLarge" style={styles.recordText}>
-                {userTargetSettings?.targetOpportunities}
+                {i18n.formatNumber(
+                  userTargetSettings?.targetOpportunities,
+                  i18nOptions.countFormatOptions,
+                )}
               </Text>
             </View>
             <View style={styles.rowContainer}>
@@ -189,7 +192,10 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
                 {i18n.t("DL7", { defaultValue: "Balance Remaining" })}
               </Text>
               <Text variant="bodyLarge" style={styles.recordText}>
-                {userTargetSettings?.balance}
+                {i18n.formatNumber(
+                  userTargetSettings?.balance,
+                  i18nOptions.countFormatOptions,
+                )}
               </Text>
             </View>
             <View style={styles.rowContainer}>
