@@ -13,14 +13,7 @@ export default function Layout() {
           headerBackTitleVisible: false,
         }}
       />
-      <Stack.Screen
-        name="Locations/[serverId]"
-        options={{
-          title: i18n.t("LC2", {
-            defaultValue: "Location",
-          }),
-        }}
-      />
+      <Stack.Screen name="Locations/[serverId]" />
       <Stack.Screen
         name="PracticeMode"
         options={{
