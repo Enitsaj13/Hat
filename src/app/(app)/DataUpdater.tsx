@@ -59,7 +59,11 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   }
 
   // recursively call to try again
-  showRetryAlert(() => serverCall(shouldRetry, onSuccess));
+  const reason = (result[0] as any).reason.toString();
+  console.log("result[0].reason: ", reason);
+  if (!reason.includes("status code 401")) {
+    showRetryAlert(() => serverCall(shouldRetry, onSuccess));
+  }
 }
 
 function Component({

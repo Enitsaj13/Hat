@@ -3,6 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import isEmpty from "lodash.isempty";
 
 import { SecureStorageKeys, SignInFunction, SignOutFunction } from "../types";
+import { database } from "@stores/index";
 
 export const axiosInstance = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
@@ -50,7 +51,7 @@ export function useAxiosResponseInterceptor(
   signOut: SignOutFunction,
 ) {
   axiosInstance.interceptors.response.use(null, async (error) => {
-    console.log("axios intercepted an error", JSON.stringify(error));
+    // console.log("axios intercepted an error", JSON.stringify(error));
     const token = await SecureStore.getItemAsync(SecureStorageKeys.AuthToken);
     const originalRequest = error.config;
     if (
@@ -78,34 +79,37 @@ export function useAxiosResponseInterceptor(
         return axiosInstance(originalRequest);
       } catch (e) {
         // Auto logout kicking in
-        console.log("Error occurred while refreshing the token: ", e);
+        // console.log("Error occurred while refreshing the token: ", e);
         signOut();
 
         // delete all user-dependent data
-        /*
-        await database.get("users").query().destroyAllPermanently();
-        await database.get("audit_types").query().destroyAllPermanently();
-        await database.get("company_configs").query().destroyAllPermanently();
-        await database
-          .get("institution_actions")
-          .query()
-          .destroyAllPermanently();
-        await database.get("locations").query().destroyAllPermanently();
-        await database
-          .get("obligatory_field_options")
-          .query()
-          .destroyAllPermanently();
-        await database.get("obligatory_fields").query().destroyAllPermanently();
-        await database
-          .get("optional_field_options")
-          .query()
-          .destroyAllPermanently();
-        await database
-          .get("optional_field_options")
-          .query()
-          .destroyAllPermanently();
-        await database.get("workers").query().destroyAllPermanently();
-         */
+        await database.write(async () => {
+          await database.get("users").query().destroyAllPermanently();
+          await database.get("audit_types").query().destroyAllPermanently();
+          await database.get("company_configs").query().destroyAllPermanently();
+          await database
+            .get("institution_actions")
+            .query()
+            .destroyAllPermanently();
+          await database.get("locations").query().destroyAllPermanently();
+          await database
+            .get("obligatory_field_options")
+            .query()
+            .destroyAllPermanently();
+          await database
+            .get("obligatory_fields")
+            .query()
+            .destroyAllPermanently();
+          await database
+            .get("optional_field_options")
+            .query()
+            .destroyAllPermanently();
+          await database
+            .get("optional_field_options")
+            .query()
+            .destroyAllPermanently();
+          await database.get("workers").query().destroyAllPermanently();
+        });
       }
     }
     return Promise.reject(error);

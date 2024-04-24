@@ -7,7 +7,7 @@ import { User } from "@stores/user";
 import { object, string } from "yup";
 
 import { UserJson } from "../types";
-import axios, { HttpStatusCode } from "axios";
+import axios from "axios";
 import { contentTypeKey, defaultContentType } from "@services/axios";
 
 export interface ILoginSchema {
@@ -145,9 +145,8 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       hasAcceptedAppPrivacy: userResponse.app_privacy_accepted_flag === 1,
     };
   } catch (e: any) {
-    console.log("login error", JSON.stringify(e));
     const message =
-      e.status === HttpStatusCode.Unauthorized
+      e.code === "ERR_BAD_REQUEST"
         ? i18n.t("INVALID_CREDENTIALS")
         : i18n.t("ADD13", {
             defaultValue:
