@@ -104,10 +104,7 @@ export function useAxiosResponseInterceptor(
             .get("optional_field_options")
             .query()
             .destroyAllPermanently();
-          await database
-            .get("optional_field_options")
-            .query()
-            .destroyAllPermanently();
+          await database.get("optional_fields").query().destroyAllPermanently();
           await database.get("workers").query().destroyAllPermanently();
         });
       }
