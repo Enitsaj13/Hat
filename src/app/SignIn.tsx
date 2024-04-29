@@ -90,6 +90,7 @@ function Component({ appSetting }: SignInProps) {
               value={value}
               keyboardType="email-address"
               onChangeText={onChange}
+              autoCapitalize="none"
               onBlur={onBlur}
               left={<TextInput.Icon icon="account" color="white" />}
               error={!isEmpty(errors.email?.message)}
@@ -106,6 +107,7 @@ function Component({ appSetting }: SignInProps) {
               secureTextEntry
               value={value}
               onChangeText={onChange}
+              autoCapitalize="none"
               onBlur={onBlur}
               left={<TextInput.Icon icon="key-variant" color="white" />}
               error={!isEmpty(errors.password?.message)}
