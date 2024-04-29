@@ -1,5 +1,12 @@
 import React, { useCallback, useRef, useState } from "react";
-import { FlatList, Image, Linking, TouchableOpacity, View, Switch } from "react-native";
+import {
+  FlatList,
+  Image,
+  Linking,
+  TouchableOpacity,
+  View,
+  Switch,
+} from "react-native";
 import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { Link } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
@@ -7,7 +14,7 @@ import { useSession } from "src/auth";
 import {
   Entypo as Icon,
   MaterialIcons as MaterialIcon,
-  FontAwesome as FontAwesomeIcon
+  FontAwesome as FontAwesomeIcon,
 } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
@@ -80,7 +87,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
         </View>
       </View>
       <List.Section>
-        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q2", { defaultValue: "Account Information" })}
             titleStyle={styles.settingsText}
@@ -101,7 +108,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q7", { defaultValue: "Change Password" })}
             titleStyle={styles.settingsText}
@@ -185,7 +192,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           </BottomSheetModal>
         </TouchableOpacity>
         <Link href="/SubscribeNow" asChild>
-          <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("D4", { defaultValue: "Subscribe Now" })}
               titleStyle={styles.settingsText}
@@ -287,20 +294,22 @@ const Component = ({ user, appSetting }: SettingsProps) => {
                   { backgroundColor: colors.lavenderMist },
                 ]}
               >
-                <MaterialIcon name="policy" size={18} color={colors.mediumPurple} />
+                <MaterialIcon
+                  name="policy"
+                  size={18}
+                  color={colors.mediumPurple}
+                />
               </View>
             )}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("H6", { defaultValue: "Practice Mode" })}
             titleStyle={styles.settingsText}
             right={() => (
-              <View
-                style={styles.switchContainer}
-              >
+              <View style={styles.switchContainer}>
                 <Text
                   style={{ color: "black", marginHorizontal: 10, fontSize: 16 }}
                 >
@@ -434,7 +443,7 @@ const stylesheet = createStyleSheet({
     fontSize: 16,
   },
   switchContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },

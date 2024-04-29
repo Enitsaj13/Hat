@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { WebView } from 'react-native-webview';
+import { WebView } from "react-native-webview";
 import { useLocalSearchParams } from "expo-router";
 
 const VideoScreen = () => {
@@ -9,10 +9,7 @@ const VideoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <WebView
-        source={{ uri: videoUrl as string }}
-        style={styles.webView}
-      />
+      <WebView source={{ uri: videoUrl as string }} style={styles.webView} />
     </View>
   );
 };

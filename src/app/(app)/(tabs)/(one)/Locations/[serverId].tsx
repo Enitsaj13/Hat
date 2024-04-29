@@ -45,8 +45,8 @@ export default function Locations() {
       title: !isEmpty(parentName)
         ? parentName
         : i18n.t("LC2", {
-          defaultValue: "Location",
-        }),
+            defaultValue: "Location",
+          }),
     });
   }, [parentName]);
 
