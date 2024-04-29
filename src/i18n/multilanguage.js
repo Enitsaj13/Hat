@@ -396,6 +396,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   pt: {
@@ -796,6 +798,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   fr: {
@@ -1197,6 +1201,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   de: {
@@ -1599,6 +1605,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   br: {
@@ -1999,6 +2007,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   es: {
@@ -2400,6 +2410,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   id: {
@@ -2800,6 +2812,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   cs: {
@@ -3199,6 +3213,8 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 
   th: {
@@ -3597,5 +3613,7 @@ export const translations = {
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
     VIDEOPLAYER: "Video Player", // TODO
     VIDEOLANGUAGES: "Video Languages", // TODO
+    SHOW: "Show", // TODO
+    HIDE: "Hide", // TODO
   },
 };

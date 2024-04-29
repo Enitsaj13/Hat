@@ -87,7 +87,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
         </View>
       </View>
       <List.Section>
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q2", { defaultValue: "Account Information" })}
             titleStyle={styles.settingsText}
@@ -108,7 +108,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q7", { defaultValue: "Change Password" })}
             titleStyle={styles.settingsText}
@@ -192,7 +192,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           </BottomSheetModal>
         </TouchableOpacity>
         <Link href="/SubscribeNow" asChild>
-          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+          <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("D4", { defaultValue: "Subscribe Now" })}
               titleStyle={styles.settingsText}
@@ -304,16 +304,14 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("H6", { defaultValue: "Practice Mode" })}
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.switchContainer}>
-                <Text
-                  style={{ color: "black", marginHorizontal: 10, fontSize: 16 }}
-                >
-                  {`${mode === true ? "Show" : "Hide"}`}
+                <Text style={styles.switchTitle}>
+                  {`${mode === true ? i18n.t("SHOW") : i18n.t("HIDE")}`}
                 </Text>
                 <Switch
                   trackColor={{ true: colors.bgColor }}
@@ -325,12 +323,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
               </View>
             )}
             left={() => (
-              <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.lilyWhite },
-                ]}
-              >
+              <View style={{ ...styles.iconContainer, backgroundColor: colors.lilyWhite }}>
                 <FontAwesomeIcon
                   name="bullseye"
                   size={18}
@@ -447,6 +440,11 @@ const stylesheet = createStyleSheet({
     justifyContent: "center",
     alignItems: "center",
   },
+  switchTitle: {
+    color: "black",
+    marginHorizontal: 10,
+    fontSize: 16
+  }
 });
 
 type WithObservableProps = ObservableifyProps<
