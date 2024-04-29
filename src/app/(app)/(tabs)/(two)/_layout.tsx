@@ -20,14 +20,30 @@ export default function Layout() {
       <Stack.Screen
         name="VideoPlayer"
         options={{
-          title: "Video Player TODO",
+          title: i18n.t("VIDEOPLAYER"),
           headerBackTitleVisible: false,
         }}
       />
       <Stack.Screen
         name="VideosLanguage"
         options={{
-          title: "Videos Language TODO",
+          title: i18n.t("VIDEOLANGUAGES"),
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="VideoLanguagesPlayer"
+        options={{
+          title: i18n.t("VIDEOLANGUAGES"),
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="GlobalHandHygieneExcellenceAward"
+        options={{
+          title: i18n.t("K5", {
+            defaultValue: "Global Hand Hygiene Excellence Awards",
+          }),
           headerBackTitleVisible: false,
         }}
       />

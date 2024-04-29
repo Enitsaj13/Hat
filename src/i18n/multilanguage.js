@@ -394,6 +394,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   pt: {
@@ -792,6 +794,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   fr: {
@@ -1191,6 +1195,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   de: {
@@ -1591,6 +1597,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   br: {
@@ -1989,6 +1997,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   es: {
@@ -2388,6 +2398,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   id: {
@@ -2786,6 +2798,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO7
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   cs: {
@@ -3183,6 +3197,8 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 
   th: {
@@ -3579,5 +3595,7 @@ export const translations = {
     COPYRIGHT: "Copyright", // TODO
     INVALID_CREDENTIALS:
       "Invalid username and/or password. Please ensure that the username and password is correct.", // TODO
+    VIDEOPLAYER: "Video Player", // TODO
+    VIDEOLANGUAGES: "Video Languages", // TODO
   },
 };
