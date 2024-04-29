@@ -1,5 +1,5 @@
-import React, { useCallback, useRef } from "react";
-import { FlatList, Image, Linking, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useRef, useState } from "react";
+import { FlatList, Image, Linking, TouchableOpacity, View, Switch } from "react-native";
 import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { Link } from "expo-router";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
@@ -7,6 +7,7 @@ import { useSession } from "src/auth";
 import {
   Entypo as Icon,
   MaterialIcons as MaterialIcon,
+  FontAwesome as FontAwesomeIcon
 } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
@@ -31,6 +32,13 @@ const Component = ({ user, appSetting }: SettingsProps) => {
   const { styles } = useStyles(stylesheet);
   const { styles: dropdownStyles } = useStyles(dropdownStylesheet);
   const { signOut } = useSession();
+
+  const [mode, setMode] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = (value: boolean) => {
+    setMode(value);
+    setIsEnabled((previousState) => !previousState);
+  };
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -72,7 +80,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
         </View>
       </View>
       <List.Section>
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q2", { defaultValue: "Account Information" })}
             titleStyle={styles.settingsText}
@@ -93,7 +101,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
             )}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("Q7", { defaultValue: "Change Password" })}
             titleStyle={styles.settingsText}
@@ -177,7 +185,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           </BottomSheetModal>
         </TouchableOpacity>
         <Link href="/SubscribeNow" asChild>
-          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+          <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("D4", { defaultValue: "Subscribe Now" })}
               titleStyle={styles.settingsText}
@@ -276,14 +284,54 @@ const Component = ({ user, appSetting }: SettingsProps) => {
               <View
                 style={[
                   styles.iconContainer,
-                  { backgroundColor: colors.lilyWhite },
+                  { backgroundColor: colors.lavenderMist },
                 ]}
               >
-                <MaterialIcon name="policy" size={18} color={colors.bgColor} />
+                <MaterialIcon name="policy" size={18} color={colors.mediumPurple} />
               </View>
             )}
           />
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+          <List.Item
+            title={i18n.t("H6", { defaultValue: "Practice Mode" })}
+            titleStyle={styles.settingsText}
+            right={() => (
+              <View
+                style={styles.switchContainer}
+              >
+                <Text
+                  style={{ color: "black", marginHorizontal: 10, fontSize: 16 }}
+                >
+                  {`${mode === true ? "Show" : "Hide"}`}
+                </Text>
+                <Switch
+                  trackColor={{ true: colors.bgColor }}
+                  thumbColor={isEnabled ? colors.lilyWhite : "#f4f3f4"}
+                  ios_backgroundColor={colors.steelGrey}
+                  value={mode}
+                  onValueChange={toggleSwitch}
+                />
+              </View>
+            )}
+            left={() => (
+              <View
+                style={[
+                  styles.iconContainer,
+                  { backgroundColor: colors.lilyWhite },
+                ]}
+              >
+                <FontAwesomeIcon
+                  name="bullseye"
+                  size={18}
+                  color={colors.bgColor}
+                />
+              </View>
+            )}
+          />
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={signOut} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("AI10", { defaultValue: "Logout" })}
@@ -347,7 +395,7 @@ const stylesheet = createStyleSheet({
     color: colors.midNight,
   },
   listItemContainer: {
-    height: 50,
+    height: 46,
   },
   accountSubName: {
     fontSize: 14,
@@ -357,8 +405,8 @@ const stylesheet = createStyleSheet({
   },
   iconContainer: {
     borderRadius: 20,
-    height: 38,
-    width: 38,
+    height: 35,
+    width: 35,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 20,
@@ -384,6 +432,11 @@ const stylesheet = createStyleSheet({
     fontWeight: "500",
     color: colors.textColor,
     fontSize: 16,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
