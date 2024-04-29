@@ -10,6 +10,8 @@ import { Q } from "@nozbe/watermelondb";
 import { useCallback, useEffect } from "react";
 import isEmpty from "lodash.isempty";
 import { i18n } from "@i18n/index";
+import { colors } from "@theme/index";
+import { Entypo as Icon } from "@expo/vector-icons";
 
 export default function Locations() {
   const { styles } = useStyles(stylesheet);
@@ -77,11 +79,18 @@ function LocationListComponent({
         <TouchableRipple
           key={item.serverId}
           onPress={() => onLocationPress(item)}
+          style={styles.itemContainer}
         >
           <List.Item
-            contentStyle={styles.itemContent}
             title={item.name}
             titleStyle={[styles.title, { color: theme.colors.onPrimary }]}
+            right={() => (
+              <Icon
+                name="chevron-thin-right"
+                size={16}
+                color={colors.midNight}
+              />
+            )}
           />
         </TouchableRipple>
       )}
@@ -108,20 +117,14 @@ const stylesheet = createStyleSheet({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 10,
   },
-  itemContent: {
-    flex: 1,
-    justifyContent: "center",
-    borderBottomColor: "black",
+  itemContainer: {
     borderBottomWidth: 1,
-    paddingRight: 0,
-
-    // not sure why there is padding on the right, just here to help visually
-    borderRightWidth: 1,
-    borderRightColor: "black",
+    borderBottomColor: colors.lightGray,
   },
   title: {
-    textAlign: "center",
+    color: colors.charcoal,
+    fontSize: 16,
+    fontWeight: "300",
   },
 });

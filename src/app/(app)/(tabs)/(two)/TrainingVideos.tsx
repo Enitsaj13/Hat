@@ -41,15 +41,17 @@ const TrainingVideos = () => {
       </TouchableRipple>
 
       {/* Item 3 */}
-      <TouchableRipple onPress={() => {}} style={styles.itemContainer}>
-        <List.Item
-          titleStyle={styles.titleColor}
-          title={i18n.t("K5", {
-            defaultValue: "Global Hand Hygiene Excellence Award",
-          })}
-          titleNumberOfLines={1}
-        />
-      </TouchableRipple>
+      <Link href="/GlobalHandHygieneExcellenceAward" asChild>
+        <TouchableRipple onPress={() => {}} style={styles.itemContainer}>
+          <List.Item
+            titleStyle={styles.titleColor}
+            title={i18n.t("K5", {
+              defaultValue: "Global Hand Hygiene Excellence Award",
+            })}
+            titleNumberOfLines={1}
+          />
+        </TouchableRipple>
+      </Link>
     </View>
   );
 };
