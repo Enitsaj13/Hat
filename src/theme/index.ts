@@ -18,6 +18,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 
 export const colors = {
   bgColor: "#01b482",
+  borderColor: "#027556",
   textColor: "white",
   lightGray: "#e2e8f0",
   cadetGrey: "#94a3b8",
@@ -29,7 +30,7 @@ export const colors = {
   lemonChiffon: "#fffbeb",
   sunshade: "#feb65d",
   lavenderMist: "#f5f3ff",
-  mediumPurple: "#8b5cf6",
+  mediumPurple: "#711e82",
   paleBlue: "#cae3f1",
   vividCerulean: "#0ea5e9",
   terracotta: "#f43f5e",
@@ -37,6 +38,7 @@ export const colors = {
   babyBlue: "#e0f2fe",
   whiteSmoke: "#f5f5f5",
   charcoal: "#334155",
+  red: "#F00",
 };
 
 const rnPaperLightTheme = { ...MD3LightTheme };

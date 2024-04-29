@@ -398,6 +398,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   pt: {
@@ -800,6 +802,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   fr: {
@@ -1203,6 +1207,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   de: {
@@ -1607,6 +1613,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   br: {
@@ -2009,6 +2017,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   es: {
@@ -2412,6 +2422,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   id: {
@@ -2814,6 +2826,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   cs: {
@@ -3215,6 +3229,8 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 
   th: {
@@ -3615,5 +3631,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
+    SIX: "Six", // TODO
+    INDICATION_TITLE: "Without Indication", // TODO
   },
 };

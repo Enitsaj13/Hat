@@ -1,7 +1,7 @@
+import React, { useCallback, useRef } from "react";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { colors } from "@theme/index";
-import { useCallback, useRef } from "react";
-import { FlatList, View, ViewStyle } from "react-native";
+import { FlatList, View, ViewStyle, StyleProp } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
@@ -17,7 +17,7 @@ interface DropdownListProps {
   options: DropDownOption[];
   selectedOptionKey?: DropDownOptionKey;
   onOptionSelected?: (key: DropDownOptionKey, value: any) => void;
-  dropdownlistStyle?: ViewStyle;
+  dropdownlistStyle?: StyleProp<ViewStyle>;
   right?: React.ReactNode;
 }
 

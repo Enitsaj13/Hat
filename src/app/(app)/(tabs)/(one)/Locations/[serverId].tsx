@@ -34,6 +34,7 @@ export default function Locations() {
         params: { serverId: location.serverId, parentName: location.name },
       });
     } else {
+      router.push("/MainScreen");
       // TODO locations save in useBatchObservation
       console.log("No more children, should redirect to main screen now");
     }
