@@ -374,7 +374,7 @@ const styles = createStyleSheet({
     mainScreenContainer: {
         backgroundColor: colors.textColor,
         alignItems: "center",
-        justifyContent: 'center',
+        justifyContent: "center",
         paddingBottom: 5,
         height: 300,
         maxHeight: 400,
@@ -386,7 +386,7 @@ const styles = createStyleSheet({
         maxHeight: 400,
     },
     mainScreenImageContainer: {
-        position: 'relative',
+        position: "relative",
         width: 400,
         height: "100%",
         maxHeight: 400,
