@@ -13,7 +13,10 @@ export default function Layout() {
           headerBackTitleVisible: false,
         }}
       />
-      <Stack.Screen name="Locations/[serverId]" />
+      <Stack.Screen
+        name="Locations/[serverId]"
+        options={{ headerBackTitleVisible: false }}
+      />
       <Stack.Screen
         name="PracticeMode"
         options={{

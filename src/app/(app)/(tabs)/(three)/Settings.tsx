@@ -315,7 +315,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
                 </Text>
                 <Switch
                   trackColor={{ true: colors.bgColor }}
-                  thumbColor={isEnabled ? colors.lilyWhite : "#f4f3f4"}
+                  thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
                   ios_backgroundColor={colors.steelGrey}
                   value={mode}
                   onValueChange={toggleSwitch}
