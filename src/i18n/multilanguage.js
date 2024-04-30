@@ -398,7 +398,6 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -802,7 +801,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -1207,7 +1206,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -1613,7 +1612,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -2017,7 +2016,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -2422,7 +2421,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -2826,7 +2825,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -3229,7 +3228,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -3631,7 +3630,7 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-    SIX: "Six", // TODO
+
     INDICATION_TITLE: "Without Indication", // TODO
   },
 };

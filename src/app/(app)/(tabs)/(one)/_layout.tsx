@@ -26,13 +26,6 @@ export default function Layout() {
           headerBackTitleVisible: false,
         }}
       />
-      <Stack.Screen
-        name="MainScreen"
-        options={{
-          title: i18n.t("SIX"),
-          headerBackTitleVisible: false,
-        }}
-      />
     </Stack>
   );
 }
