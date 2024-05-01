@@ -1,17 +1,9 @@
 import { Model } from "@nozbe/watermelondb";
-import { children, field, json, text } from "@nozbe/watermelondb/decorators";
-import { ObligatoryFieldOption } from "@stores/obligatoryFieldOption";
+import { field, json, text } from "@nozbe/watermelondb/decorators";
 import { FieldType } from "../types";
 
 export class ObligatoryField extends Model {
   static table = "obligatory_fields";
-
-  static associations = {
-    obligatory_field_options: {
-      type: "has_many",
-      foreignKey: "obligatory_field_server_id",
-    },
-  } as const;
 
   // @ts-expect-error
   @field("server_id") serverId: number;
@@ -33,6 +25,4 @@ export class ObligatoryField extends Model {
   )
   // @ts-expect-error
   actions: string[];
-
-  @children("obligatory_field_options") options?: ObligatoryFieldOption[];
 }

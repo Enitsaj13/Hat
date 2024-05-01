@@ -1206,7 +1206,6 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -2016,7 +2015,6 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -2421,7 +2419,6 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -2825,7 +2822,6 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -3228,7 +3224,6 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
   },
 
@@ -3630,7 +3625,6 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
   },
 };

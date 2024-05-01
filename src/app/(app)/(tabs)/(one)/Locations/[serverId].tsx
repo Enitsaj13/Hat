@@ -10,6 +10,7 @@ import { Q } from "@nozbe/watermelondb";
 import { useCallback, useEffect } from "react";
 import isEmpty from "lodash.isempty";
 import { i18n } from "@i18n/index";
+import { useBatchObservation } from "@hooks/useBatchObservation";
 import { colors } from "@theme/index";
 import { Entypo as Icon } from "@expo/vector-icons";
 
@@ -20,6 +21,9 @@ export default function Locations() {
     parentName?: string;
   }>();
   console.log("serverId", serverId);
+  const { batchObservationState, setBatchObservationState } =
+    useBatchObservation();
+  console.log("batchObservationState in locations: ", batchObservationState);
 
   const router = useRouter();
   const onLocationPress = useCallback(async (location: Location) => {
@@ -34,9 +38,19 @@ export default function Locations() {
         params: { serverId: location.serverId, parentName: location.name },
       });
     } else {
+      const loc = { serverId: location.serverId, name: location.name };
+      console.log(
+        "No more children, should redirect to main screen now: ",
+        loc,
+      );
+      setBatchObservationState((prevState) => {
+        console.log("prevState: ", prevState);
+        return {
+          ...prevState,
+          location: loc,
+        };
+      });
       router.push("/MainScreen");
-      // TODO locations save in useBatchObservation
-      console.log("No more children, should redirect to main screen now");
     }
   }, []);
 
