@@ -63,7 +63,7 @@ function ObligatoryFieldUIComponent({
             />
           ) : (
             <View style={styles.switchContainer}>
-              <Text style={styles.obligatoryText}>FOO BAR</Text>
+              <Text style={styles.obligatoryText}>{obligatoryField.name}</Text>
               <Switch
                 trackColor={{ true: colors.bgColor }}
                 thumbColor={value ? colors.lilyWhite : colors.textColor}
