@@ -186,38 +186,56 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
   } = form;
 
   useEffect(() => {
-    console.log("errors", errors);
-    if (!isEmpty(errors)) {
-      const keys = Object.keys(errors);
+    const errorsCopy = JSON.parse(JSON.stringify(errors));
+    delete errorsCopy.afterTouchingAPatient;
+    delete errorsCopy.afterTouchingPatientSurroundings;
+
+    console.log("errorsCopy 1", errorsCopy);
+    if (!isEmpty(errorsCopy)) {
+      const keys = Object.keys(errorsCopy);
       const firstErrorKey = keys[0];
       // @ts-ignore
-      const firstError: any = errors[firstErrorKey];
+      const firstError: any = errorsCopy[firstErrorKey];
       let message = firstError?.message;
       if (firstErrorKey === "obligatoryFields") {
         // @ts-ignore
-        const serverIdObjectKey = Object.keys(errors.obligatoryFields)[0];
+        const serverIdObjectKey = Object.keys(errorsCopy.obligatoryFields)[0];
         // @ts-ignore
-        message = errors.obligatoryFields[serverIdObjectKey].message;
+        message = errorsCopy.obligatoryFields[serverIdObjectKey].message;
       }
+
+      Alert.alert(i18n.t("X10", { defaultValue: "Invalid" }), message);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    const errorsCopy = JSON.parse(JSON.stringify(errors));
+    for (const key of Object.keys(errorsCopy)) {
+      if (
+        !["afterTouchingAPatient", "afterTouchingPatientSurroundings"].includes(
+          key,
+        )
+      ) {
+        delete errorsCopy[key];
+      }
+    }
+
+    console.log("errorsCopy 2", errorsCopy);
+    if (
+      !isEmpty(errorsCopy.afterTouchingAPatient) ||
+      !isEmpty(errorsCopy.afterTouchingPatientSurroundings)
+    ) {
+      const keys = Object.keys(errorsCopy);
+      const message = errorsCopy[keys[0]].message;
 
       Alert.alert(i18n.t("X10", { defaultValue: "Invalid" }), message, [
         {
           text: "OK",
-          onPress: () => {
-            const lastErrorKey = keys[keys.length - 1];
-            if (
-              [
-                "afterTouchingAPatient",
-                "afterTouchingPatientSurroundings",
-              ].includes(lastErrorKey)
-            ) {
-              resetField(lastErrorKey as any);
-            }
-          },
+          onPress: () => resetField(keys[keys.length - 1] as any),
         },
       ]);
     }
-  }, [errors]);
+  }, [errors.afterTouchingAPatient, errors.afterTouchingPatientSurroundings]);
 
   const resetMoments = useCallback(() => {
     resetField("beforeTouchingAPatient");
