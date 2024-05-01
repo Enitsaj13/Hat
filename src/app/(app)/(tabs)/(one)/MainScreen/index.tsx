@@ -95,7 +95,32 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
       ),
       beforeTouchingAPatient: boolean().default(false),
       beforeClean: boolean().default(false),
-      afterBodyFluidExposureRisk: boolean().default(false),
+      afterBodyFluidExposureRisk: boolean()
+        .default(false)
+        .test({
+          name: "atLeastOnceSelectedIfWithoutIndicationIsTurnedOff",
+          message: i18n.t("AG30", {
+            defaultValue: "Please select moment",
+          }),
+          test(value) {
+            // NOTE: this is a short-circuit validation to ensure one moment is selected if without indication is off
+            const {
+              withoutIndication,
+              beforeTouchingAPatient,
+              beforeClean,
+              afterTouchingAPatient,
+              afterTouchingPatientSurroundings,
+            } = this.parent;
+            return (
+              withoutIndication ||
+              value ||
+              beforeTouchingAPatient ||
+              beforeClean ||
+              afterTouchingAPatient ||
+              afterTouchingPatientSurroundings
+            );
+          },
+        }),
       afterTouchingAPatient: boolean()
         .default(false)
         .test({
