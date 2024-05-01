@@ -164,7 +164,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
           test(value) {
             const { obligatoryFieldRequired } = this.parent;
             console.log("this.parent", this.parent);
-            return !obligatoryFieldRequired || !isEmpty(value);
+            return !obligatoryFieldRequired || value != null;
           },
         }),
       // glovesMetadata: boolean().default(false), // TODO go back to ronald regarding this
