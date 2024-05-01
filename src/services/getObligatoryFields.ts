@@ -44,7 +44,10 @@ export async function getObligatoryFields() {
 
     for (const [serverId, existing] of existingMap.entries()) {
       if (!newMap.has(serverId)) {
-        existing.options?.forEach((i) =>
+        const existingOptions = await dbObligatoryOption
+          .query(Q.where("obligatory_field_server_id", existing.serverId))
+          .fetch();
+        existingOptions.forEach((i) =>
           operations.push(i.prepareDestroyPermanently()),
         );
         operations.push(existing.prepareDestroyPermanently());

@@ -4,9 +4,9 @@ import {
 } from "@react-navigation/native";
 import merge from "deepmerge";
 import {
+  adaptNavigationTheme,
   MD3DarkTheme,
   MD3LightTheme,
-  adaptNavigationTheme,
   MD3Theme,
 } from "react-native-paper";
 import { NavigationTheme } from "react-native-paper/lib/typescript/types";

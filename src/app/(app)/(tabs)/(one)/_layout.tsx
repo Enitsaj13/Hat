@@ -26,6 +26,12 @@ export default function Layout() {
           headerBackTitleVisible: false,
         }}
       />
+      <Stack.Screen
+        name="MainScreen"
+        options={{
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack>
   );
 }

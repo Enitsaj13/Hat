@@ -22,7 +22,7 @@ import { useBatchObservation } from "@hooks/useBatchObservation";
 import { number, object } from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { createBatchObservationGuid } from "@services/createBatchObservationGuid";
 import { showRetryAlert } from "@utils/showRetryAlert";
 
@@ -79,22 +79,28 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
     },
   );
 
-  if (
-    !isEmpty(userTargetSettings) &&
-    batchObservationState.balance !== userTargetSettings!.balance
-  ) {
-    setBatchObservationState((prev) => ({
-      ...prev,
-      balance: userTargetSettings?.balance,
-    }));
-  }
+  useEffect(() => {
+    if (
+      !isEmpty(userTargetSettings) &&
+      batchObservationState.balance !== userTargetSettings!.balance
+    ) {
+      setBatchObservationState((prev) => ({
+        ...prev,
+        balance: userTargetSettings?.balance,
+      }));
+    }
+  }, [userTargetSettings, batchObservationState.balance]);
 
   const router = useRouter();
   const onBeginAuditPress = useCallback(
     async (form: IBatchObservationSchema) => {
       try {
         const guid = await createBatchObservationGuid();
-        setBatchObservationState((prev) => ({ ...prev, ...form, guid }));
+        setBatchObservationState((prev) => {
+          const newState = { ...prev, ...form, guid };
+          console.log("newState after onBeginAuditPress", newState);
+          return newState;
+        });
         console.log(
           "creating batch observation is successful, redirecting to locations",
         );

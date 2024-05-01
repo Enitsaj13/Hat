@@ -1,7 +1,7 @@
-import React, { useCallback, useRef } from "react";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { colors } from "@theme/index";
-import { FlatList, View, ViewStyle, StyleProp } from "react-native";
+import { useCallback, useRef } from "react";
+import { FlatList, StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
@@ -18,7 +18,9 @@ interface DropdownListProps {
   selectedOptionKey?: DropDownOptionKey;
   onOptionSelected?: (key: DropDownOptionKey, value: any) => void;
   dropdownlistStyle?: StyleProp<ViewStyle>;
+  selectedValueStyle?: TextStyle;
   right?: React.ReactNode;
+  noOptionSelectedText?: string;
 }
 
 function DropdownList({
@@ -26,7 +28,9 @@ function DropdownList({
   selectedOptionKey,
   onOptionSelected,
   dropdownlistStyle,
+  selectedValueStyle,
   right,
+  noOptionSelectedText = "",
 }: DropdownListProps) {
   const { styles } = useStyles(dropdownStylesheet);
 
@@ -54,7 +58,7 @@ function DropdownList({
     bottomSheetModalRef.current?.dismiss();
   };
 
-  const selected = `${options.find((o) => o.key === selectedOptionKey)?.value || ""}`;
+  const selected = `${options.find((o) => o.key === selectedOptionKey)?.value || noOptionSelectedText}`;
 
   return (
     <TouchableOpacity
@@ -63,7 +67,10 @@ function DropdownList({
       activeOpacity={0.8}
     >
       <View style={[styles.dropdownlistStyle, dropdownlistStyle]}>
-        <Text variant="bodyLarge" style={styles.textColor}>
+        <Text
+          variant="bodyLarge"
+          style={[styles.textColor, selectedValueStyle]}
+        >
           {selected}
         </Text>
         {right}
