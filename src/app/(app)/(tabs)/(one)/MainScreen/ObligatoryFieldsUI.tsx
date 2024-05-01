@@ -20,6 +20,7 @@ import {
   OBLIGATORY_FIELD_VALUE_PREFIX,
   shouldShow,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
+import { colors } from "@theme/index";
 
 interface ObligatoryFieldsUIProps extends MainScreenProps {
   form: UseFormReturn<IMomentSchema>;
@@ -61,11 +62,15 @@ function ObligatoryFieldUIComponent({
               selectedOptionKey={value as DropDownOptionKey}
             />
           ) : (
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text>{obligatoryField.name}</Text>
-              <Switch value={value as boolean} />
+            <View style={styles.switchContainer}>
+              <Text style={styles.obligatoryText}>FOO BAR</Text>
+              <Switch
+                trackColor={{ true: colors.bgColor }}
+                thumbColor={value ? colors.lilyWhite : colors.textColor}
+                ios_backgroundColor={colors.textColor}
+                value={value}
+                onValueChange={onChange}
+              />
             </View>
           )
         ) : (
