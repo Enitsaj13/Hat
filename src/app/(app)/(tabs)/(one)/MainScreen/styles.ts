@@ -17,9 +17,9 @@ export const styles = createStyleSheet({
   dropdownlistActionContainer: {
     width: "80%",
     backgroundColor: colors.textColor,
-    padding: 10,
+    padding: 15,
     marginTop: 0,
-    marginBottom: 6,
+    marginBottom: 10,
   },
   headerContainer: {
     paddingVertical: 10,
@@ -40,36 +40,47 @@ export const styles = createStyleSheet({
   mainScreenContainer: {
     backgroundColor: colors.textColor,
     alignItems: "center",
+    justifyContent: "center",
     paddingBottom: 5,
+    height: 300,
+    maxHeight: 400,
+  },
+  mainScreenImage: {
+    width: "100%",
+    maxWidth: 400,
+    height: 300,
+    maxHeight: 400,
   },
   mainScreenImageContainer: {
-    width: "100%",
-    height: 250,
+    position: "relative",
+    width: 400,
+    height: "100%",
+    maxHeight: 400,
   },
   arrowImageContainer1: {
     position: "absolute",
-    top: 75,
-    left: 28,
+    top: 100,
+    left: 36,
   },
   arrowImageContainer2: {
     position: "absolute",
-    right: 112,
-    top: 35,
+    right: 125,
+    top: 55,
   },
   arrowImageContainer3: {
     position: "absolute",
-    bottom: 40,
-    left: 86,
+    bottom: 52,
+    left: 95,
   },
   arrowImageContainer4: {
     position: "absolute",
-    right: 40,
-    top: 67,
+    right: 50,
+    top: 86,
   },
   arrowImageContainer5: {
     position: "absolute",
-    right: 26,
-    bottom: 26,
+    right: 32,
+    bottom: 35,
   },
   arrowImage1: {
     width: 80,
@@ -108,12 +119,23 @@ export const styles = createStyleSheet({
   switchIndication: {
     transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
   },
+  switchContainer: {
+    backgroundColor: colors.textColor,
+    padding: 8,
+    marginHorizontal: 38,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  obligatoryText: {
+    color: colors.steelGrey,
+    fontSize: 14,
+  },
   actionHeaderContainer: {
-    backgroundColor: "#059669",
+    backgroundColor: colors.borderColor,
     padding: 10,
   },
   actionTitle: {
-    textTransform: "uppercase",
     color: colors.textColor,
     fontSize: 16,
     fontWeight: "bold",
@@ -123,11 +145,11 @@ export const styles = createStyleSheet({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    padding: 14,
+    paddingVertical: 15,
   },
   actionButton: {
     borderWidth: 2,
-    borderColor: "#047857",
+    borderColor: colors.borderColor,
     height: 55,
     width: 55,
     borderRadius: 4,
@@ -149,7 +171,7 @@ export const styles = createStyleSheet({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    marginTop: 5,
+    paddingBottom: 15,
   },
   controlButton: {
     flexDirection: "row",
@@ -158,12 +180,16 @@ export const styles = createStyleSheet({
     maxWidth: 120,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#047857",
+    backgroundColor: colors.borderColor,
     borderRadius: 30,
   },
   controlButtonTitle: {
     color: colors.textColor,
     fontSize: 12,
     marginRight: 3,
+  },
+  obligatoryContainer: {
+    marginTop: 10,
+    marginBottom: 20,
   },
 });

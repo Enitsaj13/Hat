@@ -1,7 +1,7 @@
 import { AntDesign as ArrowIcon } from "@expo/vector-icons";
 import DropdownList, { DropDownOption } from "@components/DropdownList";
 import React, { useMemo } from "react";
-import { styles } from "@app/(app)/(tabs)/(one)/ScratchMainScreen/styles";
+import { styles } from "@app/(app)/(tabs)/(one)/MainScreen/styles";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";

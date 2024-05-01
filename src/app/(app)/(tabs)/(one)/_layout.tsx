@@ -27,7 +27,7 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="ScratchMainScreen"
+        name="MainScreen"
         options={{
           headerBackTitleVisible: false,
         }}

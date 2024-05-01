@@ -1,6 +1,6 @@
 import { ObligatoryField } from "@stores/obligatoryField";
-import { MainScreenProps } from "@app/(app)/(tabs)/(one)/ScratchMainScreen/index";
-import { styles } from "@app/(app)/(tabs)/(one)/ScratchMainScreen/styles";
+import { MainScreenProps } from "@app/(app)/(tabs)/(one)/MainScreen/index";
+import { styles } from "@app/(app)/(tabs)/(one)/MainScreen/styles";
 import { AntDesign as AntDesignIcon } from "@expo/vector-icons";
 import DropdownList, {
   DropDownOption,
@@ -19,7 +19,7 @@ import {
   IMomentSchema,
   OBLIGATORY_FIELD_VALUE_PREFIX,
   shouldShow,
-} from "@app/(app)/(tabs)/(one)/ScratchMainScreen/helpers";
+} from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 interface ObligatoryFieldsUIProps extends MainScreenProps {
   form: UseFormReturn<IMomentSchema>;

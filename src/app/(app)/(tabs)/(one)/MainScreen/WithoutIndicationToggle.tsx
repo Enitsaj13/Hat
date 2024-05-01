@@ -1,5 +1,5 @@
 import { colors } from "@theme/index";
-import { styles } from "@app/(app)/(tabs)/(one)/ScratchMainScreen/styles";
+import { styles } from "@app/(app)/(tabs)/(one)/MainScreen/styles";
 import { Switch } from "react-native";
 import React from "react";
 import { withObservables } from "@nozbe/watermelondb/react";

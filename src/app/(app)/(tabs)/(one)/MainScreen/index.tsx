@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { colors } from "@theme/index";
-import { Alert, Image, Pressable, Text, View } from "react-native";
+import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import {
   AntDesign as ArrowIcon,
   Entypo as EntypoIcon,
@@ -13,9 +13,9 @@ import {
 import { router, useNavigation } from "expo-router";
 import { useBatchObservation } from "@hooks/useBatchObservation";
 import { styles } from "./styles";
-import WorkerDropdown from "@app/(app)/(tabs)/(one)/ScratchMainScreen/WorkerDropdown";
+import WorkerDropdown from "@app/(app)/(tabs)/(one)/MainScreen/WorkerDropdown";
 import isEmpty from "lodash.isempty";
-import WithoutIndicationToggle from "@app/(app)/(tabs)/(one)/ScratchMainScreen/WithoutIndicationToggle";
+import WithoutIndicationToggle from "@app/(app)/(tabs)/(one)/MainScreen/WithoutIndicationToggle";
 import { CompanyConfig } from "@stores/companyConfig";
 import { ObligatoryField } from "@stores/obligatoryField";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
@@ -23,12 +23,12 @@ import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
-import { ObligatoryFieldsUI } from "@app/(app)/(tabs)/(one)/ScratchMainScreen/ObligatoryFieldsUI";
+import { ObligatoryFieldsUI } from "@app/(app)/(tabs)/(one)/MainScreen/ObligatoryFieldsUI";
 import {
   IMomentSchema,
   OBLIGATORY_FIELD_VALUE_PREFIX,
   shouldShow,
-} from "@app/(app)/(tabs)/(one)/ScratchMainScreen/helpers";
+} from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 export interface MainScreenProps {
   companyConfig?: CompanyConfig;
@@ -160,7 +160,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
       obligatoryFields: object(obligatoryFieldsSchema)
         .default({})
         .test({
-          name: "required",
+          name: "required", // bugged
           test(value) {
             const { obligatoryFieldRequired } = this.parent;
             console.log("this.parent", this.parent);
@@ -180,7 +180,6 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
 
   const {
     control,
-    getValues,
     resetField,
     handleSubmit,
     formState: { errors },
@@ -229,7 +228,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Controller
         render={({ field: { onChange, value } }) => (
           <WorkerDropdown
@@ -250,104 +249,106 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
       </View>
 
       <View style={styles.mainScreenContainer}>
-        <Image
-          source={require("@assets/images/hat-images/MainScreenImage.jpg")}
-          resizeMode="contain"
-          style={styles.mainScreenImageContainer}
-        />
-        <Controller
-          render={({ field: { onChange, value } }) => (
-            <Pressable
-              style={styles.arrowImageContainer1}
-              onPress={() => {
-                onChange(!value);
-                resetField("withoutIndication");
-              }}
-            >
-              <Image
-                source={
-                  value
-                    ? require("@assets/images/hat-images/1_violet.png")
-                    : require("@assets/images/hat-images/1_green.png")
-                }
-                resizeMode="contain"
-                style={styles.arrowImage1}
-              />
-            </Pressable>
-          )}
-          name="beforeTouchingAPatient"
-          control={control}
-        />
-        <Controller
-          render={({ field: { onChange, value } }) => (
-            <Pressable
-              style={styles.arrowImageContainer2}
-              onPress={() => {
-                onChange(!value);
-                resetField("withoutIndication");
-              }}
-            >
-              <Image
-                source={
-                  value
-                    ? require("@assets/images/hat-images/2_violet.png")
-                    : require("@assets/images/hat-images/2_green.png")
-                }
-                resizeMode="contain"
-                style={styles.arrowImage2}
-              />
-            </Pressable>
-          )}
-          name="beforeClean"
-          control={control}
-        />
-        <Controller
-          render={({ field: { onChange, value } }) => (
-            <Pressable
-              style={styles.arrowImageContainer3}
-              onPress={() => {
-                onChange(!value);
-                // the withoutIndication field is really important so getValues will work on ObligatoryFieldsUI
-                resetField("withoutIndication");
-              }}
-            >
-              <Image
-                source={
-                  value
-                    ? require("@assets/images/hat-images/3_violet.png")
-                    : require("@assets/images/hat-images/3_green.png")
-                }
-                resizeMode="contain"
-                style={styles.arrowImage3}
-              />
-            </Pressable>
-          )}
-          name="afterBodyFluidExposureRisk"
-          control={control}
-        />
-        <Controller
-          render={({ field: { onChange, value } }) => (
-            <Pressable
-              style={styles.arrowImageContainer4}
-              onPress={() => {
-                onChange(!value);
-                resetField("withoutIndication");
-              }}
-            >
-              <Image
-                source={
-                  value
-                    ? require("@assets/images/hat-images/4_violet.png")
-                    : require("@assets/images/hat-images/4_green.png")
-                }
-                resizeMode="contain"
-                style={styles.arrowImage4}
-              />
-            </Pressable>
-          )}
-          name="afterTouchingAPatient"
-          control={control}
-        />
+        <View style={styles.mainScreenImageContainer}>
+          <Image
+            source={require("@assets/images/hat-images/MainScreenImage.jpg")}
+            resizeMode="contain"
+            style={styles.mainScreenImage}
+          />
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Pressable
+                style={styles.arrowImageContainer1}
+                onPress={() => {
+                  onChange(!value);
+                  resetField("withoutIndication");
+                }}
+              >
+                <Image
+                  source={
+                    value
+                      ? require("@assets/images/hat-images/1_violet.png")
+                      : require("@assets/images/hat-images/1_green.png")
+                  }
+                  resizeMode="contain"
+                  style={styles.arrowImage1}
+                />
+              </Pressable>
+            )}
+            name="beforeTouchingAPatient"
+            control={control}
+          />
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Pressable
+                style={styles.arrowImageContainer2}
+                onPress={() => {
+                  onChange(!value);
+                  resetField("withoutIndication");
+                }}
+              >
+                <Image
+                  source={
+                    value
+                      ? require("@assets/images/hat-images/2_violet.png")
+                      : require("@assets/images/hat-images/2_green.png")
+                  }
+                  resizeMode="contain"
+                  style={styles.arrowImage2}
+                />
+              </Pressable>
+            )}
+            name="beforeClean"
+            control={control}
+          />
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Pressable
+                style={styles.arrowImageContainer3}
+                onPress={() => {
+                  onChange(!value);
+                  // the withoutIndication field is really important so getValues will work on ObligatoryFieldsUI
+                  resetField("withoutIndication");
+                }}
+              >
+                <Image
+                  source={
+                    value
+                      ? require("@assets/images/hat-images/3_violet.png")
+                      : require("@assets/images/hat-images/3_green.png")
+                  }
+                  resizeMode="contain"
+                  style={styles.arrowImage3}
+                />
+              </Pressable>
+            )}
+            name="afterBodyFluidExposureRisk"
+            control={control}
+          />
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Pressable
+                style={styles.arrowImageContainer4}
+                onPress={() => {
+                  onChange(!value);
+                  resetField("withoutIndication");
+                }}
+              >
+                <Image
+                  source={
+                    value
+                      ? require("@assets/images/hat-images/4_violet.png")
+                      : require("@assets/images/hat-images/4_green.png")
+                  }
+                  resizeMode="contain"
+                  style={styles.arrowImage4}
+                />
+              </Pressable>
+            )}
+            name="afterTouchingAPatient"
+            control={control}
+          />
+        </View>
         <Controller
           render={({ field: { onChange, value } }) => (
             <Pressable
@@ -406,13 +407,11 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
         <Controller
           render={({ field: { onChange, value } }) => (
             <Pressable
-              style={[
-                styles.actionButton,
-                {
-                  borderColor: value ? colors.mediumPurple : "#047857",
-                  backgroundColor: value ? colors.textColor : colors.bgColor,
-                },
-              ]}
+              style={{
+                ...styles.actionButton,
+                borderColor: value ? colors.mediumPurple : "#047857",
+                backgroundColor: value ? colors.textColor : colors.bgColor,
+              }}
               onPress={() => {
                 onChange(!value);
                 resetField("wash");
@@ -420,12 +419,10 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
               }}
             >
               <Text
-                style={[
-                  styles.buttonName,
-                  {
-                    color: value ? colors.mediumPurple : colors.textColor,
-                  },
-                ]}
+                style={{
+                  ...styles.buttonName,
+                  color: value ? colors.mediumPurple : colors.textColor,
+                }}
               >
                 {i18n.t("AE9", { defaultValue: "RUB" })}
               </Text>
@@ -437,13 +434,11 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
         <Controller
           render={({ field: { onChange, value } }) => (
             <Pressable
-              style={[
-                styles.actionButton,
-                {
-                  borderColor: value ? colors.mediumPurple : "#047857",
-                  backgroundColor: value ? colors.textColor : colors.bgColor,
-                },
-              ]}
+              style={{
+                ...styles.actionButton,
+                borderColor: value ? colors.mediumPurple : "#047857",
+                backgroundColor: value ? colors.textColor : colors.bgColor,
+              }}
               onPress={() => {
                 onChange(!value);
                 resetField("rub");
@@ -451,12 +446,10 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
               }}
             >
               <Text
-                style={[
-                  styles.buttonName,
-                  {
-                    color: value ? colors.mediumPurple : colors.textColor,
-                  },
-                ]}
+                style={{
+                  ...styles.buttonName,
+                  color: value ? colors.mediumPurple : colors.textColor,
+                }}
               >
                 {i18n.t("AE10", { defaultValue: "WASH" })}
               </Text>
@@ -468,14 +461,12 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
         <Controller
           render={({ field: { onChange, value } }) => (
             <Pressable
-              style={[
-                styles.actionButton,
-                styles.circleButton,
-                {
-                  borderColor: value ? colors.red : "#047857",
-                  backgroundColor: value ? colors.textColor : colors.bgColor,
-                },
-              ]}
+              style={{
+                ...styles.actionButton,
+                ...styles.circleButton,
+                borderColor: value ? colors.red : "#047857",
+                backgroundColor: value ? colors.textColor : colors.bgColor,
+              }}
               onPress={() => {
                 onChange(!value);
                 resetField("rub");
@@ -483,12 +474,10 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
               }}
             >
               <Text
-                style={[
-                  styles.buttonName,
-                  {
-                    color: value ? colors.red : colors.textColor,
-                  },
-                ]}
+                style={{
+                  ...styles.buttonName,
+                  color: value ? colors.red : colors.textColor,
+                }}
               >
                 {i18n.t("AE11", { defaultValue: "MISSED" })}
               </Text>
@@ -502,36 +491,30 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
           render={({ field: { onChange, value } }) => (
             <>
               <Pressable
-                style={[
-                  styles.actionButton,
-                  styles.circleButton,
-                  {
-                    borderColor: value ? colors.mediumPurple : "#047857",
-                    backgroundColor: value ? colors.textColor : colors.bgColor,
-                  },
-                ]}
+                style={{
+                  ...styles.actionButton,
+                  ...styles.circleButton,
+                  borderColor: value ? colors.mediumPurple : "#047857",
+                  backgroundColor: value ? colors.textColor : colors.bgColor,
+                }}
                 onPress={() => onChange(!value)}
               >
                 <Text
-                  style={[
-                    styles.buttonName,
-                    {
-                      color: value ? colors.mediumPurple : colors.textColor,
-                    },
-                  ]}
+                  style={{
+                    ...styles.buttonName,
+                    color: value ? colors.mediumPurple : colors.textColor,
+                  }}
                 >
                   {i18n.t("AE12", { defaultValue: "GLOVES" })}
                 </Text>
               </Pressable>
 
               <Pressable
-                style={[
-                  styles.actionButton,
-                  {
-                    borderColor: value ? colors.mediumPurple : "#047857",
-                    backgroundColor: value ? colors.textColor : colors.bgColor,
-                  },
-                ]}
+                style={{
+                  ...styles.actionButton,
+                  borderColor: value ? colors.mediumPurple : "#047857",
+                  backgroundColor: value ? colors.textColor : colors.bgColor,
+                }}
                 onPress={() => onChange(!value)}
               >
                 <EntypoIcon
@@ -557,16 +540,19 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
         <Pressable
           style={styles.controlButton}
           onPress={() => {
-            console.log("MEMA");
             router.back();
           }}
         >
-          <Text style={styles.controlButtonTitle}>Move</Text>
+          <Text style={styles.controlButtonTitle}>
+            {i18n.t("ADD28", { defaultValue: "Move" })}
+          </Text>
           <ArrowIcon name="arrowleft" size={12} color="white" />
         </Pressable>
 
         <Pressable style={styles.controlButton}>
-          <Text style={styles.controlButtonTitle}>Stop</Text>
+          <Text style={styles.controlButtonTitle}>
+            {i18n.t("ADD29", { defaultValue: "Stop" })}
+          </Text>
           <EntypoIcon name="cross" size={12} color="white" />
         </Pressable>
 
@@ -582,7 +568,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
           <ArrowIcon name="arrowright" size={12} color="white" />
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -591,7 +577,7 @@ type WithObservableProps = ObservableifyProps<
   "companyConfig",
   "obligatoryFields"
 >;
-const ScratchMainScreen = withObservables(
+const MainScreen = withObservables(
   ["companyConfig", "obligatoryFields"],
   (props: WithObservableProps) => ({
     companyConfig: database
@@ -609,4 +595,4 @@ const ScratchMainScreen = withObservables(
   }),
 )(Component as any);
 
-export default ScratchMainScreen;
+export default MainScreen;

@@ -50,7 +50,7 @@ export default function Locations() {
           location: loc,
         };
       });
-      router.push("/MainScreen");
+      router.push("/(app)/(tabs)/(one)/MainScreen");
     }
   }, []);
 
