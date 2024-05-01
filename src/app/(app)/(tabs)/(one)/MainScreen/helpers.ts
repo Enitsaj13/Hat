@@ -21,11 +21,12 @@ export interface IMomentSchema {
 
 export function shouldShow(
   actions: string[],
+  isAllActionRequired: boolean,
   form: UseFormReturn<IMomentSchema>,
 ) {
   const { getValues } = form;
   // console.log("getValues", getValues());
-  if (isEmpty(actions)) {
+  if (isAllActionRequired || isEmpty(actions)) {
     return true;
   } else if (
     getValues("beforeTouchingAPatient") &&

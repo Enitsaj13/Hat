@@ -42,7 +42,11 @@ function ObligatoryFieldUIComponent({
       value: opt.name,
     })) || [];
 
-  const show = shouldShow(obligatoryField.actions, form);
+  const show = shouldShow(
+    obligatoryField.actions,
+    obligatoryField.isAllActionRequired,
+    form,
+  );
   return (
     <Controller
       render={({ field: { onChange, value } }) =>

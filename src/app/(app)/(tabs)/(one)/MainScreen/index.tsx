@@ -73,7 +73,11 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
                     // );
                     // console.log("value", value);
                     return (
-                      !shouldShow(actions, formRef.current!) || value != null
+                      !shouldShow(
+                        actions,
+                        obligatoryField.isAllActionRequired,
+                        formRef.current!,
+                      ) || value != null
                     );
                   },
                 })
