@@ -182,8 +182,10 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
     control,
     resetField,
     handleSubmit,
+    watch,
     formState: { errors },
   } = form;
+  const isGloveSelected = watch("gloves");
 
   useEffect(() => {
     const errorsCopy = JSON.parse(JSON.stringify(errors));
@@ -507,45 +509,45 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
 
         <Controller
           render={({ field: { onChange, value } }) => (
-            <>
-              <Pressable
+            <Pressable
+              style={{
+                ...styles.actionButton,
+                ...styles.circleButton,
+                borderColor: value ? colors.mediumPurple : "#047857",
+                backgroundColor: value ? colors.textColor : colors.bgColor,
+              }}
+              onPress={() => onChange(!value)}
+            >
+              <Text
                 style={{
-                  ...styles.actionButton,
-                  ...styles.circleButton,
-                  borderColor: value ? colors.mediumPurple : "#047857",
-                  backgroundColor: value ? colors.textColor : colors.bgColor,
+                  ...styles.buttonName,
+                  color: value ? colors.mediumPurple : colors.textColor,
                 }}
-                onPress={() => onChange(!value)}
               >
-                <Text
-                  style={{
-                    ...styles.buttonName,
-                    color: value ? colors.mediumPurple : colors.textColor,
-                  }}
-                >
-                  {i18n.t("AE12", { defaultValue: "GLOVES" })}
-                </Text>
-              </Pressable>
-
-              <Pressable
-                style={{
-                  ...styles.actionButton,
-                  borderColor: value ? colors.mediumPurple : "#047857",
-                  backgroundColor: value ? colors.textColor : colors.bgColor,
-                }}
-                onPress={() => onChange(!value)}
-              >
-                <EntypoIcon
-                  name="plus"
-                  size={24}
-                  color={value ? colors.mediumPurple : colors.textColor}
-                />
-              </Pressable>
-            </>
+                {i18n.t("AE12", { defaultValue: "GLOVES" })}
+              </Text>
+            </Pressable>
           )}
           name="gloves"
           control={control}
         />
+        {/* TODO when one of optional fields are selected as well then turn this into selected */}
+        <Pressable
+          style={{
+            ...styles.actionButton,
+            borderColor: isGloveSelected ? colors.mediumPurple : "#047857",
+            backgroundColor: isGloveSelected
+              ? colors.textColor
+              : colors.bgColor,
+          }}
+          onPress={() => {}}
+        >
+          <EntypoIcon
+            name="plus"
+            size={24}
+            color={isGloveSelected ? colors.mediumPurple : colors.textColor}
+          />
+        </Pressable>
       </View>
 
       <ObligatoryFieldsUI
