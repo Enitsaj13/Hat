@@ -2,7 +2,7 @@ import { boolean, mixed, number, object } from "yup";
 import { Controller, useForm, UseFormReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { colors } from "@theme/index";
 import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import {
@@ -30,6 +30,9 @@ import {
   shouldShow,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
+import ReusableModal from "@components/Modal";
+import Precaution from "../Precaution";
+
 export interface MainScreenProps {
   companyConfig?: CompanyConfig;
   obligatoryFields: ObligatoryField[];
@@ -47,6 +50,18 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
     });
   }, [location]);
 
+  // toggle modal
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(prevModalVisible => !prevModalVisible);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+
   const formRef = useRef<UseFormReturn<IMomentSchema> | undefined>();
   const momentSchema = useMemo(() => {
     const obligatoryFieldRequired =
@@ -62,25 +77,25 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
           ([nonExistentField, schema]) => {
             return obligatoryField.fieldType === "DROPDOWN"
               ? number().test({
-                  name: "required",
-                  message: i18n.t("OBF1", {
-                    default: "Please select obligatory field/s.",
-                  }),
-                  test(value) {
-                    // console.log(
-                    //   "shouldShow(actions, this.parent)",
-                    //   shouldShow(actions, formRef.current!),
-                    // );
-                    // console.log("value", value);
-                    return (
-                      !shouldShow(
-                        actions,
-                        obligatoryField.isAllActionRequired,
-                        formRef.current!,
-                      ) || value != null
-                    );
-                  },
-                })
+                name: "required",
+                message: i18n.t("OBF1", {
+                  default: "Please select obligatory field/s.",
+                }),
+                test(value) {
+                  // console.log(
+                  //   "shouldShow(actions, this.parent)",
+                  //   shouldShow(actions, formRef.current!),
+                  // );
+                  // console.log("value", value);
+                  return (
+                    !shouldShow(
+                      actions,
+                      obligatoryField.isAllActionRequired,
+                      formRef.current!,
+                    ) || value != null
+                  );
+                },
+              })
               : boolean().required().default(false);
           },
         );
@@ -586,6 +601,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
         />
         {/* TODO when one of optional fields are selected as well then turn this into selected */}
         <Pressable
+          onPress={toggleModal}
           style={{
             ...styles.actionButton,
             borderColor: isGloveSelected ? colors.mediumPurple : "#047857",
@@ -593,7 +609,6 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
               ? colors.textColor
               : colors.bgColor,
           }}
-          onPress={() => {}}
         >
           <EntypoIcon
             name="plus"
@@ -602,6 +617,10 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
           />
         </Pressable>
       </View>
+
+      <ReusableModal visible={modalVisible} onDismiss={closeModal}>
+        <Precaution />
+      </ReusableModal>
 
       <ObligatoryFieldsUI
         form={form}
