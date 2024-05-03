@@ -19,6 +19,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 export const colors = {
   bgColor: "#01b482",
   borderColor: "#027556",
+  green: "#047857",
   textColor: "white",
   lightGray: "#e2e8f0",
   cadetGrey: "#94a3b8",

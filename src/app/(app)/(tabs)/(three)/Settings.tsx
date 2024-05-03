@@ -88,13 +88,17 @@ const Component = ({ user, appSetting }: SettingsProps) => {
       </View>
       <List.Section>
         <Link href="/Profile" asChild>
-          <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("Q2", { defaultValue: "Account Information" })}
               titleStyle={styles.settingsText}
               right={() => (
                 <View style={styles.centerContainer}>
-                  <Icon name="chevron-right" size={18} color={colors.midNight} />
+                  <Icon
+                    name="chevron-right"
+                    size={18}
+                    color={colors.midNight}
+                  />
                 </View>
               )}
               left={() => (
@@ -111,13 +115,17 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           </TouchableOpacity>
         </Link>
         <Link href="/ChangePassword" asChild>
-          <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("Q7", { defaultValue: "Change Password" })}
               titleStyle={styles.settingsText}
               right={() => (
                 <View style={styles.centerContainer}>
-                  <Icon name="chevron-right" size={18} color={colors.midNight} />
+                  <Icon
+                    name="chevron-right"
+                    size={18}
+                    color={colors.midNight}
+                  />
                 </View>
               )}
               left={() => (
@@ -196,7 +204,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           </BottomSheetModal>
         </TouchableOpacity>
         <Link href="/SubscribeNow" asChild>
-          <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+          <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
             <List.Item
               title={i18n.t("D4", { defaultValue: "Subscribe Now" })}
               titleStyle={styles.settingsText}
@@ -308,7 +316,7 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
           <List.Item
             title={i18n.t("H6", { defaultValue: "Practice Mode" })}
             titleStyle={styles.settingsText}
