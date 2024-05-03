@@ -14,5 +14,5 @@ export class ObligatoryFieldOption extends Model {
   @field("sort") sort: number;
 
   // @ts-expect-error
-  @field("a") obligatoryFieldServerId: number;
+  @field("obligatory_field_server_id") obligatoryFieldServerId: number;
 }
