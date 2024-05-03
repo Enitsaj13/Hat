@@ -399,6 +399,8 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   pt: {
@@ -801,8 +803,9 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   fr: {
@@ -1207,6 +1210,8 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   de: {
@@ -1611,8 +1616,9 @@ export const translations = {
     VIDEOLANGUAGES: "Video Languages", // TODO
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
-
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   br: {
@@ -2016,6 +2022,8 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   es: {
@@ -2420,6 +2428,8 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   id: {
@@ -2823,6 +2833,8 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   cs: {
@@ -3225,6 +3237,8 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 
   th: {
@@ -3626,5 +3640,7 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
+    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
+      "Are you sure you want to move without submitting your current observation?", // TODO
   },
 };

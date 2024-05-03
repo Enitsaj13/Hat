@@ -212,7 +212,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
     resetField,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = form;
   const isGloveSelected = watch("gloves");
 
@@ -275,6 +275,30 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
     resetField("afterTouchingAPatient");
     resetField("afterTouchingPatientSurroundings");
   }, []);
+
+  const onMovePressed = useCallback(() => {
+    if (isDirty) {
+      Alert.alert(
+        i18n.t("AG15", { defaultValue: "Confirmation" }),
+        i18n.t("UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION"),
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: router.back,
+          },
+        ],
+        {
+          cancelable: true,
+        },
+      );
+    } else {
+      router.back();
+    }
+  }, [isDirty]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -586,12 +610,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
       />
 
       <View style={styles.controlContainer}>
-        <Pressable
-          style={styles.controlButton}
-          onPress={() => {
-            router.back();
-          }}
-        >
+        <Pressable style={styles.controlButton} onPress={onMovePressed}>
           <Text style={styles.controlButtonTitle}>
             {i18n.t("ADD28", { defaultValue: "Move" })}
           </Text>
