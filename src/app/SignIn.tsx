@@ -149,7 +149,7 @@ function Component({ appSetting }: SignInProps) {
         />
       </View>
       <View style={styles.forgotPasswordContainer}>
-        <Button mode="text" onPress={() => Alert.alert("Forgot Password")}>
+        <Button mode="text" onPress={() => router.navigate("ForgotPassword")}>
           {i18n.t("D5", { defaultValue: "Forgot Password?" })}
         </Button>
       </View>
