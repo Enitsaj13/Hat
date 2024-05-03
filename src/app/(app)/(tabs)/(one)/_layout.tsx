@@ -1,5 +1,7 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { i18n } from "@i18n/index";
+import { FontAwesome as Icon } from "@expo/vector-icons";
+import { Pressable, Image } from "react-native";
 
 export default function Layout() {
   return (
@@ -27,9 +29,29 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="AuditSummary"
+        options={{
+          title: i18n.t("AH1", {
+            defaultValue: "Audit Summary",
+          }),
+          headerBackTitleVisible: false,
+          presentation: "fullScreenModal",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <Icon name="home" size={24} color="white" />
+            </Pressable>
+          ),
+        }}
+      />
+      <Stack.Screen
         name="MainScreen"
         options={{
           headerBackTitleVisible: false,
+          headerRight: () => (
+            <Pressable onPress={() => router.navigate("AuditSummary")}>
+              <Icon name="table" size={20} color="white" />
+            </Pressable>
+          ),
         }}
       />
     </Stack>

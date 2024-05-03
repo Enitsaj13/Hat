@@ -2,7 +2,13 @@ import { boolean, mixed, number, object } from "yup";
 import { Controller, useForm, UseFormReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { colors } from "@theme/index";
 import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import {
@@ -30,6 +36,9 @@ import {
   shouldShow,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
+import ReusableModal from "@components/Modal";
+import Precaution from "../Precaution";
+
 export interface MainScreenProps {
   companyConfig?: CompanyConfig;
   obligatoryFields: ObligatoryField[];
@@ -46,6 +55,17 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
       title: location?.name,
     });
   }, [location]);
+
+  // toggle modal
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible((prevModalVisible) => !prevModalVisible);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const formRef = useRef<UseFormReturn<IMomentSchema> | undefined>();
   const momentSchema = useMemo(() => {
@@ -482,7 +502,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
             <Pressable
               style={{
                 ...styles.actionButton,
-                borderColor: value ? colors.mediumPurple : "#047857",
+                borderColor: value ? colors.mediumPurple : colors.green,
                 backgroundColor: value ? colors.textColor : colors.bgColor,
               }}
               onPress={() => {
@@ -509,7 +529,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
             <Pressable
               style={{
                 ...styles.actionButton,
-                borderColor: value ? colors.mediumPurple : "#047857",
+                borderColor: value ? colors.mediumPurple : colors.green,
                 backgroundColor: value ? colors.textColor : colors.bgColor,
               }}
               onPress={() => {
@@ -537,7 +557,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
               style={{
                 ...styles.actionButton,
                 ...styles.circleButton,
-                borderColor: value ? colors.red : "#047857",
+                borderColor: value ? colors.red : colors.green,
                 backgroundColor: value ? colors.textColor : colors.bgColor,
               }}
               onPress={() => {
@@ -566,7 +586,7 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
               style={{
                 ...styles.actionButton,
                 ...styles.circleButton,
-                borderColor: value ? colors.mediumPurple : "#047857",
+                borderColor: value ? colors.mediumPurple : colors.green,
                 backgroundColor: value ? colors.textColor : colors.bgColor,
               }}
               onPress={() => onChange(!value)}
@@ -586,14 +606,14 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
         />
         {/* TODO when one of optional fields are selected as well then turn this into selected */}
         <Pressable
+          onPress={toggleModal}
           style={{
             ...styles.actionButton,
-            borderColor: isGloveSelected ? colors.mediumPurple : "#047857",
+            borderColor: isGloveSelected ? colors.mediumPurple : colors.green,
             backgroundColor: isGloveSelected
               ? colors.textColor
               : colors.bgColor,
           }}
-          onPress={() => {}}
         >
           <EntypoIcon
             name="plus"
@@ -602,6 +622,10 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
           />
         </Pressable>
       </View>
+
+      <ReusableModal visible={modalVisible} onDismiss={closeModal}>
+        <Precaution />
+      </ReusableModal>
 
       <ObligatoryFieldsUI
         form={form}
