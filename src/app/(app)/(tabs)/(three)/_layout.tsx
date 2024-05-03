@@ -21,6 +21,15 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="Profile"
+        options={{
+          title: i18n.t("H5", {
+            defaultValue: "Profile",
+          }),
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
         name="ChangePassword"
         options={{
           title: i18n.t("Q7", {

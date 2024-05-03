@@ -87,27 +87,29 @@ const Component = ({ user, appSetting }: SettingsProps) => {
         </View>
       </View>
       <List.Section>
-        <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
-          <List.Item
-            title={i18n.t("Q2", { defaultValue: "Account Information" })}
-            titleStyle={styles.settingsText}
-            right={() => (
-              <View style={styles.centerContainer}>
-                <Icon name="chevron-right" size={18} color={colors.midNight} />
-              </View>
-            )}
-            left={() => (
-              <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.lilyWhite },
-                ]}
-              >
-                <Icon name="user" size={18} color={colors.bgColor} />
-              </View>
-            )}
-          />
-        </TouchableOpacity>
+        <Link href="/Profile" asChild>
+          <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
+            <List.Item
+              title={i18n.t("Q2", { defaultValue: "Account Information" })}
+              titleStyle={styles.settingsText}
+              right={() => (
+                <View style={styles.centerContainer}>
+                  <Icon name="chevron-right" size={18} color={colors.midNight} />
+                </View>
+              )}
+              left={() => (
+                <View
+                  style={[
+                    styles.iconContainer,
+                    { backgroundColor: colors.lilyWhite },
+                  ]}
+                >
+                  <Icon name="user" size={18} color={colors.bgColor} />
+                </View>
+              )}
+            />
+          </TouchableOpacity>
+        </Link>
         <Link href="/ChangePassword" asChild>
           <TouchableOpacity onPress={() => { }} style={styles.listItemContainer}>
             <List.Item
