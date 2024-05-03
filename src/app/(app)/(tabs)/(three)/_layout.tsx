@@ -20,6 +20,15 @@ export default function Layout() {
           headerBackTitleVisible: false,
         }}
       />
+      <Stack.Screen
+        name="ChangePassword"
+        options={{
+          title: i18n.t("Q7", {
+            defaultValue: "Change Password",
+          }),
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack>
   );
 }
