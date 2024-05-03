@@ -2,7 +2,7 @@
   "expo": {
     "name": "hat",
     "slug": "hat",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "hat",
@@ -20,14 +20,16 @@
       "bundleIdentifier": "ph.rocketspin.hat",
       "config": {
         "usesNonExemptEncryption": false
-      }
+      },
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "ph.rocketspin.hat"
+      "package": "ph.rocketspin.hat",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
