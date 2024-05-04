@@ -88,13 +88,19 @@ const Precaution = () => {
               defaultValue: "Don on Gloves",
             })}
           </Text>
-          <Switch
-            trackColor={{ true: colors.mediumPurple }}
-            thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
-            ios_backgroundColor={colors.textColor}
-            style={styles.switchIndication}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Switch
+                trackColor={{ true: colors.mediumPurple }}
+                thumbColor={value ? colors.lilyWhite : colors.textColor}
+                ios_backgroundColor={colors.textColor}
+                style={styles.switchIndication}
+                onValueChange={onChange}
+                value={value}
+              />
+            )}
+            name="gloves"
+            control={control}
           />
         </View>
       </View>
@@ -105,13 +111,19 @@ const Precaution = () => {
               defaultValue: "Don on Gown",
             })}
           </Text>
-          <Switch
-            trackColor={{ true: colors.mediumPurple }}
-            thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
-            ios_backgroundColor={colors.textColor}
-            style={styles.switchIndication}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Switch
+                trackColor={{ true: colors.mediumPurple }}
+                thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
+                ios_backgroundColor={colors.textColor}
+                style={styles.switchIndication}
+                onValueChange={onChange}
+                value={value}
+              />
+            )}
+            name="donOnGown"
+            control={control}
           />
         </View>
       </View>
@@ -122,13 +134,19 @@ const Precaution = () => {
               defaultValue: "Don on Mask",
             })}
           </Text>
-          <Switch
-            trackColor={{ true: colors.mediumPurple }}
-            thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
-            ios_backgroundColor={colors.textColor}
-            style={styles.switchIndication}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Switch
+                trackColor={{ true: colors.mediumPurple }}
+                thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
+                ios_backgroundColor={colors.textColor}
+                style={styles.switchIndication}
+                onValueChange={onChange}
+                value={value}
+              />
+            )}
+            name="donOnMask"
+            control={control}
           />
         </View>
       </View>
@@ -140,22 +158,29 @@ const Precaution = () => {
           })}{" "}
           -
         </Text>
-        <SegmentedButton
-          segments={[
-            {
-              value: "Surgical",
-              label: i18n.t("AF11", { defaultValue: "Surgical" }),
-            },
-            {
-              value: "High Filtration",
-              label: i18n.t("AF12", { defaultValue: "High Filtration" }),
-            },
-            {
-              value: "Other",
-              label: i18n.t("AF13 ", { defaultValue: "Other" }),
-            },
-          ]}
-          onSegmentChange={() => {}}
+        <Controller
+          render={({ field: { onChange, value } }) => (
+            <SegmentedButton
+              segments={[
+                {
+                  value: "Surgical",
+                  label: i18n.t("AF11", { defaultValue: "Surgical" }),
+                },
+                {
+                  value: "High Filtration",
+                  label: i18n.t("AF12", { defaultValue: "High Filtration" }),
+                },
+                {
+                  value: "Other",
+                  label: i18n.t("AF13 ", { defaultValue: "Other" }),
+                },
+              ]}
+              onSegmentChange={onChange}
+              value={value}
+            />
+          )}
+          name="maskType"
+          control={control}
         />
       </View>
       <View style={styles.actionTitleContainer}>
