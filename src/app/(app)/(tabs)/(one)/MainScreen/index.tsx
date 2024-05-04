@@ -192,14 +192,16 @@ function Component({
         name="workerServerId"
         control={control}
       />
-      <Pressable style={styles.headerContainer} onPress={toggleNotes}>
+      <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>
           {i18n.t("U13", {
             defaultValue: "Moment",
           })}
         </Text>
-        <EditIcon name="edit" size={22} color="white" />
-      </Pressable>
+        <Pressable onPress={toggleNotes}>
+          <EditIcon name="edit" size={22} color="white" />
+        </Pressable>
+      </View>
       <NoteModal
         visible={notesVisible}
         onClose={closeNotes}
