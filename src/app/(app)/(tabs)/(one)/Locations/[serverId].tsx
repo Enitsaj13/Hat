@@ -33,7 +33,7 @@ export default function Locations() {
       .fetchCount();
 
     if (childrenCount > 0) {
-      router.push({
+      router.navigate({
         pathname: "/(app)/(tabs)/(one)/Locations/[serverId]",
         params: { serverId: location.serverId, parentName: location.name },
       });
@@ -50,7 +50,7 @@ export default function Locations() {
           location: loc,
         };
       });
-      router.push("/(app)/(tabs)/(one)/MainScreen");
+      router.navigate("/(app)/(tabs)/(one)/MainScreen");
     }
   }, []);
 

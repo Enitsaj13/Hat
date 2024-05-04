@@ -54,6 +54,16 @@ export default function Layout() {
           ),
         }}
       />
+      <Stack.Screen
+        name="Precaution"
+        options={{
+          headerBackTitleVisible: false,
+          presentation: "modal",
+          title: i18n.t("AF1", {
+            defaultValue: "Precaution",
+          }),
+        }}
+      />
     </Stack>
   );
 }

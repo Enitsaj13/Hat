@@ -11,7 +11,7 @@ function VideoPlayerLanguages() {
   const { name, videoUrl } = useLocalSearchParams();
 
   const handleVideoPlayer = (url: string | string[]) => {
-    router.push({
+    router.navigate({
       pathname: "/VideoPlayer",
       params: { videoUrl: url },
     });

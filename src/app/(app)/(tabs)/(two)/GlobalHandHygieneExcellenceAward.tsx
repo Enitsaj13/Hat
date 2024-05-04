@@ -15,7 +15,7 @@ function GlobalHandHygieneExcellenceAward() {
 
   const handlerVideo = (videoUrlIndex: number) => {
     const selectedVideoUrl = videoUrls[videoUrlIndex];
-    router.push({
+    router.navigate({
       pathname: "/VideoPlayer",
       params: { videoUrl: selectedVideoUrl },
     });

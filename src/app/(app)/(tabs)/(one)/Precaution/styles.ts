@@ -21,11 +21,6 @@ export const styles = createStyleSheet({
     justifyContent: "center",
     alignItems: "center",
   },
-  titleContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingBottom: 10,
-  },
   title: {
     color: colors.textColor,
     fontSize: 16,

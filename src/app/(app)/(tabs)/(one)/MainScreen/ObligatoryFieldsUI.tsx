@@ -22,7 +22,7 @@ import {
   IMomentSchema,
   OBLIGATORY_FIELD_VALUE_PREFIX,
   shouldShow,
-  useMomentSchemaForRef,
+  useMomentSchemaFormRef,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 import { colors } from "@theme/index";
 
@@ -35,7 +35,7 @@ function ObligatoryFieldUIComponent({
   obligatoryField,
   options,
 }: ObligatoryFieldUIProps) {
-  const formRef = useMomentSchemaForRef();
+  const formRef = useMomentSchemaFormRef();
   const form = formRef.current!;
 
   const dropdownOptions: DropDownOption[] =

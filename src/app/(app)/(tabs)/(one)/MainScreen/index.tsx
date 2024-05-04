@@ -38,12 +38,12 @@ import {
   OBLIGATORY_FIELD_VALUE_PREFIX,
   OPTIONAL_FIELD_VALUE_PREFIX,
   shouldShow,
-  useMomentSchemaForRef,
+  useMomentSchema,
+  useMomentSchemaFormRef,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
-import ReusableModal from "@components/Modal";
 import { OptionalField } from "@stores/optionalField";
-import Precaution from "src/app/(app)/(tabs)/(one)/MainScreen/Precaution";
+import Precaution from "src/app/(app)/(tabs)/(one)/Precaution";
 
 function Component({
   companyConfig,
@@ -61,181 +61,13 @@ function Component({
     });
   }, [location]);
 
-  // toggle modal
-  const [modalVisible, setModalVisible] = useState(false);
+  const formRef = useMomentSchemaFormRef();
 
-  const formRef = useMomentSchemaForRef();
-
-  const momentSchema = useMemo(() => {
-    const obligatoryFieldRequired =
-      isEmpty(companyConfig) || companyConfig.enableObligatoryFields;
-    const obligatoryFieldsSchema: any = {};
-    if (obligatoryFieldRequired) {
-      for (const obligatoryField of obligatoryFields) {
-        const actions = obligatoryField.actions?.slice() || [];
-        obligatoryFieldsSchema[
-          `${OBLIGATORY_FIELD_VALUE_PREFIX}${obligatoryField.serverId}`
-        ] = mixed<number | boolean>().when(
-          ["nonExistentField"],
-          ([nonExistentField, schema]) => {
-            return obligatoryField.fieldType === "DROPDOWN"
-              ? number().test({
-                  name: "required",
-                  message: i18n.t("OBF1", {
-                    default: "Please select obligatory field/s.",
-                  }),
-                  test(value) {
-                    // console.log(
-                    //   "shouldShow(actions, this.parent)",
-                    //   shouldShow(actions, formRef.current!),
-                    // );
-                    // console.log("value", value);
-                    return (
-                      !shouldShow(
-                        actions,
-                        obligatoryField.isAllActionRequired,
-                        formRef.current!,
-                      ) || value != null
-                    );
-                  },
-                })
-              : boolean().required().default(false);
-          },
-        );
-      }
-    }
-
-    const optionalFieldSchema: any = {};
-    for (const optionalField of optionalFields) {
-      optionalFieldSchema[
-        `${OPTIONAL_FIELD_VALUE_PREFIX}${optionalField.serverId}`
-      ] = mixed<number | boolean>().when(
-        ["nonExistentField"],
-        ([nonExistentField, schema]) => {
-          return optionalField.fieldType === "DROPDOWN"
-            ? number().notRequired()
-            : boolean().notRequired().default(false);
-        },
-      );
-    }
-
-    return object({
-      workerServerId: number().required(
-        i18n.t("AG6", {
-          defaultValue: "Healthcare worker is required!",
-        }),
-      ),
-      beforeTouchingAPatient: boolean().default(false),
-      beforeClean: boolean().default(false),
-      afterBodyFluidExposureRisk: boolean()
-        .default(false)
-        .test({
-          name: "atLeastOnceSelectedIfWithoutIndicationIsTurnedOff",
-          message: i18n.t("AG30", {
-            defaultValue: "Please select moment",
-          }),
-          test(value) {
-            // NOTE: this is a short-circuit validation to ensure one moment is selected if without indication is off
-            const {
-              withoutIndication,
-              beforeTouchingAPatient,
-              beforeClean,
-              afterTouchingAPatient,
-              afterTouchingPatientSurroundings,
-            } = this.parent;
-            return (
-              withoutIndication ||
-              value ||
-              beforeTouchingAPatient ||
-              beforeClean ||
-              afterTouchingAPatient ||
-              afterTouchingPatientSurroundings
-            );
-          },
-        }),
-      afterTouchingAPatient: boolean()
-        .default(false)
-        .test({
-          name: "xorWithAfterTouchingPatientSurroundings",
-          message: i18n.t("AG4", {
-            defaultValue: "Moment 4 & 5 cannot be simultaneously enabled.",
-          }),
-          test(value) {
-            const { afterTouchingPatientSurroundings } = this.parent;
-            return !value || !afterTouchingPatientSurroundings;
-          },
-        }),
-      afterTouchingPatientSurroundings: boolean()
-        .default(false)
-        .test({
-          name: "xorWithAfterTouchingPatientSurroundings",
-          message: i18n.t("AG4", {
-            defaultValue: "Moment 4 & 5 cannot be simultaneously enabled.",
-          }),
-          test(value) {
-            const { afterTouchingAPatient } = this.parent;
-            return !value || !afterTouchingAPatient;
-          },
-        }),
-      withoutIndication: boolean().default(false),
-      rub: boolean()
-        .default(false)
-        .test({
-          name: "ShouldBeRubOrWashOrMissed",
-          message: i18n.t("AG10", {
-            defaultValue: "Please select action either rub, wash or missed!",
-          }),
-          test(value) {
-            const { wash, missed } = this.parent;
-            return value || wash || missed;
-          },
-        }),
-      wash: boolean()
-        .default(false)
-        .test({
-          name: "ShouldBeRubOrWashOrMissed",
-          message: i18n.t("AG10", {
-            defaultValue: "Please select action either rub, wash or missed!",
-          }),
-          test(value) {
-            const { rub, missed } = this.parent;
-            return value || rub || missed;
-          },
-        }),
-      missed: boolean()
-        .default(false)
-        .test({
-          name: "ShouldBeRubOrWashOrMissed",
-          message: i18n.t("AG10", {
-            defaultValue: "Please select action either rub, wash or missed!",
-          }),
-          test(value) {
-            const { rub, wash } = this.parent;
-            return value || rub || wash;
-          },
-        }),
-      gloves: boolean().default(false),
-      obligatoryFieldRequired: boolean()
-        .required()
-        .default(obligatoryFieldRequired),
-      obligatoryFields: object(obligatoryFieldsSchema)
-        .default({})
-        .test({
-          name: "required", // bugged
-          test(value) {
-            const { obligatoryFieldRequired } = this.parent;
-            console.log("this.parent", this.parent);
-            return !obligatoryFieldRequired || value != null;
-          },
-        }),
-      occupationRisk: string().optional(),
-      donOnGown: boolean().default(false),
-      donOnMask: boolean().default(false),
-      maskType: string().optional(),
-      optionalFields: object(optionalFieldSchema).default({}),
-    });
-  }, [companyConfig, obligatoryFields, optionalFields]);
-
+  const momentSchema = useMomentSchema(
+    companyConfig,
+    obligatoryFields,
+    optionalFields,
+  );
   const form = useForm<IMomentSchema>({
     resolver: yupResolver(momentSchema),
     mode: "onChange",
@@ -470,30 +302,30 @@ function Component({
             name="afterTouchingAPatient"
             control={control}
           />
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <Pressable
+                style={styles.arrowImageContainer5}
+                onPress={() => {
+                  onChange(!value);
+                  resetField("withoutIndication");
+                }}
+              >
+                <Image
+                  source={
+                    value
+                      ? require("@assets/images/hat-images/5_violet.png")
+                      : require("@assets/images/hat-images/5_green.png")
+                  }
+                  resizeMode="contain"
+                  style={styles.arrowImage5}
+                />
+              </Pressable>
+            )}
+            name="afterTouchingPatientSurroundings"
+            control={control}
+          />
         </View>
-        <Controller
-          render={({ field: { onChange, value } }) => (
-            <Pressable
-              style={styles.arrowImageContainer5}
-              onPress={() => {
-                onChange(!value);
-                resetField("withoutIndication");
-              }}
-            >
-              <Image
-                source={
-                  value
-                    ? require("@assets/images/hat-images/5_violet.png")
-                    : require("@assets/images/hat-images/5_green.png")
-                }
-                resizeMode="contain"
-                style={styles.arrowImage5}
-              />
-            </Pressable>
-          )}
-          name="afterTouchingPatientSurroundings"
-          control={control}
-        />
         <Controller
           render={({ field: { onChange, value } }) => (
             <Pressable
@@ -634,7 +466,7 @@ function Component({
           control={control}
         />
         <Pressable
-          onPress={() => setModalVisible((prevState) => !prevState)}
+          onPress={() => router.navigate("Precaution")}
           style={{
             ...styles.actionButton,
             borderColor: shouldHighlightPlusButton
@@ -654,13 +486,6 @@ function Component({
           />
         </Pressable>
       </View>
-
-      <ReusableModal
-        visible={modalVisible}
-        onDismiss={() => setModalVisible(false)}
-      >
-        <Precaution />
-      </ReusableModal>
 
       <ObligatoryFieldsUI
         obligatoryFields={obligatoryFields}

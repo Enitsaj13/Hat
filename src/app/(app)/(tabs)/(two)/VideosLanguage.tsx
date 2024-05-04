@@ -14,7 +14,7 @@ const VideosLanguages = () => {
   const { styles } = useStyles(stylesheet);
 
   const handleLanguageSelect = (videoUrl: string, name: string) => {
-    router.push({
+    router.navigate({
       pathname: "/VideoLanguagesPlayer",
       params: { videoUrl, name },
     });

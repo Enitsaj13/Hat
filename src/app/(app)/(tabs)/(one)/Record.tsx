@@ -104,7 +104,7 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
         console.log(
           "creating batch observation is successful, redirecting to locations",
         );
-        router.push({
+        router.navigate({
           pathname: "/(app)/(tabs)/(one)/Locations/[serverId]",
           params: { serverId: -1 },
         });

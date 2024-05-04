@@ -6,13 +6,6 @@ import { OptionalFieldOption } from "@stores/optionalFieldOption";
 export class OptionalField extends Model {
   static table = "optional_fields";
 
-  static associations = {
-    optional_field_options: {
-      type: "has_many",
-      foreignKey: "optional_field_server_id",
-    },
-  } as const;
-
   // @ts-expect-error
   @field("server_id") serverId: number;
 
@@ -21,6 +14,4 @@ export class OptionalField extends Model {
 
   // @ts-expect-error
   @text("field_type") fieldType: FieldType;
-
-  @children("optional_field_options") options?: OptionalFieldOption[];
 }
