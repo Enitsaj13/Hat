@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Text, View, Switch } from "react-native";
+import { Switch, Text, View } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
 import { colors } from "@theme/index";
 import { i18n } from "@i18n/index";
 import SegmentedButton from "@components/SegmentButton";
 import DropdownList from "@components/DropdownList";
-import { SegmentedButtons } from "react-native-paper";
+import { useMomentSchemaForRef } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
+import { Controller } from "react-hook-form";
 
 const MealType = [
   { key: "patent", value: "Patent Meal" },
@@ -15,6 +16,11 @@ const MealType = [
 ];
 
 const Precaution = () => {
+  const formRef = useMomentSchemaForRef();
+  const form = formRef.current!;
+
+  const { control } = form;
+
   const [isEnabled, setIsEnabled] = useState(false);
 
   const toggleSwitch = () => {
@@ -24,10 +30,18 @@ const Precaution = () => {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{i18n.t("AF1")}</Text>
+        <Text style={styles.title}>
+          {i18n.t("AF1", {
+            defaultValue: "Precaution",
+          })}
+        </Text>
       </View>
       <View style={styles.dragDownContainer}>
-        <Text style={styles.dragDownText}>{i18n.t("AF2")}</Text>
+        <Text style={styles.dragDownText}>
+          {i18n.t("AF2", {
+            defaultValue: "Drag down to go back to opportunity screen",
+          })}
+        </Text>
       </View>
       <View style={styles.occupationalTitleContainer}>
         <Text style={styles.title}>
@@ -36,22 +50,29 @@ const Precaution = () => {
           })}
         </Text>
       </View>
-      <SegmentedButton
-        segments={[
-          {
-            value: "Contact",
-            label: i18n.t("AF3", { defaultValue: "Contact" }),
-          },
-          {
-            value: "Airborne",
-            label: i18n.t("AF4", { defaultValue: "Airborne" }),
-          },
-          {
-            value: "Droplet",
-            label: i18n.t("AF5", { defaultValue: "Droplet" }),
-          },
-        ]}
-        onSegmentChange={() => {}}
+      <Controller
+        render={({ field: { onChange, value } }) => (
+          <SegmentedButton
+            segments={[
+              {
+                value: "Contact",
+                label: i18n.t("AF3", { defaultValue: "Contact" }),
+              },
+              {
+                value: "Airborne",
+                label: i18n.t("AF4", { defaultValue: "Airborne" }),
+              },
+              {
+                value: "Droplet",
+                label: i18n.t("AF5", { defaultValue: "Droplet" }),
+              },
+            ]}
+            onSegmentChange={onChange}
+            value={value}
+          />
+        )}
+        name="occupationRisk"
+        control={control}
       />
       <View style={styles.actionTitleContainer}>
         <Text style={styles.title}>

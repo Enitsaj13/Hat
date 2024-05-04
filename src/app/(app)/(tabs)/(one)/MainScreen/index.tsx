@@ -259,6 +259,19 @@ function Component({
     formState: { errors, isDirty },
   } = form;
   const isGloveSelected = watch("gloves");
+  const optionalFieldsWatchValue = watch("optionalFields");
+  const occupationRisk = watch("occupationRisk");
+  const donOnGown = watch("donOnGown");
+  const donOnMask = watch("donOnMask");
+  const maskType = watch("maskType");
+
+  const shouldHighlightPlusButton =
+    isGloveSelected ||
+    !isEmpty(occupationRisk) ||
+    donOnGown ||
+    donOnMask ||
+    !isEmpty(maskType) ||
+    !isEmpty(optionalFieldsWatchValue);
 
   useEffect(() => {
     const errorsCopy = JSON.parse(JSON.stringify(errors));
@@ -628,13 +641,14 @@ function Component({
           name="gloves"
           control={control}
         />
-        {/* TODO when one of optional fields are selected as well then turn this into selected */}
         <Pressable
           onPress={toggleModal}
           style={{
             ...styles.actionButton,
-            borderColor: isGloveSelected ? colors.mediumPurple : colors.green,
-            backgroundColor: isGloveSelected
+            borderColor: shouldHighlightPlusButton
+              ? colors.mediumPurple
+              : colors.green,
+            backgroundColor: shouldHighlightPlusButton
               ? colors.textColor
               : colors.bgColor,
           }}
@@ -642,7 +656,9 @@ function Component({
           <EntypoIcon
             name="plus"
             size={24}
-            color={isGloveSelected ? colors.mediumPurple : colors.textColor}
+            color={
+              shouldHighlightPlusButton ? colors.mediumPurple : colors.textColor
+            }
           />
         </Pressable>
       </View>

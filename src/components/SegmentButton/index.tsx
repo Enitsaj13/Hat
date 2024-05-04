@@ -25,7 +25,7 @@ function SegmentedButton({
             segment.value === value && styles.selectedSegment,
             index < segments.length - 1 && styles.borderRight, // Add border to all segments except the last one
           ]}
-          onPress={onSegmentChange}
+          onPress={() => onSegmentChange(segment.value)}
         >
           <Text
             style={[
