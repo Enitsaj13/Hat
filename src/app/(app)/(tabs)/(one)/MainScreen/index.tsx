@@ -203,7 +203,7 @@ function Component({
       <NoteModal
         visible={notesVisible}
         onClose={closeNotes}
-        title={i18n.t("FEED2", {
+        title={i18n.t("AE5", {
           defaultValue: "Add Notes",
         })}
         cancelTitle={i18n.t("CLEAR")}
@@ -558,7 +558,7 @@ const getObservables = (props: ObservableProps) => ({
 });
 
 export interface MainScreenProps
-  extends ExtractedObservables<ReturnType<typeof getObservables>> { }
+  extends ExtractedObservables<ReturnType<typeof getObservables>> {}
 
 const MainScreen = withObservables(
   ["companyConfig", "obligatoryFields", "optionalFields"],
