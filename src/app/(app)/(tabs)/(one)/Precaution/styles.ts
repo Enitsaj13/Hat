@@ -4,7 +4,6 @@ import { colors } from "@theme/index";
 export const styles = createStyleSheet({
   container: {
     flex: 1,
-    marginTop: 40,
   },
   dragDownContainer: {
     padding: 10,
