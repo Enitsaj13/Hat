@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { colors } from "@theme/index";
 import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import {
@@ -17,7 +17,6 @@ import isEmpty from "lodash.isempty";
 import WithoutIndicationToggle from "@app/(app)/(tabs)/(one)/MainScreen/WithoutIndicationToggle";
 import { CompanyConfig } from "@stores/companyConfig";
 import { ObligatoryField } from "@stores/obligatoryField";
-import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import {
   ExtractedObservables,
   withObservables,
@@ -33,6 +32,7 @@ import {
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 import { OptionalField } from "@stores/optionalField";
+import NoteModal from "@components/Notes";
 
 function Component({
   companyConfig,
@@ -42,6 +42,16 @@ function Component({
   const { batchObservationState } = useBatchObservation();
   const location = batchObservationState.location;
   // console.log("batchObservationState: ", batchObservationState);
+
+  const [notesVisible, setNotesVisible] = useState(false);
+
+  const toggleNotes = () => {
+    setNotesVisible(!notesVisible);
+  };
+
+  const closeNotes = () => {
+    setNotesVisible(false);
+  };
 
   const navigation = useNavigation();
   useEffect(() => {
@@ -182,14 +192,23 @@ function Component({
         name="workerServerId"
         control={control}
       />
-      <View style={styles.headerContainer}>
+      <Pressable style={styles.headerContainer} onPress={toggleNotes}>
         <Text style={styles.headerTitle}>
           {i18n.t("U13", {
             defaultValue: "Moment",
           })}
         </Text>
         <EditIcon name="edit" size={22} color="white" />
-      </View>
+      </Pressable>
+      <NoteModal
+        visible={notesVisible}
+        onClose={closeNotes}
+        title={i18n.t("FEED2", {
+          defaultValue: "Add Feedback Notes",
+        })}
+        cancelTitle={i18n.t("CLEAR")}
+        saveTitle={i18n.t("DONE")}
+      />
 
       <View style={styles.mainScreenContainer}>
         <View style={styles.mainScreenImageContainer}>
