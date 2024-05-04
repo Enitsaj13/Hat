@@ -227,6 +227,7 @@ const Component = ({ optionalFields, optionsMap }: PrecautionProps) => {
                   selectedValueStyle={styles.selectedValue}
                   noOptionSelectedText={optField.name}
                   selectedOptionKey={value}
+                  allowNullKeySelection={true}
                 />
               ) : (
                 <Switch

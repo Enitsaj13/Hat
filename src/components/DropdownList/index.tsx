@@ -6,7 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 
-export type DropDownOptionKey = string | number;
+export type DropDownOptionKey = string | number | null;
 
 export type DropDownOption = {
   key: DropDownOptionKey;
@@ -16,11 +16,12 @@ export type DropDownOption = {
 interface DropdownListProps {
   options: DropDownOption[];
   selectedOptionKey?: DropDownOptionKey;
-  onOptionSelected?: (key: DropDownOptionKey, value: any) => void;
+  onOptionSelected?: (key: DropDownOptionKey | null, value: any) => void;
   dropdownlistStyle?: StyleProp<ViewStyle>;
   selectedValueStyle?: TextStyle;
   right?: React.ReactNode;
   noOptionSelectedText?: string;
+  allowNullKeySelection?: boolean;
 }
 
 function DropdownList({
@@ -31,6 +32,7 @@ function DropdownList({
   selectedValueStyle,
   right,
   noOptionSelectedText = "",
+  allowNullKeySelection,
 }: DropdownListProps) {
   const { styles } = useStyles(dropdownStylesheet);
 
@@ -60,6 +62,9 @@ function DropdownList({
 
   const selected = `${options.find((o) => o.key === selectedOptionKey)?.value || noOptionSelectedText}`;
 
+  const optionsToRender = !allowNullKeySelection
+    ? options
+    : [{ key: null, value: noOptionSelectedText }, ...options];
   return (
     <TouchableOpacity
       style={styles.container}
@@ -85,13 +90,21 @@ function DropdownList({
         style={styles.containerBottomSheetModal}
       >
         <FlatList
-          data={options}
+          data={optionsToRender}
           renderItem={({ item }) => (
             <TouchableRipple onPress={() => handleOptionSelect(item)}>
               <List.Item
                 contentStyle={styles.languageBottomSheetContainer}
                 title={item.value}
-                titleStyle={[styles.key, { color: theme.colors.onPrimary }]}
+                titleStyle={[
+                  styles.key,
+                  {
+                    color:
+                      item.key != null
+                        ? theme.colors.onPrimary
+                        : theme.colors.secondary,
+                  },
+                ]}
                 left={() =>
                   selectedOptionKey === item.key ? (
                     <List.Icon
