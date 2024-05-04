@@ -5,7 +5,7 @@ import { i18n } from "@i18n/index";
 import SegmentedButton from "@components/SegmentButton";
 import DropdownList from "@components/DropdownList";
 import {
-  OBLIGATORY_FIELD_VALUE_PREFIX,
+  OPTIONAL_FIELD_VALUE_PREFIX,
   useMomentSchemaFormRef,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 import { Controller } from "react-hook-form";
@@ -242,7 +242,7 @@ const Component = ({ optionalFields, optionsMap }: PrecautionProps) => {
             </View>
           )}
           name={
-            `optionalFields.${OBLIGATORY_FIELD_VALUE_PREFIX}${optField.serverId}` as any
+            `optionalFields.${OPTIONAL_FIELD_VALUE_PREFIX}${optField.serverId}` as any
           }
           control={control}
         />

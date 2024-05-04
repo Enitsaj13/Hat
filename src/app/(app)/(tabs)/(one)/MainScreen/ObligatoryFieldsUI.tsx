@@ -1,8 +1,5 @@
 import { ObligatoryField } from "@stores/obligatoryField";
-import {
-  MainScreenProps,
-  ObligatoryFieldRelatedProps,
-} from "@app/(app)/(tabs)/(one)/MainScreen/index";
+import { ObligatoryFieldRelatedProps } from "@app/(app)/(tabs)/(one)/MainScreen/index";
 import { styles } from "@app/(app)/(tabs)/(one)/MainScreen/styles";
 import { AntDesign as AntDesignIcon } from "@expo/vector-icons";
 import DropdownList, {
@@ -12,14 +9,13 @@ import DropdownList, {
 import React from "react";
 import { Switch, View } from "react-native";
 import { Text } from "react-native-paper";
-import { Controller, UseFormReturn } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { ObligatoryFieldOption } from "@stores/obligatoryFieldOption";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import {
-  IMomentSchema,
   OBLIGATORY_FIELD_VALUE_PREFIX,
   shouldShow,
   useMomentSchemaFormRef,

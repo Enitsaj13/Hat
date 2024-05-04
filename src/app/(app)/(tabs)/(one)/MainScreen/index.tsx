@@ -1,14 +1,7 @@
-import { boolean, mixed, number, object, string } from "yup";
-import { Controller, useForm, UseFormReturn } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect } from "react";
 import { colors } from "@theme/index";
 import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import {
@@ -35,15 +28,11 @@ import { of, switchMap } from "rxjs";
 import { ObligatoryFieldsUI } from "@app/(app)/(tabs)/(one)/MainScreen/ObligatoryFieldsUI";
 import {
   IMomentSchema,
-  OBLIGATORY_FIELD_VALUE_PREFIX,
-  OPTIONAL_FIELD_VALUE_PREFIX,
-  shouldShow,
   useMomentSchema,
   useMomentSchemaFormRef,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 import { OptionalField } from "@stores/optionalField";
-import Precaution from "src/app/(app)/(tabs)/(one)/Precaution";
 
 function Component({
   companyConfig,
