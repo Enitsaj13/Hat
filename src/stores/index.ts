@@ -12,6 +12,7 @@ import { ObligatoryField } from "@stores/obligatoryField";
 import { ObligatoryFieldOption } from "@stores/obligatoryFieldOption";
 import { OptionalField } from "@stores/optionalField";
 import { OptionalFieldOption } from "@stores/optionalFieldOption";
+import { ToSendDatus } from "@stores/toSendDatus";
 
 const adapter = new SQLiteAdapter({
   schema: dbSchema,
@@ -41,5 +42,6 @@ export const database = new Database({
     ObligatoryFieldOption,
     OptionalField,
     OptionalFieldOption,
+    ToSendDatus,
   ],
 });

@@ -101,5 +101,15 @@ export const dbSchema = appSchema({
         { name: "optional_field_server_id", type: "number" },
       ],
     }),
+    tableSchema({
+      name: "to_send_data",
+      columns: [
+        { name: "body", type: "string" },
+        { name: "url", type: "string" },
+        { name: "type", type: "string" },
+        { name: "status", type: "string" },
+        { name: "key", type: "string", isOptional: true },
+      ],
+    }),
   ],
 });
