@@ -5,30 +5,34 @@ import { colors } from "@theme/index";
 import { createStyleSheet } from "react-native-unistyles";
 
 interface NoteModalProps {
+  value?: string;
   title: string;
   visible: boolean;
   onClose: () => void;
+  onSave: (note: string | undefined) => void;
   cancelTitle: string;
   saveTitle: string;
+  maxLength: number;
 }
 
 function NoteModal({
+  value,
   visible,
   onClose,
   title,
   cancelTitle,
   saveTitle,
+  maxLength,
+  onSave,
 }: NoteModalProps) {
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState(value);
 
   const handleSaveNote = () => {
-    // Handle saving the note (you can pass it to a parent component or do something else)
-    console.log("Note saved:", note);
-    onClose(); // Close the modal after saving the note
+    onSave(note);
+    onClose();
   };
 
-  const characterCount = note.length;
-
+  const characterCount = note?.length || 0;
   return (
     <Portal>
       <Modal
@@ -40,10 +44,11 @@ function NoteModal({
         <Text style={styles.characterCount}>{characterCount}/150</Text>
         <TextInput
           value={note}
-          onChangeText={(text) => setNote(text)}
+          onChangeText={setNote}
           multiline
-          maxLength={150}
+          maxLength={maxLength}
           style={styles.noteInput}
+          defaultValue={value}
         />
         <View style={styles.buttonContainer}>
           <Button

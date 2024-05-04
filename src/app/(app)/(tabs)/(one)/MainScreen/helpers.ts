@@ -34,7 +34,7 @@ export interface IMomentSchema {
   maskType?: string; // TODO when saving in ToSendData table, ensure that this is empty when donOnMask is false
   optionalFields: Record<string, number | boolean | null>; // TODO when saving in ToSendData table, if null should be removed
 
-  // TODO notes field here
+  notes?: string;
 }
 
 function useMomentSchemaFormRefHolder() {
@@ -218,6 +218,7 @@ export function useMomentSchema(
       donOnMask: boolean().default(false),
       maskType: string().optional(),
       optionalFields: object(optionalFieldSchema).default({}),
+      notes: string().optional().max(150),
     });
   }, [companyConfig, obligatoryFields, optionalFields]);
 

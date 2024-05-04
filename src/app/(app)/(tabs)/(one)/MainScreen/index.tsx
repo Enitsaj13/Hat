@@ -45,14 +45,6 @@ function Component({
 
   const [notesVisible, setNotesVisible] = useState(false);
 
-  const toggleNotes = () => {
-    setNotesVisible(!notesVisible);
-  };
-
-  const closeNotes = () => {
-    setNotesVisible(false);
-  };
-
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -198,18 +190,27 @@ function Component({
             defaultValue: "Moment",
           })}
         </Text>
-        <Pressable onPress={toggleNotes}>
+        <Pressable onPress={() => setNotesVisible(true)}>
           <EditIcon name="edit" size={22} color="white" />
         </Pressable>
       </View>
-      <NoteModal
-        visible={notesVisible}
-        onClose={closeNotes}
-        title={i18n.t("AE5", {
-          defaultValue: "Add Notes",
-        })}
-        cancelTitle={i18n.t("CLEAR")}
-        saveTitle={i18n.t("DONE")}
+      <Controller
+        render={({ field: { onChange, value } }) => (
+          <NoteModal
+            value={value}
+            visible={notesVisible}
+            onClose={() => setNotesVisible(false)}
+            title={i18n.t("AE5", {
+              defaultValue: "Add Notes",
+            })}
+            cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
+            saveTitle={i18n.t("DONE")}
+            maxLength={150}
+            onSave={onChange}
+          />
+        )}
+        name="notes"
+        control={control}
       />
 
       <View style={styles.mainScreenContainer}>

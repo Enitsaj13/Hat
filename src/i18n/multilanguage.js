@@ -401,7 +401,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -808,7 +807,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -1216,7 +1214,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -1625,7 +1622,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -2032,7 +2028,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -2440,7 +2435,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -2847,7 +2841,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -3253,7 +3246,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 
@@ -3658,7 +3650,6 @@ export const translations = {
     INDICATION_TITLE: "Without Indication", // TODO
     UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
       "Are you sure you want to move without submitting your current observation?", // TODO
-    CLEAR: "Clear",
     DONE: "Done",
   },
 };
