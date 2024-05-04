@@ -32,7 +32,7 @@ export interface IMomentSchema {
   donOnGown: boolean;
   donOnMask: boolean;
   maskType?: string; // TODO when saving in ToSendData table, ensure that this is empty when donOnMask is false
-  optionalFields: Record<string, number | boolean>;
+  optionalFields: Record<string, number | boolean | null>; // TODO when saving in ToSendData table, if null should be removed
 
   // TODO notes field here
 }
