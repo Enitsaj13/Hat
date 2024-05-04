@@ -42,8 +42,8 @@ import {
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 import ReusableModal from "@components/Modal";
-import Precaution from "../Precaution";
 import { OptionalField } from "@stores/optionalField";
+import Precaution from "src/app/(app)/(tabs)/(one)/MainScreen/Precaution";
 
 function Component({
   companyConfig,
@@ -63,14 +63,6 @@ function Component({
 
   // toggle modal
   const [modalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible((prevModalVisible) => !prevModalVisible);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   const formRef = useMomentSchemaForRef();
 
@@ -642,7 +634,7 @@ function Component({
           control={control}
         />
         <Pressable
-          onPress={toggleModal}
+          onPress={() => setModalVisible((prevState) => !prevState)}
           style={{
             ...styles.actionButton,
             borderColor: shouldHighlightPlusButton
@@ -663,7 +655,10 @@ function Component({
         </Pressable>
       </View>
 
-      <ReusableModal visible={modalVisible} onDismiss={closeModal}>
+      <ReusableModal
+        visible={modalVisible}
+        onDismiss={() => setModalVisible(false)}
+      >
         <Precaution />
       </ReusableModal>
 
