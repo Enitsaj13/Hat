@@ -1,4 +1,4 @@
-import { boolean, mixed, number, object } from "yup";
+import { boolean, mixed, number, object, string } from "yup";
 import { Controller, useForm, UseFormReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
@@ -25,7 +25,10 @@ import WithoutIndicationToggle from "@app/(app)/(tabs)/(one)/MainScreen/WithoutI
 import { CompanyConfig } from "@stores/companyConfig";
 import { ObligatoryField } from "@stores/obligatoryField";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
-import { withObservables } from "@nozbe/watermelondb/react";
+import {
+  ExtractedObservables,
+  withObservables,
+} from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
@@ -33,18 +36,20 @@ import { ObligatoryFieldsUI } from "@app/(app)/(tabs)/(one)/MainScreen/Obligator
 import {
   IMomentSchema,
   OBLIGATORY_FIELD_VALUE_PREFIX,
+  OPTIONAL_FIELD_VALUE_PREFIX,
   shouldShow,
+  useMomentSchemaForRef,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 import ReusableModal from "@components/Modal";
 import Precaution from "../Precaution";
+import { OptionalField } from "@stores/optionalField";
 
-export interface MainScreenProps {
-  companyConfig?: CompanyConfig;
-  obligatoryFields: ObligatoryField[];
-}
-
-function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
+function Component({
+  companyConfig,
+  obligatoryFields,
+  optionalFields,
+}: MainScreenProps) {
   const { batchObservationState } = useBatchObservation();
   const location = batchObservationState.location;
   // console.log("batchObservationState: ", batchObservationState);
@@ -67,7 +72,8 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
     setModalVisible(false);
   };
 
-  const formRef = useRef<UseFormReturn<IMomentSchema> | undefined>();
+  const formRef = useMomentSchemaForRef();
+
   const momentSchema = useMemo(() => {
     const obligatoryFieldRequired =
       isEmpty(companyConfig) || companyConfig.enableObligatoryFields;
@@ -105,6 +111,20 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
           },
         );
       }
+    }
+
+    const optionalFieldSchema: any = {};
+    for (const optionalField of optionalFields) {
+      optionalFieldSchema[
+        `${OPTIONAL_FIELD_VALUE_PREFIX}${optionalField.serverId}`
+      ] = mixed<number | boolean>().when(
+        ["nonExistentField"],
+        ([nonExistentField, schema]) => {
+          return optionalField.fieldType === "DROPDOWN"
+            ? number().notRequired()
+            : boolean().notRequired().default(false);
+        },
+      );
     }
 
     return object({
@@ -216,9 +236,13 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
             return !obligatoryFieldRequired || value != null;
           },
         }),
-      // glovesMetadata: boolean().default(false), // TODO go back to ronald regarding this
+      occupationRisk: string().optional(),
+      donOnGown: boolean().default(false),
+      donOnMask: boolean().default(false),
+      maskType: string().optional(),
+      optionalFields: object(optionalFieldSchema).default({}),
     });
-  }, [companyConfig, obligatoryFields]);
+  }, [companyConfig, obligatoryFields, optionalFields]);
 
   const form = useForm<IMomentSchema>({
     resolver: yupResolver(momentSchema),
@@ -628,7 +652,6 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
       </ReusableModal>
 
       <ObligatoryFieldsUI
-        form={form}
         obligatoryFields={obligatoryFields}
         companyConfig={companyConfig}
       />
@@ -664,27 +687,38 @@ function Component({ companyConfig, obligatoryFields }: MainScreenProps) {
   );
 }
 
-type WithObservableProps = ObservableifyProps<
-  MainScreenProps,
-  "companyConfig",
-  "obligatoryFields"
->;
-const MainScreen = withObservables(
-  ["companyConfig", "obligatoryFields"],
-  (props: WithObservableProps) => ({
-    companyConfig: database
-      .get<CompanyConfig>("company_configs")
-      .query(Q.take(1))
-      .observe()
-      .pipe(
-        switchMap((companyConfig) =>
-          companyConfig.length > 0 ? companyConfig[0].observe() : of(null),
-        ),
+export interface ObligatoryFieldRelatedProps {
+  companyConfig?: CompanyConfig | null;
+  obligatoryFields: ObligatoryField[];
+}
+export interface ObservableProps extends ObligatoryFieldRelatedProps {
+  optionalFields: OptionalField[];
+}
+
+const getObservables = (props: ObservableProps) => ({
+  companyConfig: database
+    .get<CompanyConfig>("company_configs")
+    .query(Q.take(1))
+    .observe()
+    .pipe(
+      switchMap((companyConfig) =>
+        companyConfig.length > 0 ? companyConfig[0].observe() : of(null),
       ),
-    obligatoryFields: database
-      .get<ObligatoryField>("obligatory_fields")
-      .query(Q.sortBy("sort", Q.asc)),
-  }),
-)(Component as any);
+    ),
+  obligatoryFields: database
+    .get<ObligatoryField>("obligatory_fields")
+    .query(Q.sortBy("sort", Q.asc)),
+  optionalFields: database
+    .get<OptionalField>("optional_fields")
+    .query(Q.sortBy("sort", Q.asc)),
+});
+
+export interface MainScreenProps
+  extends ExtractedObservables<ReturnType<typeof getObservables>> {}
+
+const MainScreen = withObservables(
+  ["companyConfig", "obligatoryFields", "optionalFields"],
+  getObservables,
+)(Component);
 
 export default MainScreen;

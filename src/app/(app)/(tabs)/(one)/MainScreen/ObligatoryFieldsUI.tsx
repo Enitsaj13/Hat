@@ -1,5 +1,8 @@
 import { ObligatoryField } from "@stores/obligatoryField";
-import { MainScreenProps } from "@app/(app)/(tabs)/(one)/MainScreen/index";
+import {
+  MainScreenProps,
+  ObligatoryFieldRelatedProps,
+} from "@app/(app)/(tabs)/(one)/MainScreen/index";
 import { styles } from "@app/(app)/(tabs)/(one)/MainScreen/styles";
 import { AntDesign as AntDesignIcon } from "@expo/vector-icons";
 import DropdownList, {
@@ -19,14 +22,11 @@ import {
   IMomentSchema,
   OBLIGATORY_FIELD_VALUE_PREFIX,
   shouldShow,
+  useMomentSchemaForRef,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 import { colors } from "@theme/index";
 
-interface ObligatoryFieldsUIProps extends MainScreenProps {
-  form: UseFormReturn<IMomentSchema>;
-}
-
-interface ObligatoryFieldUIProps extends ObligatoryFieldsUIProps {
+interface ObligatoryFieldUIProps extends ObligatoryFieldRelatedProps {
   obligatoryField: ObligatoryField;
   options: ObligatoryFieldOption[];
 }
@@ -34,8 +34,10 @@ interface ObligatoryFieldUIProps extends ObligatoryFieldsUIProps {
 function ObligatoryFieldUIComponent({
   obligatoryField,
   options,
-  form,
 }: ObligatoryFieldUIProps) {
+  const formRef = useMomentSchemaForRef();
+  const form = formRef.current!;
+
   const dropdownOptions: DropDownOption[] =
     options.map((opt) => ({
       key: opt.serverId as DropDownOptionKey,
@@ -103,12 +105,12 @@ const ObligatoryFieldUI = withObservables(
   }),
 )(ObligatoryFieldUIComponent as any);
 
-export function ObligatoryFieldsUI(props: ObligatoryFieldsUIProps) {
+export function ObligatoryFieldsUI(props: ObligatoryFieldRelatedProps) {
   if (props.companyConfig?.enableObligatoryFields === false) {
     return null;
   }
 
   return props.obligatoryFields?.map((o, index) => (
-    <ObligatoryFieldUI obligatoryField={o} key={`${o.serverId}`} {...props} />
+    <ObligatoryFieldUI obligatoryField={o} key={`${o.serverId}`} />
   ));
 }

@@ -1,7 +1,11 @@
 import { UseFormReturn } from "react-hook-form";
 import isEmpty from "lodash.isempty";
+import { useRef } from "react";
+import { useBetween } from "use-between";
 
 export const OBLIGATORY_FIELD_VALUE_PREFIX = "obligatoryField-";
+
+export const OPTIONAL_FIELD_VALUE_PREFIX = "optionalField-";
 
 export interface IMomentSchema {
   workerServerId: number;
@@ -17,6 +21,13 @@ export interface IMomentSchema {
   gloves: boolean;
   obligatoryFieldRequired: boolean;
   obligatoryFields: Record<string, number | boolean>;
+
+  // optional fields
+  occupationRisk?: string | undefined;
+  donOnGown: boolean;
+  donOnMask: boolean;
+  maskType?: string;
+  optionalFields: Record<string, number | boolean>;
 }
 
 export function shouldShow(
@@ -58,4 +69,12 @@ export function shouldShow(
     return true;
   }
   return false;
+}
+
+function useMomentSchemaFormRefHolder() {
+  return useRef<UseFormReturn<IMomentSchema> | undefined>();
+}
+
+export function useMomentSchemaForRef() {
+  return useBetween(useMomentSchemaFormRefHolder);
 }

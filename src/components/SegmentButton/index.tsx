@@ -1,41 +1,39 @@
 import { colors } from "@theme/index";
-import React, { useState } from "react";
-import { View, Text } from "react-native";
+import React from "react";
+import { Text, View } from "react-native";
 import { TouchableRipple } from "react-native-paper";
 import { createStyleSheet } from "react-native-unistyles";
 
 interface SegmentedButtonProps {
-  segments: string[];
-  onSegmentChange: (index: number) => void;
+  segments: { value: any; label: string }[];
+  onSegmentChange: (value: any) => void;
+  value?: any;
 }
 
-function SegmentedButton({ segments, onSegmentChange }: SegmentedButtonProps) {
-  const [selectedSegment, setSelectedSegment] = useState(0);
-
-  const handleSegmentPress = (index: number) => {
-    setSelectedSegment(index);
-    onSegmentChange(index);
-  };
-
+function SegmentedButton({
+  segments,
+  onSegmentChange,
+  value,
+}: SegmentedButtonProps) {
   return (
     <View style={styles.container}>
       {segments.map((segment, index) => (
         <TouchableRipple
-          key={index}
+          key={segment.value}
           style={[
             styles.segment,
-            index === selectedSegment && styles.selectedSegment,
+            segment.value === value && styles.selectedSegment,
             index < segments.length - 1 && styles.borderRight, // Add border to all segments except the last one
           ]}
-          onPress={() => handleSegmentPress(index)}
+          onPress={onSegmentChange}
         >
           <Text
             style={[
               styles.segmentText,
-              index === selectedSegment && styles.selectedText,
+              segment.value === value && styles.selectedText,
             ]}
           >
-            {segment}
+            {segment.label}
           </Text>
         </TouchableRipple>
       ))}

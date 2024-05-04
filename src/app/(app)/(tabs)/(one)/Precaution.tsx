@@ -5,6 +5,7 @@ import { colors } from "@theme/index";
 import { i18n } from "@i18n/index";
 import SegmentedButton from "@components/SegmentButton";
 import DropdownList from "@components/DropdownList";
+import { SegmentedButtons } from "react-native-paper";
 
 const MealType = [
   { key: "patent", value: "Patent Meal" },
@@ -14,10 +15,6 @@ const MealType = [
 ];
 
 const Precaution = () => {
-  const handleSegmentChange = (index: number) => {
-    // Do something based on the selected segment
-  };
-
   const [isEnabled, setIsEnabled] = useState(false);
 
   const toggleSwitch = () => {
@@ -40,8 +37,21 @@ const Precaution = () => {
         </Text>
       </View>
       <SegmentedButton
-        segments={["Contact", "Airborne", "Droplet"]}
-        onSegmentChange={handleSegmentChange}
+        segments={[
+          {
+            value: "Contact",
+            label: i18n.t("AF3", { defaultValue: "Contact" }),
+          },
+          {
+            value: "Airborne",
+            label: i18n.t("AF4", { defaultValue: "Airborne" }),
+          },
+          {
+            value: "Droplet",
+            label: i18n.t("AF5", { defaultValue: "Droplet" }),
+          },
+        ]}
+        onSegmentChange={() => {}}
       />
       <View style={styles.actionTitleContainer}>
         <Text style={styles.title}>
@@ -100,6 +110,32 @@ const Precaution = () => {
             value={isEnabled}
           />
         </View>
+      </View>
+      <View style={styles.actionContainer}>
+        <Text style={styles.maskType}>
+          -{" "}
+          {i18n.t("U20", {
+            defaultValue: "Mask Type",
+          })}{" "}
+          -
+        </Text>
+        <SegmentedButton
+          segments={[
+            {
+              value: "Surgical",
+              label: i18n.t("AF11", { defaultValue: "Surgical" }),
+            },
+            {
+              value: "High Filtration",
+              label: i18n.t("AF12", { defaultValue: "High Filtration" }),
+            },
+            {
+              value: "Other",
+              label: i18n.t("AF13 ", { defaultValue: "Other" }),
+            },
+          ]}
+          onSegmentChange={() => {}}
+        />
       </View>
       <View style={styles.actionTitleContainer}>
         <Text style={styles.title}>
@@ -197,6 +233,12 @@ const styles = createStyleSheet({
   actionTitle: {
     color: colors.textColor,
     fontSize: 16,
+  },
+  maskType: {
+    color: colors.textColor,
+    fontSize: 16,
+    padding: 10,
+    textAlign: "center",
   },
   switchIndication: {
     transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
