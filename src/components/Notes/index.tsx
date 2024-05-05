@@ -37,13 +37,15 @@ function NoteModal({
     <Modal
       visible={visible}
       animationType="slide"
-      transparent={true}
+      transparent
       onRequestClose={onClose}
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>{title}</Text>
-          <Text style={styles.characterCount}>{characterCount}/{maxLength}</Text>
+          <Text style={styles.characterCount}>
+            {characterCount}/{maxLength}
+          </Text>
           <TextInput
             value={note}
             onChangeText={setNote}
@@ -73,7 +75,7 @@ function NoteModal({
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   modalContainer: {

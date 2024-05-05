@@ -7,16 +7,17 @@ import { colors } from "@theme/index";
 import NoteModal from "@components/Notes";
 
 const AuditSummary = () => {
-
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const [noteModal, setNoteModal] = useState(false);
   const [note, setNote] = useState("");
 
-
   return (
-    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={true}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator
+    >
       <View style={styles.rowContainer}>
         <Text style={styles.textTable}>
           {i18n.t("AH2", {
@@ -53,7 +54,7 @@ const AuditSummary = () => {
         <View style={styles.titleContainer}>
           <Text style={styles.handHygieneText}>
             {i18n.t("DL5", {
-              defaultValue: "Hand Hygiend Compliance"
+              defaultValue: "Hand Hygiend Compliance",
             })}
           </Text>
         </View>
@@ -65,7 +66,7 @@ const AuditSummary = () => {
         <View style={styles.feedbackTextContainer}>
           <Text style={styles.handHygieneText}>
             {i18n.t("FEED1", {
-              defaultValue: "Feeback Given?"
+              defaultValue: "Feeback Given?",
             })}
           </Text>
         </View>
@@ -79,7 +80,11 @@ const AuditSummary = () => {
             value={isEnabled}
           />
           <Pressable onPress={() => isEnabled && setNoteModal(true)}>
-            <Icon name="edit" size={20} color={isEnabled ? colors.textColor : colors.cadetGrey} />
+            <Icon
+              name="edit"
+              size={20}
+              color={isEnabled ? colors.textColor : colors.cadetGrey}
+            />
           </Pressable>
         </View>
       </View>
@@ -93,7 +98,7 @@ const AuditSummary = () => {
         cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
         saveTitle={i18n.t("AE7", { defaultValue: "Send" })}
         maxLength={150}
-        onSave={() => { }}
+        onSave={() => {}}
       />
       <View style={styles.titleLabelContainer}>
         <Text style={styles.healthCareTitle}>
@@ -214,7 +219,7 @@ const AuditSummary = () => {
 
 const styles = createStyleSheet({
   container: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   rowContainer: {
     flexDirection: "row",
@@ -306,22 +311,22 @@ const styles = createStyleSheet({
     borderBottomWidth: 2,
     borderColor: colors.textColor,
     padding: 12,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   handHygieneText: {
     color: colors.textColor,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   titleContainer: {
-    width: '95%',
-    alignItems: 'center',
-    justifyContent: 'center'
+    width: "95%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   handHygienePercentContainer: {
-    width: '5%',
+    width: "5%",
   },
   feedbackContainer: {
     borderTopWidth: 0,
@@ -329,19 +334,19 @@ const styles = createStyleSheet({
     borderColor: colors.textColor,
     paddingHorizontal: 12,
     padding: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   feedbackTextContainer: {
-    width: '70%',
-    alignItems: 'flex-start'
+    width: "70%",
+    alignItems: "flex-start",
   },
   feedbackButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '25%',
-    marginHorizontal: 18
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "25%",
+    marginHorizontal: 18,
   },
   switchIndication: {
     transform: [{ scaleX: 0.6 }, { scaleY: 0.6 }],
@@ -349,4 +354,3 @@ const styles = createStyleSheet({
 });
 
 export default AuditSummary;
-
