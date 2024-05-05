@@ -30,11 +30,11 @@ function Component({ toSendData }: DataSenderProps) {
       if (hasNetworkConnection) {
         for (const datus of toSendData) {
           // ensure that the data has not been sent in fact
-          const actualDatus = await database
+          const freshDatusFromDB = await database
             .get<ToSendDatus>("to_send_data")
             .query(Q.where("id", datus.id))
             .fetch();
-          if (actualDatus[0].status === SendStatus.SENT) {
+          if (freshDatusFromDB[0].status === SendStatus.SENT) {
             continue;
           }
 
