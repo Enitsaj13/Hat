@@ -35,7 +35,6 @@ export default function Layout() {
             defaultValue: "Audit Summary",
           }),
           headerBackTitleVisible: false,
-          presentation: "fullScreenModal",
         }}
       />
       <Stack.Screen
@@ -53,7 +52,6 @@ export default function Layout() {
         name="Precaution"
         options={{
           headerBackTitleVisible: false,
-          presentation: "modal",
           title: i18n.t("AF1", {
             defaultValue: "Precaution",
           }),
