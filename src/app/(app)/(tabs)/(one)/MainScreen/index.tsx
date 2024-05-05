@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { i18n } from "@i18n/index";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { colors } from "@theme/index";
 import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import {
@@ -81,13 +81,33 @@ function Component({
   const donOnMask = watch("donOnMask");
   const maskType = watch("maskType");
 
-  const shouldHighlightPlusButton =
-    isGloveSelected ||
-    !isEmpty(occupationRisk) ||
-    donOnGown ||
-    donOnMask ||
-    !isEmpty(maskType) ||
-    !isEmpty(optionalFieldsWatchValue);
+  const shouldHighlightPlusButton = useMemo(() => {
+    console.log("isGloveSelected", isGloveSelected);
+    console.log("occupationRisk", occupationRisk);
+    console.log("donOnGown", donOnGown);
+    console.log("donOnMask", donOnMask);
+    console.log("maskType", maskType);
+    console.log("optionalFieldsWatchValue", optionalFieldsWatchValue);
+
+    const optionalValuesThatIsNotNullOrUndefinedCount = Object.values(
+      optionalFieldsWatchValue,
+    ).filter((v) => v != null).length;
+    return (
+      isGloveSelected ||
+      !isEmpty(occupationRisk) ||
+      donOnGown ||
+      donOnMask ||
+      !isEmpty(maskType) ||
+      optionalValuesThatIsNotNullOrUndefinedCount > 0
+    );
+  }, [
+    isGloveSelected,
+    occupationRisk,
+    donOnGown,
+    donOnMask,
+    maskType,
+    optionalFieldsWatchValue,
+  ]);
 
   useEffect(() => {
     const errorsCopy = JSON.parse(JSON.stringify(errors));

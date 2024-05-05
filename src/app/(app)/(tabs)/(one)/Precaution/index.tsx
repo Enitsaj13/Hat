@@ -269,7 +269,7 @@ const Precaution = withObservables(
       .observe()
       .pipe(
         switchMap((optionalFields) => {
-          console.log("optionalFields from db", optionalFields);
+          // console.log("optionalFields from db", optionalFields);
           const toReturn: Record<string, OptionalFieldOption[]> = {};
           optionalFields.forEach((opt) => {
             const key = `${optionsMapKeyPrefix}${opt.optionalFieldServerId.toString()}`;
@@ -277,7 +277,7 @@ const Precaution = withObservables(
             options.push(opt);
             toReturn[key] = options;
           });
-          console.log("optionsMap to be returned", toReturn);
+          // console.log("optionsMap to be returned", toReturn);
           return of(toReturn);
         }),
       ),
