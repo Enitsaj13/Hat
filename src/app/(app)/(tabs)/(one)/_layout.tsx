@@ -36,11 +36,6 @@ export default function Layout() {
           }),
           headerBackTitleVisible: false,
           presentation: "fullScreenModal",
-          headerLeft: () => (
-            <Pressable onPress={() => router.back()}>
-              <Icon name="home" size={24} color="white" />
-            </Pressable>
-          ),
         }}
       />
       <Stack.Screen
