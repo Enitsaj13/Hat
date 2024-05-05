@@ -404,6 +404,10 @@ export function useObservationSubmit() {
 
       const currentTargetOpportunities =
         batchObservationState.targetOpportunities;
+      console.log(
+        "currentTargetOpportunities - 1",
+        currentTargetOpportunities - 1,
+      );
       if (currentTargetOpportunities - 1 > 0) {
         router.replace("/(app)/(tabs)/(one)/MainScreen");
       } else {
@@ -416,7 +420,6 @@ export function useObservationSubmit() {
           [
             {
               text: "OK",
-              // TODO test this later. has bug!
               onPress: () =>
                 navigation.reset({
                   index: 1,
