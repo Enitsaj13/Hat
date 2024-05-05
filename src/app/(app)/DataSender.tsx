@@ -17,7 +17,7 @@ function Component({ toSendData }: DataSenderProps) {
   const [hasNetworkConnection, setHasNetworkConnection] = useState(true);
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      setHasNetworkConnection(state.isInternetReachable == true);
+      setHasNetworkConnection(state.isInternetReachable === true);
     });
 
     return unsubscribe;
@@ -29,6 +29,15 @@ function Component({ toSendData }: DataSenderProps) {
       console.log("hasNetworkConnection", hasNetworkConnection);
       if (hasNetworkConnection) {
         for (const datus of toSendData) {
+          // ensure that the data has not been sent in fact
+          const actualDatus = await database
+            .get<ToSendDatus>("to_send_data")
+            .query(Q.where("id", datus.id))
+            .fetch();
+          if (actualDatus[0].status === SendStatus.SENT) {
+            continue;
+          }
+
           // TODO when sent set the datus status to SENDING
           try {
             await sendDataToServer(datus);

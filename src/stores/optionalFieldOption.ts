@@ -1,6 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
-import { field, immutableRelation, text } from "@nozbe/watermelondb/decorators";
-import { OptionalField } from "@stores/optionalField";
+import { field, text } from "@nozbe/watermelondb/decorators";
 
 export class OptionalFieldOption extends Model {
   static table = "optional_field_options";

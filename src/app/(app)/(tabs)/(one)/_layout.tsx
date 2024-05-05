@@ -1,7 +1,7 @@
 import { router, Stack } from "expo-router";
 import { i18n } from "@i18n/index";
 import { FontAwesome as Icon } from "@expo/vector-icons";
-import { Pressable, Image } from "react-native";
+import { Pressable } from "react-native";
 
 export default function Layout() {
   return (

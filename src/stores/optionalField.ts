@@ -1,7 +1,6 @@
 import { Model } from "@nozbe/watermelondb";
-import { children, field, text } from "@nozbe/watermelondb/decorators";
+import { field, text } from "@nozbe/watermelondb/decorators";
 import { FieldType } from "../types";
-import { OptionalFieldOption } from "@stores/optionalFieldOption";
 
 export class OptionalField extends Model {
   static table = "optional_fields";

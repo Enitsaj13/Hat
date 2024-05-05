@@ -281,7 +281,6 @@ export function shouldShow(
 export function useObservationSubmit() {
   const { batchObservationState, setBatchObservationState } =
     useBatchObservation();
-  const formRef = useMomentSchemaFormRef();
   const router = useRouter();
   const navigation = useNavigation();
 
@@ -328,6 +327,7 @@ export function useObservationSubmit() {
               key.indexOf(OBLIGATORY_FIELD_VALUE_PREFIX) +
                 OBLIGATORY_FIELD_VALUE_PREFIX.length,
             ),
+            10,
           ),
           option_id:
             typeof form.obligatoryFields[key] === "number"
@@ -349,6 +349,7 @@ export function useObservationSubmit() {
               key.indexOf(OPTIONAL_FIELD_VALUE_PREFIX) +
                 OPTIONAL_FIELD_VALUE_PREFIX.length,
             ),
+            10,
           ),
           option_id:
             typeof form.optionalFields[key] === "number"
