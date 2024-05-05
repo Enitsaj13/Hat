@@ -20,6 +20,7 @@ export const dbSchema = appSchema({
         { name: "terms_of_use_url", type: "string" },
         { name: "language", type: "string" },
         { name: "is_introduction_viewed", type: "boolean" },
+        { name: "disable_practice_mode", type: "boolean" },
       ],
     }),
     tableSchema({
@@ -109,6 +110,8 @@ export const dbSchema = appSchema({
         { name: "type", type: "string" },
         { name: "status", type: "string" },
         { name: "key", type: "string", isOptional: true },
+        { name: "created_at", type: "number" },
+        { name: "updated_at", type: "number" },
       ],
     }),
   ],

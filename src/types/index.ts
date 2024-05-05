@@ -34,3 +34,42 @@ export interface BaseResponse {
 }
 
 export type FieldType = "DROPDOWN" | "TOGGLE";
+
+export interface FieldJson {
+  id: number;
+  option_id?: number;
+  value?: boolean;
+}
+
+export type HhCompliance = "rub" | "missed" | "washed";
+export type HhComplianceType = "Contact" | "Airborne" | "Droplet" | "";
+export type Answer = "YES" | "NO" | "";
+export type MaskType = "High Filtration" | "Surgical" | "Other" | "";
+
+export function getAnswer(v?: boolean | null): Answer {
+  if (v == null) {
+    return "";
+  }
+
+  return v ? "YES" : "NO";
+}
+export interface SendObservationDataRequest {
+  batch_uuid: string; // UUID
+  resend_id: string; // UUID
+  hcw_title: number;
+  moment: number[]; //[1, 3],
+  note?: string;
+  location_id: number;
+  hh_compliance: HhCompliance;
+  hh_compliance_type: HhComplianceType;
+  glove_compliance: Answer;
+  gown_compliance: Answer;
+  mask_compliance: Answer;
+  mask_type?: MaskType;
+  date_registered: number; // unix timestamp
+  without_indication: boolean;
+  feedback_given: boolean;
+  audit_type_id: number;
+  obligatory_fields: FieldJson[];
+  optional_fields: FieldJson[];
+}

@@ -29,6 +29,7 @@ import {
   IMomentSchema,
   useMomentSchema,
   useMomentSchemaFormRef,
+  useObservationSubmit,
 } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 import { OptionalField } from "@stores/optionalField";
@@ -171,6 +172,8 @@ function Component({
       router.back();
     }
   }, [isDirty]);
+
+  const onSubmitPressed = useObservationSubmit();
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -520,9 +523,7 @@ function Component({
 
         <Pressable
           style={styles.controlButton}
-          onPress={handleSubmit((currentForm) =>
-            console.log("currentForm", currentForm),
-          )}
+          onPress={handleSubmit(onSubmitPressed)}
         >
           <Text style={styles.controlButtonTitle}>
             {i18n.t("AE13", { defaultValue: "Submit" })}

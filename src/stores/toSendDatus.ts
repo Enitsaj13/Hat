@@ -1,5 +1,12 @@
 import { Model } from "@nozbe/watermelondb";
-import { field, json, text, writer } from "@nozbe/watermelondb/decorators";
+import {
+  date,
+  json,
+  readonly,
+  text,
+  writer,
+  nochange,
+} from "@nozbe/watermelondb/decorators";
 
 export enum ToSendDatusType {
   OBSERVATION = "OBSERVATION",
@@ -16,21 +23,25 @@ export enum SendStatus {
 export class ToSendDatus extends Model {
   static table = "to_send_data";
 
-  // @ts-expect-error
-  @json("body") body: any;
+  @nochange @json("body", (json) => json) body: any;
 
   // @ts-expect-error
-  @text("url") url: string;
+  @nochange @text("url") url: string;
 
   // @ts-expect-error
-  @text("type") type: ToSendDatusType;
+  @nochange @text("type") type: ToSendDatusType;
 
   // @ts-expect-error
   @text("status") status: SendStatus;
 
-  // for observation & feedback both are
-  @text("key") key?: SendStatus;
+  // for feedback & observation the key is the observation guid
+  @text("key") key?: string;
 
+  // @ts-expect-error
+  @readonly @date("created_at") createdAt: Date;
+
+  // @ts-expect-error
+  @readonly @date("updated_at") updatedAt: Date;
   @writer
   async updateStatus(status: SendStatus) {
     await this.update((user) => {

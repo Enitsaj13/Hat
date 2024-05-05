@@ -16,6 +16,9 @@ export class AppSetting extends Model {
   // @ts-expect-error
   @field("is_introduction_viewed") isIntroductionViewed: boolean;
 
+  // @ts-expect-error
+  @field("disable_practice_mode") disablePracticeMode: boolean;
+
   @writer
   async saveLanguage(language: string) {
     await this.update((appSetting) => {

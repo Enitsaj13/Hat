@@ -1,12 +1,26 @@
 import { UseFormReturn } from "react-hook-form";
 import isEmpty from "lodash.isempty";
-import { useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useBetween } from "use-between";
 import { boolean, mixed, number, object, string } from "yup";
 import { i18n } from "@i18n/index";
 import { CompanyConfig } from "@stores/companyConfig";
 import { ObligatoryField } from "@stores/obligatoryField";
 import { OptionalField } from "@stores/optionalField";
+import { useBatchObservation } from "@hooks/useBatchObservation";
+import { randomUUID } from "expo-crypto";
+import {
+  FieldJson,
+  getAnswer,
+  HhCompliance,
+  HhComplianceType,
+  MaskType,
+  SendObservationDataRequest,
+} from "../../../../../types";
+import { database } from "@stores/index";
+import { SendStatus, ToSendDatus, ToSendDatusType } from "@stores/toSendDatus";
+import { useNavigation, useRouter } from "expo-router";
+import { Alert } from "react-native";
 
 export const OBLIGATORY_FIELD_VALUE_PREFIX = "obligatoryField-";
 
@@ -29,10 +43,10 @@ export interface IMomentSchema {
 
   // optional fields
   occupationRisk?: string | undefined;
-  donOnGown: boolean;
-  donOnMask: boolean;
-  maskType?: string; // TODO when saving in ToSendData table, ensure that this is empty when donOnMask is false
-  optionalFields: Record<string, number | boolean | null>; // TODO when saving in ToSendData table, if null should be removed
+  donOnGown?: boolean;
+  donOnMask?: boolean;
+  maskType?: string;
+  optionalFields: Record<string, number | boolean | null | undefined>;
 
   notes?: string;
 }
@@ -51,7 +65,7 @@ export function useMomentSchema(
   optionalFields: OptionalField[],
 ) {
   const formRef = useMomentSchemaFormRef();
-  const momentSchema = useMemo(() => {
+  return useMemo(() => {
     const obligatoryFieldRequired =
       isEmpty(companyConfig) || companyConfig.enableObligatoryFields;
     const obligatoryFieldsSchema: any = {};
@@ -98,8 +112,8 @@ export function useMomentSchema(
         ["nonExistentField"],
         ([nonExistentField, schema]) => {
           return optionalField.fieldType === "DROPDOWN"
-            ? number().notRequired()
-            : boolean().notRequired().default(false);
+            ? number().optional()
+            : boolean().optional();
         },
       );
     }
@@ -209,20 +223,18 @@ export function useMomentSchema(
           name: "required", // bugged
           test(value) {
             const { obligatoryFieldRequired } = this.parent;
-            console.log("this.parent", this.parent);
+            // console.log("this.parent", this.parent);
             return !obligatoryFieldRequired || value != null;
           },
         }),
       occupationRisk: string().optional(),
-      donOnGown: boolean().default(false),
-      donOnMask: boolean().default(false),
+      donOnGown: boolean().optional(),
+      donOnMask: boolean().optional(),
       maskType: string().optional(),
       optionalFields: object(optionalFieldSchema).default({}),
       notes: string().optional().max(150),
     });
   }, [companyConfig, obligatoryFields, optionalFields]);
-
-  return momentSchema;
 }
 
 export function shouldShow(
@@ -264,4 +276,169 @@ export function shouldShow(
     return true;
   }
   return false;
+}
+
+export function useObservationSubmit() {
+  const { batchObservationState, setBatchObservationState } =
+    useBatchObservation();
+  const formRef = useMomentSchemaFormRef();
+  const router = useRouter();
+  const navigation = useNavigation();
+
+  return useCallback(
+    async (form: IMomentSchema) => {
+      console.log("current form", form);
+      const moments: number[] = [];
+      if (form.beforeTouchingAPatient) {
+        moments.push(1);
+      }
+
+      if (form.beforeClean) {
+        moments.push(2);
+      }
+
+      if (form.afterBodyFluidExposureRisk) {
+        moments.push(3);
+      }
+
+      if (form.afterTouchingAPatient) {
+        moments.push(4);
+      }
+
+      if (form.afterTouchingPatientSurroundings) {
+        moments.push(5);
+      }
+
+      let hhCompliance: HhCompliance = "rub";
+      if (form.wash) {
+        hhCompliance = "washed";
+      } else if (form.missed) {
+        hhCompliance = "missed";
+      }
+
+      let maskType: MaskType = "";
+      if (form.donOnMask && form.maskType != null) {
+        maskType = form.maskType as MaskType;
+      }
+
+      const obligatoryFields: FieldJson[] = Object.keys(form.obligatoryFields)
+        .map((key) => ({
+          id: parseInt(
+            key.substring(
+              key.indexOf(OBLIGATORY_FIELD_VALUE_PREFIX) +
+                OBLIGATORY_FIELD_VALUE_PREFIX.length,
+            ),
+          ),
+          option_id:
+            typeof form.obligatoryFields[key] === "number"
+              ? (form.obligatoryFields[key] as number)
+              : undefined,
+          value:
+            typeof form.obligatoryFields[key] === "boolean"
+              ? (form.obligatoryFields[key] as boolean)
+              : undefined,
+        }))
+        .filter(
+          (fieldJson) => fieldJson.option_id == null || fieldJson.value == null,
+        );
+
+      const optionalFields: FieldJson[] = Object.keys(form.optionalFields)
+        .map((key) => ({
+          id: parseInt(
+            key.substring(
+              key.indexOf(OPTIONAL_FIELD_VALUE_PREFIX) +
+                OPTIONAL_FIELD_VALUE_PREFIX.length,
+            ),
+          ),
+          option_id:
+            typeof form.optionalFields[key] === "number"
+              ? (form.optionalFields[key] as number)
+              : undefined,
+          value:
+            typeof form.optionalFields[key] === "boolean"
+              ? (form.optionalFields[key] as boolean)
+              : undefined,
+        }))
+        .filter(
+          (fieldJson) => fieldJson.option_id == null || fieldJson.value == null,
+        );
+
+      const sendObservationDataRequest: SendObservationDataRequest = {
+        batch_uuid: batchObservationState.guid,
+        resend_id: randomUUID(),
+        hcw_title: form.workerServerId,
+        moment: moments,
+        note: form.notes,
+        location_id: batchObservationState.location?.serverId!,
+        hh_compliance: hhCompliance,
+        hh_compliance_type: form.occupationRisk as HhComplianceType,
+        glove_compliance: getAnswer(form.gloves),
+        gown_compliance: getAnswer(form.donOnGown),
+        mask_compliance: getAnswer(form.donOnMask),
+        mask_type: maskType,
+        date_registered: new Date().getDate(),
+        without_indication: form.withoutIndication,
+        feedback_given: false, // TODO
+        audit_type_id: batchObservationState.auditType,
+        obligatory_fields: obligatoryFields,
+        optional_fields: optionalFields,
+      };
+
+      const db = database.get<ToSendDatus>("to_send_data");
+      await database.write(async () => {
+        await db.create((newToSendDatus) => {
+          newToSendDatus.body = sendObservationDataRequest;
+          newToSendDatus.url = "/mobile/save-observation";
+          newToSendDatus.type = ToSendDatusType.OBSERVATION;
+          newToSendDatus.status = SendStatus.IDLE;
+          newToSendDatus.key = batchObservationState.guid;
+        });
+      });
+
+      setTimeout(() => {
+        setBatchObservationState((prevState) => ({
+          ...prevState,
+          targetOpportunities: prevState!.targetOpportunities - 1,
+        }));
+      }, 0);
+
+      const currentTargetOpportunities =
+        batchObservationState.targetOpportunities;
+      if (currentTargetOpportunities - 1 > 0) {
+        router.replace("/(app)/(tabs)/(one)/MainScreen");
+      } else {
+        // TODO trial mode
+        Alert.alert(
+          i18n.t("AG24", { defaultValue: "COMPLETED!" }),
+          i18n.t("AG25", {
+            defaultValue: "Observation successfully completed.",
+          }),
+          [
+            {
+              text: "OK",
+              // TODO test this later. has bug!
+              onPress: () =>
+                navigation.reset({
+                  index: 1,
+                  routes: [
+                    {
+                      name: "Record",
+                    },
+                    {
+                      name: "AuditSummary",
+                    },
+                  ] as any,
+                }),
+            },
+          ],
+        );
+      }
+    },
+    [
+      batchObservationState.location,
+      batchObservationState.guid,
+      batchObservationState.auditType,
+      batchObservationState.targetOpportunities,
+    ],
+  );
 }
