@@ -1,12 +1,23 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useState } from "react";
+import { Text, View, ScrollView, Switch, Pressable } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
+import { Feather as Icon } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
+import NoteModal from "@components/Notes";
 
 const AuditSummary = () => {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const [noteModal, setNoteModal] = useState(false);
+  const [note, setNote] = useState("");
+
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator
+    >
       <View style={styles.rowContainer}>
         <Text style={styles.textTable}>
           {i18n.t("AH2", {
@@ -39,6 +50,56 @@ const AuditSummary = () => {
         </Text>
         <Text style={styles.textTable}>2</Text>
       </View>
+      <View style={styles.handHygieneContainer}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.handHygieneText}>
+            {i18n.t("DL5", {
+              defaultValue: "Hand Hygiend Compliance",
+            })}
+          </Text>
+        </View>
+        <View style={styles.handHygienePercentContainer}>
+          <Text style={styles.handHygieneText}>%</Text>
+        </View>
+      </View>
+      <View style={styles.feedbackContainer}>
+        <View style={styles.feedbackTextContainer}>
+          <Text style={styles.handHygieneText}>
+            {i18n.t("FEED1", {
+              defaultValue: "Feeback Given?",
+            })}
+          </Text>
+        </View>
+        <View style={styles.feedbackButtonContainer}>
+          <Switch
+            trackColor={{ true: colors.mediumPurple }}
+            thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
+            ios_backgroundColor={colors.cadetGrey}
+            style={styles.switchIndication}
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+          <Pressable onPress={() => isEnabled && setNoteModal(true)}>
+            <Icon
+              name="edit"
+              size={20}
+              color={isEnabled ? colors.textColor : colors.cadetGrey}
+            />
+          </Pressable>
+        </View>
+      </View>
+      <NoteModal
+        value={note}
+        visible={isEnabled && noteModal}
+        onClose={() => setNoteModal(false)}
+        title={i18n.t("FEED2", {
+          defaultValue: "Add Feedback Notes",
+        })}
+        cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
+        saveTitle={i18n.t("AE7", { defaultValue: "Send" })}
+        maxLength={150}
+        onSave={() => {}}
+      />
       <View style={styles.titleLabelContainer}>
         <Text style={styles.healthCareTitle}>
           {i18n.t("ADD7", {
@@ -152,13 +213,13 @@ const AuditSummary = () => {
           <Text style={styles.tableText}>0%</Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = createStyleSheet({
   container: {
-    flex: 1,
+    flexGrow: 1,
   },
   rowContainer: {
     flexDirection: "row",
@@ -244,6 +305,51 @@ const styles = createStyleSheet({
     alignItems: "center",
     borderRightWidth: 0.4,
     borderColor: colors.green,
+  },
+  handHygieneContainer: {
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: colors.textColor,
+    padding: 12,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  handHygieneText: {
+    color: colors.textColor,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  titleContainer: {
+    width: "95%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  handHygienePercentContainer: {
+    width: "5%",
+  },
+  feedbackContainer: {
+    borderTopWidth: 0,
+    borderBottomWidth: 2,
+    borderColor: colors.textColor,
+    paddingHorizontal: 12,
+    padding: 6,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  feedbackTextContainer: {
+    width: "70%",
+    alignItems: "flex-start",
+  },
+  feedbackButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "25%",
+    marginHorizontal: 18,
+  },
+  switchIndication: {
+    transform: [{ scaleX: 0.6 }, { scaleY: 0.6 }],
   },
 });
 

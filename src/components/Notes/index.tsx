@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { TextInput, View } from "react-native";
-import { Button, Modal, Text, Portal } from "react-native-paper";
+import { TextInput, View, Modal, StyleSheet } from "react-native";
+import { Button, Text } from "react-native-paper";
 import { colors } from "@theme/index";
-import { createStyleSheet } from "react-native-unistyles";
 
 interface NoteModalProps {
   value?: string;
@@ -33,52 +32,70 @@ function NoteModal({
   };
 
   const characterCount = note?.length || 0;
+
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onClose}
-        contentContainerStyle={styles.modalContainer}
-      >
-        <Text style={styles.modalTitle}>{title}</Text>
-        <Text style={styles.characterCount}>{characterCount}/150</Text>
-        <TextInput
-          value={note}
-          onChangeText={setNote}
-          multiline
-          maxLength={maxLength}
-          style={styles.noteInput}
-          defaultValue={value}
-        />
-        <View style={styles.buttonContainer}>
-          <Button
-            mode="contained"
-            onPress={onClose}
-            style={styles.cancelButton}
-          >
-            {cancelTitle}
-          </Button>
-          <Button
-            mode="contained"
-            onPress={handleSaveNote}
-            style={styles.saveButton}
-            labelStyle={{ color: "white" }}
-          >
-            {saveTitle}
-          </Button>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>{title}</Text>
+          <Text style={styles.characterCount}>
+            {characterCount}/{maxLength}
+          </Text>
+          <TextInput
+            value={note}
+            onChangeText={setNote}
+            multiline
+            maxLength={maxLength}
+            style={styles.noteInput}
+            defaultValue={value}
+          />
+          <View style={styles.buttonContainer}>
+            <Button
+              mode="contained"
+              onPress={onClose}
+              style={styles.cancelButton}
+            >
+              {cancelTitle}
+            </Button>
+            <Button
+              mode="contained"
+              onPress={handleSaveNote}
+              style={styles.saveButton}
+              labelStyle={{ color: colors.textColor }}
+            >
+              {saveTitle}
+            </Button>
+          </View>
         </View>
-      </Modal>
-    </Portal>
+      </View>
+    </Modal>
   );
 }
 
-const styles = createStyleSheet({
+const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: "white",
-    marginHorizontal: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: colors.textColor,
+    width: "80%",
+    padding: 20,
     borderRadius: 8,
+    elevation: 5,
+    shadowColor: colors.midNight,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
   },
   modalTitle: {
     fontSize: 18,
@@ -89,10 +106,12 @@ const styles = createStyleSheet({
   },
   noteInput: {
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.steelGrey,
+    borderWidth: 0.4,
+    borderColor: colors.cadetGrey,
     paddingHorizontal: 10,
     height: 100,
+    textAlignVertical: "top",
+    backgroundColor: colors.textColor,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -100,9 +119,11 @@ const styles = createStyleSheet({
   },
   cancelButton: {
     marginTop: 10,
+    width: "45%",
   },
   saveButton: {
     marginTop: 10,
+    width: "45%",
     backgroundColor: colors.bgColor,
   },
   characterCount: {
