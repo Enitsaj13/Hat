@@ -19,9 +19,8 @@ const ForgotPasswordScreen = () => {
 
   const {
     control,
-    reset,
     handleSubmit,
-    formState: { isLoading, isValid, isSubmitSuccessful },
+    formState: { isLoading, isValid },
   } = useForm<IForgotPasswordSchema>({
     resolver: yupResolver(forgotPasswordSchema),
   });
