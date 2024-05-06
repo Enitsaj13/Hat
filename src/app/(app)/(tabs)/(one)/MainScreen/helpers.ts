@@ -49,6 +49,8 @@ export interface IMomentSchema {
   optionalFields: Record<string, number | boolean | null | undefined>;
 
   notes?: string;
+  feedbackEnabled: boolean;
+  feedback?: string;
 }
 
 function useMomentSchemaFormRefHolder() {
@@ -233,6 +235,9 @@ export function useMomentSchema(
       maskType: string().optional(),
       optionalFields: object(optionalFieldSchema).default({}),
       notes: string().optional().max(150),
+
+      feedbackEnabled: boolean().default(false),
+      feedback: string().optional(),
     });
   }, [companyConfig, obligatoryFields, optionalFields]);
 }
@@ -379,7 +384,7 @@ export function useObservationSubmit() {
         mask_type: maskType,
         date_registered: new Date().getDate(),
         without_indication: form.withoutIndication,
-        feedback_given: false, // TODO
+        feedback_given: form.feedbackEnabled && !isEmpty(form.feedback),
         audit_type_id: batchObservationState.auditType,
         obligatory_fields: obligatoryFields,
         optional_fields: optionalFields,

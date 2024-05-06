@@ -1,17 +1,51 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Text, View, ScrollView, Switch, Pressable } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
 import { Feather as Icon } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
 import NoteModal from "@components/Notes";
+import { useMomentSchemaFormRef } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
+import { Controller } from "react-hook-form";
+import { useBatchObservation } from "@hooks/useBatchObservation";
+import {
+  getAnswer,
+  HhComplianceType,
+  SendFeedbackRequest,
+  SendObservationDataRequest,
+} from "../../../../types";
+import { randomUUID } from "expo-crypto";
+import isEmpty from "lodash.isempty";
+import { database } from "@stores/index";
+import { SendStatus, ToSendDatus, ToSendDatusType } from "@stores/toSendDatus";
 
 const AuditSummary = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const formRef = useMomentSchemaFormRef();
+  const form = formRef.current!;
+  const { control, setValue, watch } = form;
+  const [showNoteModal, setShowNoteModal] = useState(false);
 
-  const [noteModal, setNoteModal] = useState(false);
-  const [note, setNote] = useState("");
+  const { batchObservationState } = useBatchObservation();
+  const onFeedbackSave = useCallback(
+    async (feedback?: string) => {
+      const sendObservationDataRequest: SendFeedbackRequest = {
+        batch_uuid: batchObservationState.guid,
+        notes: feedback,
+      };
+
+      const db = database.get<ToSendDatus>("to_send_data");
+      await database.write(async () => {
+        await db.create((newToSendDatus) => {
+          newToSendDatus.body = sendObservationDataRequest;
+          newToSendDatus.url = "/mobile/update-feedback-given";
+          newToSendDatus.type = ToSendDatusType.FEEDBACK;
+          newToSendDatus.status = SendStatus.IDLE;
+          newToSendDatus.key = batchObservationState.guid;
+        });
+      });
+    },
+    [batchObservationState.guid],
+  );
 
   return (
     <ScrollView
@@ -62,43 +96,78 @@ const AuditSummary = () => {
           <Text style={styles.handHygieneText}>%</Text>
         </View>
       </View>
-      <View style={styles.feedbackContainer}>
-        <View style={styles.feedbackTextContainer}>
-          <Text style={styles.handHygieneText}>
-            {i18n.t("FEED1", {
-              defaultValue: "Feeback Given?",
+      <Controller
+        render={({ field: { onChange, value } }) => (
+          <View style={styles.feedbackContainer}>
+            <Pressable
+              style={styles.feedbackTextContainer}
+              onPress={() => onChange(!value)}
+            >
+              <Text style={styles.handHygieneText}>
+                {i18n.t("FEED1", {
+                  defaultValue: "Feeback Given?",
+                })}
+              </Text>
+            </Pressable>
+
+            <View style={styles.feedbackButtonContainer}>
+              <Switch
+                trackColor={{ true: colors.mediumPurple }}
+                thumbColor={value ? colors.lilyWhite : colors.textColor}
+                ios_backgroundColor={colors.cadetGrey}
+                style={styles.switchIndication}
+                onValueChange={async (v) => {
+                  onChange(v);
+                  if (!v) {
+                    // TODO KNOWN UI BUG, set here does not seem to work.
+                    // seems that we are hitting the limitation of react-hook-form
+                    // to make this work, it seems that we need to breakdown the form
+                    // but this is only a UI bug, the feedback to be sent to server is still empty when switch is turned to false
+                    setValue("feedback", "");
+                    await onFeedbackSave("");
+                  }
+                }}
+                value={value}
+                hitSlop={{ right: -30 }}
+              />
+
+              <Icon
+                name="edit"
+                size={20}
+                color={value ? colors.textColor : colors.cadetGrey}
+                onPress={() => {
+                  if (value) {
+                    setShowNoteModal(true);
+                  }
+                }}
+                hitSlop={{ left: 30, right: 10, top: 10, bottom: 10 }}
+              />
+            </View>
+          </View>
+        )}
+        name="feedbackEnabled"
+        control={control}
+      />
+      <Controller
+        render={({ field: { onChange, value } }) => (
+          <NoteModal
+            value={value}
+            visible={showNoteModal}
+            onClose={() => setShowNoteModal(false)}
+            title={i18n.t("FEED2", {
+              defaultValue: "Add Feedback Notes",
             })}
-          </Text>
-        </View>
-        <View style={styles.feedbackButtonContainer}>
-          <Switch
-            trackColor={{ true: colors.mediumPurple }}
-            thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
-            ios_backgroundColor={colors.cadetGrey}
-            style={styles.switchIndication}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+            cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
+            saveTitle={i18n.t("AE7", { defaultValue: "Send" })}
+            maxLength={150}
+            onSave={(feedback) => {
+              onChange(feedback);
+              onFeedbackSave(feedback);
+            }}
           />
-          <Pressable onPress={() => isEnabled && setNoteModal(true)}>
-            <Icon
-              name="edit"
-              size={20}
-              color={isEnabled ? colors.textColor : colors.cadetGrey}
-            />
-          </Pressable>
-        </View>
-      </View>
-      <NoteModal
-        value={note}
-        visible={isEnabled && noteModal}
-        onClose={() => setNoteModal(false)}
-        title={i18n.t("FEED2", {
-          defaultValue: "Add Feedback Notes",
-        })}
-        cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
-        saveTitle={i18n.t("AE7", { defaultValue: "Send" })}
-        maxLength={150}
-        onSave={() => {}}
+        )}
+        name="feedback"
+        control={control}
       />
       <View style={styles.titleLabelContainer}>
         <Text style={styles.healthCareTitle}>

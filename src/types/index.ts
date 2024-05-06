@@ -73,3 +73,8 @@ export interface SendObservationDataRequest {
   obligatory_fields: FieldJson[];
   optional_fields: FieldJson[];
 }
+
+export interface SendFeedbackRequest {
+  batch_uuid: string;
+  notes?: string;
+}
