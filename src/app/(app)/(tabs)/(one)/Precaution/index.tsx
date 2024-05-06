@@ -13,19 +13,22 @@ import { styles } from "@app/(app)/(tabs)/(one)/Precaution/styles";
 import { OptionalField } from "@stores/optionalField";
 import { OptionalFieldOption } from "@stores/optionalFieldOption";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
-import { withObservables } from "@nozbe/watermelondb/react";
+import {
+  ExtractedObservables,
+  withObservables,
+} from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { of, switchMap } from "rxjs";
 import { Q } from "@nozbe/watermelondb";
+import { CompanyConfig } from "@stores/companyConfig";
 
 const optionsMapKeyPrefix = "opt-";
 
-export interface PrecautionProps {
-  optionalFields: OptionalField[];
-  optionsMap: Record<string, OptionalFieldOption[]>;
-}
-
-const Component = ({ optionalFields, optionsMap }: PrecautionProps) => {
+const Component = ({
+  optionalFields,
+  optionsMap,
+  companyConfig,
+}: PrecautionProps) => {
   const formRef = useMomentSchemaFormRef();
   const form = formRef.current!;
   const { control } = form;
@@ -184,104 +187,125 @@ const Component = ({ optionalFields, optionsMap }: PrecautionProps) => {
           control={control}
         />
       </View>
-      <View style={styles.actionTitleContainer}>
-        <Text style={styles.title}>
-          {i18n.t("OPF1", {
-            defaultValue: "OPTIONAL DATA",
-          })}
-        </Text>
-      </View>
 
-      {optionalFields.map((optField) => (
-        <Controller
-          key={`optional-field-${optField.serverId}`}
-          render={({ field: { onChange, value } }) => (
-            <View
-              style={{
-                ...styles.optionalDataContainer,
-                ...(optField.fieldType === "DROPDOWN"
-                  ? styles.dropdownContainer
-                  : {}),
-              }}
-            >
-              {optField.fieldType !== "DROPDOWN" && (
-                <Text style={styles.optionalDataTitle}>{optField.name}</Text>
+      {companyConfig!.enableOptionalFields && (
+        <>
+          <View style={styles.actionTitleContainer}>
+            <Text style={styles.title}>
+              {i18n.t("OPF1", {
+                defaultValue: "OPTIONAL DATA",
+              })}
+            </Text>
+          </View>
+
+          {optionalFields.map((optField) => (
+            <Controller
+              key={`optional-field-${optField.serverId}`}
+              render={({ field: { onChange, value } }) => (
+                <View
+                  style={{
+                    ...styles.optionalDataContainer,
+                    ...(optField.fieldType === "DROPDOWN"
+                      ? styles.dropdownContainer
+                      : {}),
+                  }}
+                >
+                  {optField.fieldType !== "DROPDOWN" && (
+                    <Text style={styles.optionalDataTitle}>
+                      {optField.name}
+                    </Text>
+                  )}
+                  {optField.fieldType === "DROPDOWN" ? (
+                    <DropdownList
+                      options={
+                        Object.hasOwn(
+                          optionsMap,
+                          `${optionsMapKeyPrefix}${optField.serverId.toString()}`,
+                        )
+                          ? optionsMap[
+                              `${optionsMapKeyPrefix}${optField.serverId.toString()}`
+                            ].map((opt) => ({
+                              key: opt.serverId,
+                              value: opt.name,
+                            }))
+                          : []
+                      }
+                      onOptionSelected={onChange}
+                      dropdownlistStyle={styles.dropdownlistContainer}
+                      selectedValueStyle={styles.selectedValue}
+                      noOptionSelectedText={optField.name}
+                      selectedOptionKey={value}
+                      allowNullKeySelection
+                    />
+                  ) : (
+                    <Switch
+                      trackColor={{ true: colors.mediumPurple }}
+                      thumbColor={value ? colors.lilyWhite : colors.textColor}
+                      ios_backgroundColor={colors.textColor}
+                      style={styles.switchIndication}
+                      onValueChange={onChange}
+                      value={value}
+                    />
+                  )}
+                </View>
               )}
-              {optField.fieldType === "DROPDOWN" ? (
-                <DropdownList
-                  options={
-                    Object.hasOwn(
-                      optionsMap,
-                      `${optionsMapKeyPrefix}${optField.serverId.toString()}`,
-                    )
-                      ? optionsMap[
-                          `${optionsMapKeyPrefix}${optField.serverId.toString()}`
-                        ].map((opt) => ({
-                          key: opt.serverId,
-                          value: opt.name,
-                        }))
-                      : []
-                  }
-                  onOptionSelected={onChange}
-                  dropdownlistStyle={styles.dropdownlistContainer}
-                  selectedValueStyle={styles.selectedValue}
-                  noOptionSelectedText={optField.name}
-                  selectedOptionKey={value}
-                  allowNullKeySelection
-                />
-              ) : (
-                <Switch
-                  trackColor={{ true: colors.mediumPurple }}
-                  thumbColor={value ? colors.lilyWhite : colors.textColor}
-                  ios_backgroundColor={colors.textColor}
-                  style={styles.switchIndication}
-                  onValueChange={onChange}
-                  value={value}
-                />
-              )}
-            </View>
-          )}
-          name={
-            `optionalFields.${OPTIONAL_FIELD_VALUE_PREFIX}${optField.serverId}` as any
-          }
-          control={control}
-        />
-      ))}
+              name={
+                `optionalFields.${OPTIONAL_FIELD_VALUE_PREFIX}${optField.serverId}` as any
+              }
+              control={control}
+            />
+          ))}
+        </>
+      )}
     </View>
   );
 };
 
-type WithObservableProps = ObservableifyProps<
-  PrecautionProps,
-  "optionalFields",
-  "optionsMap"
->;
+interface ObservableProps {
+  optionalFields: OptionalField[];
+  optionsMap: Record<string, OptionalFieldOption[]>;
+  companyConfig?: CompanyConfig;
+}
+
+const getObservables = (props: ObservableProps) => ({
+  companyConfig: database
+    .get<CompanyConfig>("company_configs")
+    .query(Q.take(1))
+    .observe()
+    .pipe(
+      switchMap((companyConfig) =>
+        companyConfig.length > 0 ? companyConfig[0].observe() : of(null),
+      ),
+    ),
+  optionalFields: database
+    .get<OptionalField>("optional_fields")
+    .query(Q.sortBy("sort", Q.asc)),
+  optionsMap: database
+    .get<OptionalFieldOption>("optional_field_options")
+    .query()
+    .observe()
+    .pipe(
+      switchMap((optionalFields) => {
+        // console.log("optionalFields from db", optionalFields);
+        const toReturn: Record<string, OptionalFieldOption[]> = {};
+        optionalFields.forEach((opt) => {
+          const key = `${optionsMapKeyPrefix}${opt.optionalFieldServerId.toString()}`;
+          const options = Object.hasOwn(toReturn, key) ? toReturn[key] : [];
+          options.push(opt);
+          toReturn[key] = options;
+        });
+        // console.log("optionsMap to be returned", toReturn);
+        return of(toReturn);
+      }),
+    ),
+});
+
+export interface PrecautionProps
+  extends ExtractedObservables<ReturnType<typeof getObservables>> {}
 
 const Precaution = withObservables(
-  ["optionalFields", "optionsMap"],
-  (props: WithObservableProps) => ({
-    optionalFields: database
-      .get<OptionalField>("optional_fields")
-      .query(Q.sortBy("sort", Q.asc)),
-    optionsMap: database
-      .get<OptionalFieldOption>("optional_field_options")
-      .query()
-      .observe()
-      .pipe(
-        switchMap((optionalFields) => {
-          // console.log("optionalFields from db", optionalFields);
-          const toReturn: Record<string, OptionalFieldOption[]> = {};
-          optionalFields.forEach((opt) => {
-            const key = `${optionsMapKeyPrefix}${opt.optionalFieldServerId.toString()}`;
-            const options = Object.hasOwn(toReturn, key) ? toReturn[key] : [];
-            options.push(opt);
-            toReturn[key] = options;
-          });
-          // console.log("optionsMap to be returned", toReturn);
-          return of(toReturn);
-        }),
-      ),
-  }),
+  ["optionalFields", "optionsMap", "companyConfig"],
+  getObservables,
 )(Component as any);
 
 export default Precaution;
