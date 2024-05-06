@@ -20,8 +20,8 @@ vulnerabilities.
    version
 8. Optional: Create an AVD where to run this project. For laptops with lower specs, Opt to running it in an actual
    android device.
-    * Recommended: Ensure that your machine has proper CPU that supports virtualization. Install **Google HAXM** for
-      much better emulator performance!
+   * Recommended: Ensure that your machine has proper CPU that supports virtualization. Install **Google HAXM** for
+     much better emulator performance!
 9. Go to the project folder and execute `npm run prebuild`
 10. Afterwards, execute `npm run android`
 
@@ -32,8 +32,8 @@ vulnerabilities.
 3. Install **watchman** using Homebrew
 4. Download **XCode** from Mac App store. Follow the promps to ensure you have a working setup including the simulators.
 5. run `npm run prebuild` if you haven't done it yet
-    * To run the app using your local personal account, ensure to delete the **Push notification capability** in
-      *Signing and Capabilities tab*, since push notification requires an actual developer account
+   * To run the app using your local personal account, ensure to delete the **Push notification capability** in
+     *Signing and Capabilities tab*, since push notification requires an actual developer account
 6. run `npm run ios`
 
 ### Additional setup:
@@ -47,12 +47,13 @@ This project uses **local EAS** to build the project.
 
 ### Pre-requisite
 
-1. Change the app package to the correct value. Look for **ph.rocketspin.hat** in app.json and then change it
-2. Increment the **buildNumber** for iOS and **versionCode** for android in app.json as well on every app store update
+1. In _env.prod_ file, change the url to the correct value. note that the `/api` should always be the suffix
+2. Change the app package to the correct value. Look for **ph.rocketspin.hat** in app.json and then change it
+3. Increment the **buildNumber** for iOS and **versionCode** for android in app.json as well on every app store update
    of the app
-3. Update both version fields in app.json and package.json to the intended version that will be publicly viewable in
+4. Update both version fields in app.json and package.json to the intended version that will be publicly viewable in
    respective app stores of each platform
-4. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
+5. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
 
 ### Android build
 
