@@ -28,13 +28,16 @@ function Component({ toSendData }: DataSenderProps) {
       const release = await mutex.acquire();
       console.log("hasNetworkConnection", hasNetworkConnection);
       if (hasNetworkConnection) {
-        for (const datus of toSendData) {
+        for (const datus of toSendData || []) {
           // ensure that the data has not been sent in fact
           const freshDatusFromDB = await database
             .get<ToSendDatus>("to_send_data")
             .query(Q.where("id", datus.id))
             .fetch();
-          if (freshDatusFromDB[0].status === SendStatus.SENT) {
+          if (
+            freshDatusFromDB?.length > 0 &&
+            freshDatusFromDB[0].status === SendStatus.SENT
+          ) {
             continue;
           }
 
