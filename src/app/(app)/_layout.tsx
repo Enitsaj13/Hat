@@ -17,6 +17,7 @@ import { i18n } from "@i18n/index";
 import { View } from "react-native";
 import DataUpdater from "@app/(app)/DataUpdater";
 import DataSender from "@app/(app)/DataSender";
+import SentDataDeleter from "@app/(app)/SentDataDeleter";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -70,6 +71,7 @@ function Component({ user, appSetting }: RootLayoutProps) {
     <View style={{ flex: 1, position: "relative" }}>
       <DataUpdater />
       <DataSender />
+      <SentDataDeleter />
       <Stack>
         <Stack.Screen
           name="(tabs)"
