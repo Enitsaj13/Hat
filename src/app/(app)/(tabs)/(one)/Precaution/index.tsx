@@ -59,7 +59,7 @@ const Component = ({
                 label: i18n.t("AF5", { defaultValue: "Droplet" }),
               },
             ]}
-            onSegmentChange={onChange}
+            onSegmentChange={(v) => onChange(v != value ? v : undefined)}
             value={value}
           />
         )}
@@ -129,65 +129,72 @@ const Component = ({
       />
       <Controller
         render={({ field: { onChange, value } }) => (
-          <Pressable
-            style={styles.actionContainer}
-            onPress={() => onChange(!value)}
-          >
-            <View style={styles.actionListContainer}>
-              <Text style={styles.actionTitle}>
-                {i18n.t("AF9", {
-                  defaultValue: "Don on Mask",
-                })}
-              </Text>
+          <>
+            <Pressable
+              style={styles.actionContainer}
+              onPress={() => onChange(!value)}
+            >
+              <View style={styles.actionListContainer}>
+                <Text style={styles.actionTitle}>
+                  {i18n.t("AF9", {
+                    defaultValue: "Don on Mask",
+                  })}
+                </Text>
 
-              <Switch
-                trackColor={{ true: colors.mediumPurple }}
-                thumbColor={value ? colors.lilyWhite : colors.textColor}
-                ios_backgroundColor={colors.textColor}
-                style={styles.switchIndication}
-                onValueChange={onChange}
-                value={value}
-              />
-            </View>
-          </Pressable>
+                <Switch
+                  trackColor={{ true: colors.mediumPurple }}
+                  thumbColor={value ? colors.lilyWhite : colors.textColor}
+                  ios_backgroundColor={colors.textColor}
+                  style={styles.switchIndication}
+                  onValueChange={onChange}
+                  value={value}
+                />
+              </View>
+            </Pressable>
+            {value && (
+              <View style={styles.actionContainer}>
+                <Text style={styles.maskType}>
+                  -{" "}
+                  {i18n.t("U20", {
+                    defaultValue: "Mask Type",
+                  })}{" "}
+                  -
+                </Text>
+                <Controller
+                  render={({ field: { onChange, value } }) => (
+                    <SegmentedButton
+                      segments={[
+                        {
+                          value: "Surgical",
+                          label: i18n.t("AF11", { defaultValue: "Surgical" }),
+                        },
+                        {
+                          value: "High Filtration",
+                          label: i18n.t("AF12", {
+                            defaultValue: "High Filtration",
+                          }),
+                        },
+                        {
+                          value: "Other",
+                          label: i18n.t("AF13 ", { defaultValue: "Other" }),
+                        },
+                      ]}
+                      onSegmentChange={(v) =>
+                        onChange(v != value ? v : undefined)
+                      }
+                      value={value}
+                    />
+                  )}
+                  name="maskType"
+                  control={control}
+                />
+              </View>
+            )}
+          </>
         )}
         name="donOnMask"
         control={control}
       />
-      <View style={styles.actionContainer}>
-        <Text style={styles.maskType}>
-          -{" "}
-          {i18n.t("U20", {
-            defaultValue: "Mask Type",
-          })}{" "}
-          -
-        </Text>
-        <Controller
-          render={({ field: { onChange, value } }) => (
-            <SegmentedButton
-              segments={[
-                {
-                  value: "Surgical",
-                  label: i18n.t("AF11", { defaultValue: "Surgical" }),
-                },
-                {
-                  value: "High Filtration",
-                  label: i18n.t("AF12", { defaultValue: "High Filtration" }),
-                },
-                {
-                  value: "Other",
-                  label: i18n.t("AF13 ", { defaultValue: "Other" }),
-                },
-              ]}
-              onSegmentChange={onChange}
-              value={value}
-            />
-          )}
-          name="maskType"
-          control={control}
-        />
-      </View>
-
       {companyConfig!.enableOptionalFields && (
         <>
           <View style={styles.actionTitleContainer}>
