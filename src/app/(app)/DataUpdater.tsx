@@ -21,6 +21,7 @@ import { getOptionalFields } from "@services/getOptionalFields";
 import { ObligatoryField } from "@stores/obligatoryField";
 import { OptionalField } from "@stores/optionalField";
 import { showRetryAlert } from "@utils/showRetryAlert";
+import axios, { HttpStatusCode } from "axios/index";
 
 async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
   const result = await Promise.allSettled([
@@ -34,22 +35,8 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
 
   console.log("server call result", result);
   if (result[0].status === "fulfilled") {
-    const companyConfig = result[0].value;
-
-    const isAuditTypeSuccess =
-      !companyConfig.enableAuditTypes || result[1].status === "fulfilled";
-    const isObligatoryFieldsSuccess =
-      !companyConfig.enableObligatoryFields || result[2].status === "fulfilled";
-    const isOptionalFieldsSuccess =
-      !companyConfig.enableOptionalFields || result[3].status === "fulfilled";
-
-    const rest = result.slice(4).map((r) => r.status === "fulfilled");
-
-    const hasOneApiCallFailed =
-      !isAuditTypeSuccess ||
-      !isObligatoryFieldsSuccess ||
-      !isOptionalFieldsSuccess ||
-      rest.findIndex((r) => !r) >= 0;
+    const statuses = result.map((r) => r.status === "fulfilled");
+    const hasOneApiCallFailed = statuses.findIndex((r) => !r) >= 0;
 
     console.log("hasOneApiCallFailed", hasOneApiCallFailed);
     if (!shouldRetry || !hasOneApiCallFailed) {
@@ -58,10 +45,11 @@ async function serverCall(shouldRetry: boolean, onSuccess: () => void) {
     }
   }
 
-  // recursively call to try again
-  const reason = (result[0] as any)?.reason?.toString() || "";
-  console.log("result[0].reason: ", reason);
-  if (!reason.includes("status code 401")) {
+  // if (!reason.includes("status code 401")) {  // old tested code
+  if (
+    axios.isAxiosError(result[0]) &&
+    (result[0] as any).response?.status === HttpStatusCode.Unauthorized
+  ) {
     showRetryAlert(() => serverCall(shouldRetry, onSuccess));
   }
 }
