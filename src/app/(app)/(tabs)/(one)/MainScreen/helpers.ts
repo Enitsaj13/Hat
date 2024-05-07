@@ -382,7 +382,7 @@ export function useObservationSubmit() {
         gown_compliance: getAnswer(form.donOnGown),
         mask_compliance: getAnswer(form.donOnMask),
         mask_type: maskType,
-        date_registered: new Date().getDate(),
+        date_registered: Date.now(),
         without_indication: form.withoutIndication,
         feedback_given: form.feedbackEnabled && !isEmpty(form.feedback),
         audit_type_id: batchObservationState.auditType,

@@ -48,7 +48,7 @@ const DataSender = withObservables(
       .query(
         Q.and(
           Q.where("status", Q.oneOf([SendStatus.SENT, SendStatus.DO_NOT_SEND])),
-          Q.where("updated_at", new Date().getDate() - 1000 * 60 * 60 * 24),
+          Q.where("updated_at", Date.now() - 1000 * 60 * 60 * 24),
         ),
       ),
   }),
