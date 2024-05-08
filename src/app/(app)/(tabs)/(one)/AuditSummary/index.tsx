@@ -1,23 +1,101 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Text, View, ScrollView, Switch, Pressable } from "react-native";
-import { createStyleSheet } from "react-native-unistyles";
+import React, { useCallback, useEffect, useState } from "react";
+import { Pressable, ScrollView, Switch, Text, View } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import { i18n } from "@i18n/index";
+import { i18n, i18nOptions } from "@i18n/index";
 import { colors } from "@theme/index";
 import NoteModal from "@components/Notes";
 import { useMomentSchemaFormRef } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 import { Controller } from "react-hook-form";
 import { useBatchObservation } from "@hooks/useBatchObservation";
 import {
-  getAnswer,
-  HhComplianceType,
   SendFeedbackRequest,
   SendObservationDataRequest,
-} from "../../../../types";
-import { randomUUID } from "expo-crypto";
-import isEmpty from "lodash.isempty";
+} from "../../../../../types";
 import { database } from "@stores/index";
 import { SendStatus, ToSendDatus, ToSendDatusType } from "@stores/toSendDatus";
+import { styles } from "./styles";
+import { Q } from "@nozbe/watermelondb";
+import { Worker } from "@stores/worker";
+import cloneDeep from "lodash.clonedeep";
+
+interface IAuditSummary {
+  saved: number;
+  sent: number;
+  hcwStatus: Map<number, { name: string; count: number }>;
+  momentCompliance: Map<number, { passed: number; failed: number }>;
+}
+
+const auditSummaryInitialState = Object.freeze({
+  saved: 0,
+  sent: 0,
+  hcwStatus: new Map<number, { name: string; count: number }>(),
+  momentCompliance: new Map<number, { passed: number; failed: number }>(),
+});
+
+async function transformToSendDataToReport(toSendData: ToSendDatus[]) {
+  const s: IAuditSummary = cloneDeep(auditSummaryInitialState);
+
+  const hcw = await database
+    .get<Worker>("workers")
+    .query(Q.sortBy("list_order"))
+    .fetch();
+  hcw.forEach((w) => s.hcwStatus.set(w.serverId, { name: w.name, count: 0 }));
+  [1, 2, 3, 4, 5].forEach((v) =>
+    s.momentCompliance.set(v, { passed: 0, failed: 0 }),
+  );
+
+  for (const toSendDatus of toSendData) {
+    if (toSendDatus.status === SendStatus.SENT) {
+      s.sent = s.sent + 1;
+    } else {
+      s.saved = s.saved + 1;
+    }
+
+    const body = toSendDatus.body as SendObservationDataRequest;
+    const hcwStat = s.hcwStatus.get(body.hcw_title)!;
+    s.hcwStatus.set(body.hcw_title, {
+      ...hcwStat,
+      count: hcwStat!.count + 1,
+    });
+    if (body.hh_compliance !== "missed") {
+      body.moment.forEach((m) => {
+        const momentStat = s.momentCompliance.get(m)!;
+        s.momentCompliance.set(m, {
+          ...momentStat,
+          passed: momentStat.passed + 1,
+        });
+      });
+    } else {
+      body.moment.forEach((m) => {
+        const momentStat = s.momentCompliance.get(m)!;
+        s.momentCompliance.set(m, {
+          ...momentStat,
+          failed: momentStat.failed + 1,
+        });
+      });
+    }
+  }
+
+  const finalHcwStatus = new Map<number, { name: string; count: number }>();
+  for (const [hcwServerId, value] of s.hcwStatus.entries()) {
+    if (value.count > 0) {
+      finalHcwStatus.set(hcwServerId, value);
+    }
+  }
+  s.hcwStatus = finalHcwStatus;
+
+  const finalMomentCompliance = new Map<
+    number,
+    { passed: number; failed: number }
+  >();
+  for (const [moment, momentStat] of s.momentCompliance.entries()) {
+    if (momentStat.passed > 0 || momentStat.failed > 0) {
+      finalMomentCompliance.set(moment, momentStat);
+    }
+  }
+  s.momentCompliance = finalMomentCompliance;
+  return s;
+}
 
 const AuditSummary = () => {
   const formRef = useMomentSchemaFormRef();
@@ -26,6 +104,31 @@ const AuditSummary = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
 
   const { batchObservationState } = useBatchObservation();
+
+  const [summary, setSummary] = useState<IAuditSummary>(
+    auditSummaryInitialState,
+  );
+
+  const transformToSendData = useCallback(() => {
+    (async () => {
+      console.log("summary before transform", summary);
+      const toSendData = await database
+        .get<ToSendDatus>("to_send_data")
+        .query(
+          Q.and(
+            Q.where("key", batchObservationState.guid),
+            Q.where("type", ToSendDatusType.OBSERVATION),
+          ),
+        )
+        .fetch();
+      const transformed = await transformToSendDataToReport(toSendData);
+      console.log("summary to be set", transformed);
+      setSummary(transformed!);
+    })();
+  }, []);
+
+  useEffect(transformToSendData, []);
+
   const onFeedbackSave = useCallback(
     async (feedback?: string) => {
       const sendObservationDataRequest: SendFeedbackRequest = {
@@ -47,6 +150,7 @@ const AuditSummary = () => {
     [batchObservationState.guid],
   );
 
+  const completed = summary.saved + summary.sent;
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -58,7 +162,12 @@ const AuditSummary = () => {
             defaultValue: "Target Opportunities",
           })}
         </Text>
-        <Text style={styles.textTable}>2</Text>
+        <Text style={styles.textTable}>
+          {i18n.formatNumber(
+            batchObservationState.targetOpportunities + completed,
+            i18nOptions.countFormatOptions,
+          )}
+        </Text>
       </View>
       <View style={styles.rowContainer}>
         <Text style={styles.textTable}>
@@ -66,7 +175,9 @@ const AuditSummary = () => {
             defaultValue: "Completed",
           })}
         </Text>
-        <Text style={styles.textTable}>2</Text>
+        <Text style={styles.textTable}>
+          {i18n.formatNumber(completed, i18nOptions.countFormatOptions)}
+        </Text>
       </View>
       <View style={styles.rowContainer}>
         <Text style={styles.textTable}>
@@ -74,7 +185,9 @@ const AuditSummary = () => {
             defaultValue: "Saved in Device",
           })}
         </Text>
-        <Text style={styles.textTable}>2</Text>
+        <Text style={styles.textTable}>
+          {i18n.formatNumber(summary.saved, i18nOptions.countFormatOptions)}
+        </Text>
       </View>
       <View style={styles.rowContainer}>
         <Text style={styles.textTable}>
@@ -82,13 +195,15 @@ const AuditSummary = () => {
             defaultValue: "Submitted to Server",
           })}
         </Text>
-        <Text style={styles.textTable}>2</Text>
+        <Text style={styles.textTable}>
+          {i18n.formatNumber(summary.sent, i18nOptions.countFormatOptions)}
+        </Text>
       </View>
       <View style={styles.handHygieneContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.handHygieneText}>
             {i18n.t("DL5", {
-              defaultValue: "Hand Hygiend Compliance",
+              defaultValue: "Hand Hygiene Compliance",
             })}
           </Text>
         </View>
@@ -105,7 +220,7 @@ const AuditSummary = () => {
             >
               <Text style={styles.handHygieneText}>
                 {i18n.t("FEED1", {
-                  defaultValue: "Feeback Given?",
+                  defaultValue: "Feedback Given?",
                 })}
               </Text>
             </Pressable>
@@ -188,17 +303,27 @@ const AuditSummary = () => {
           </Text>
         </View>
       </View>
-      <View style={styles.tableContainer}>
-        <View style={styles.totalContainer}>
-          <Text style={styles.textTotal}>Doctor</Text>
+      {Array.from(summary.hcwStatus).map(([serverId, hcwStat]) => (
+        <View style={styles.tableContainer} key={`hcw-${serverId}`}>
+          <View style={styles.totalContainer}>
+            <Text style={styles.textTotal}>{hcwStat.name}</Text>
+          </View>
+          <View style={styles.countPercentContainer}>
+            <Text style={styles.tableText}>
+              {i18n.formatNumber(hcwStat.count, i18nOptions.countFormatOptions)}
+            </Text>
+          </View>
+          <View style={styles.countPercentContainer}>
+            <Text style={styles.tableText}>
+              {i18n.formatNumber(
+                (hcwStat.count / completed) * 100,
+                i18nOptions.percentageFormatOptions,
+              )}
+              %
+            </Text>
+          </View>
         </View>
-        <View style={styles.countPercentContainer}>
-          <Text style={styles.tableText}>2</Text>
-        </View>
-        <View style={styles.countPercentContainer}>
-          <Text style={styles.tableText}>100%</Text>
-        </View>
-      </View>
+      ))}
       <View style={styles.tableContainer}>
         <View style={styles.totalContainer}>
           <Text style={styles.textTotal}>
@@ -208,7 +333,7 @@ const AuditSummary = () => {
           </Text>
         </View>
         <View style={styles.countPercentContainer}>
-          <Text style={styles.tableText}>2</Text>
+          <Text style={styles.tableText}>{completed}</Text>
         </View>
         <View style={styles.countPercentContainer}>
           <Text style={styles.tableText}>100%</Text>
@@ -248,178 +373,52 @@ const AuditSummary = () => {
           </Text>
         </View>
       </View>
-      <View style={[styles.tableContainer, styles.tableCompliance]}>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>3</Text>
+      {Array.from(summary.momentCompliance).map(([moment, momentStat]) => (
+        <View
+          style={[styles.tableContainer, styles.tableCompliance]}
+          key={`moment-${moment}`}
+        >
+          <View style={styles.tableComplianceContainer}>
+            <Text style={styles.tableText}>{moment}</Text>
+          </View>
+          <View style={styles.tableComplianceContainer}>
+            <Text style={styles.tableText}>
+              {i18n.formatNumber(
+                momentStat.passed + momentStat.failed,
+                i18nOptions.countFormatOptions,
+              )}
+            </Text>
+          </View>
+          <View style={styles.tableComplianceContainer}>
+            <Text style={styles.tableText}>
+              {i18n.formatNumber(
+                momentStat.passed,
+                i18nOptions.countFormatOptions,
+              )}
+            </Text>
+          </View>
+          <View style={styles.tableComplianceContainer}>
+            <Text style={styles.tableText}>
+              {i18n.formatNumber(
+                momentStat.failed,
+                i18nOptions.countFormatOptions,
+              )}
+            </Text>
+          </View>
+          <View style={styles.tableComplianceContainer}>
+            <Text style={styles.tableText}>
+              {i18n.formatNumber(
+                (momentStat.passed / (momentStat.passed + momentStat.failed)) *
+                  100,
+                i18nOptions.countFormatOptions,
+              )}
+              %
+            </Text>
+          </View>
         </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>1</Text>
-        </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>0</Text>
-        </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>1</Text>
-        </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>0%</Text>
-        </View>
-      </View>
-      <View style={[styles.tableContainer, styles.tableCompliance]}>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>4</Text>
-        </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>1</Text>
-        </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>0</Text>
-        </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>1</Text>
-        </View>
-        <View style={styles.tableComplianceContainer}>
-          <Text style={styles.tableText}>0%</Text>
-        </View>
-      </View>
+      ))}
     </ScrollView>
   );
 };
-
-const styles = createStyleSheet({
-  container: {
-    flexGrow: 1,
-  },
-  rowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: 45,
-    alignItems: "center",
-    paddingHorizontal: 15,
-    borderBottomWidth: 0.4,
-    borderColor: colors.green,
-  },
-  textTable: {
-    color: colors.textColor,
-    fontSize: 16,
-  },
-  titleLabelContainer: {
-    alignItems: "center",
-    paddingTop: 10,
-    paddingBottom: 20,
-    backgroundColor: colors.green,
-  },
-  healthCareTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-    color: colors.textColor,
-  },
-  textRow: {
-    fontSize: 14,
-    color: colors.textColor,
-    marginHorizontal: 14,
-  },
-  countPercentTitleContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 14,
-    width: "100%",
-  },
-  countPercentContainer: {
-    width: "20%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRightWidth: 0.4,
-    borderColor: colors.green,
-  },
-  tableContainer: {
-    backgroundColor: colors.bgColor,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: 40,
-    borderBottomWidth: 0.4,
-    borderColor: colors.green,
-  },
-  tableText: {
-    fontSize: 14,
-    color: colors.textColor,
-    textAlign: "center",
-  },
-  totalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "60%",
-    borderRightWidth: 0.4,
-    borderColor: colors.green,
-  },
-  textTotal: {
-    fontSize: 14,
-    color: colors.textColor,
-    textAlign: "center",
-  },
-  complianceDetailsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginTop: 14,
-    width: "100%",
-  },
-  tableCompliance: {
-    justifyContent: "space-evenly",
-  },
-  tableComplianceContainer: {
-    flexDirection: "row",
-    width: "20%",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    borderRightWidth: 0.4,
-    borderColor: colors.green,
-  },
-  handHygieneContainer: {
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: colors.textColor,
-    padding: 12,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  handHygieneText: {
-    color: colors.textColor,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  titleContainer: {
-    width: "95%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  handHygienePercentContainer: {
-    width: "5%",
-  },
-  feedbackContainer: {
-    borderTopWidth: 0,
-    borderBottomWidth: 2,
-    borderColor: colors.textColor,
-    paddingHorizontal: 12,
-    padding: 6,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  feedbackTextContainer: {
-    width: "70%",
-    alignItems: "flex-start",
-  },
-  feedbackButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "25%",
-    marginHorizontal: 18,
-  },
-  switchIndication: {
-    transform: [{ scaleX: 0.6 }, { scaleY: 0.6 }],
-  },
-});
 
 export default AuditSummary;

@@ -6,6 +6,7 @@ import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Worker } from "@stores/worker";
+import { Q } from "@nozbe/watermelondb";
 
 interface WorkerDropdownProps {
   workers?: Worker[];
@@ -40,7 +41,7 @@ type WithObservableProps = ObservableifyProps<WorkerDropdownProps, "workers">;
 const WorkerDropdown = withObservables(
   ["workers"],
   (props: WithObservableProps) => ({
-    workers: database.get<Worker>("workers").query(),
+    workers: database.get<Worker>("workers").query(Q.sortBy("list_order")),
   }),
 )(Component as any);
 

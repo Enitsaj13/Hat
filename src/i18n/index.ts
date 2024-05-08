@@ -14,4 +14,5 @@ export function getDefaultLanguage(appSetting: AppSetting) {
 
 export const i18nOptions = {
   countFormatOptions: { precision: 0 },
+  percentageFormatOptions: { precision: 2 },
 };
