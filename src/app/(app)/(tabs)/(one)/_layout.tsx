@@ -42,7 +42,11 @@ export default function Layout() {
         options={{
           headerBackTitleVisible: false,
           headerRight: () => (
-            <Pressable onPress={() => router.navigate("AuditSummary")}>
+            <Pressable
+              onPress={() =>
+                router.navigate("AuditSummary?hideFeedbackGiven=false")
+              }
+            >
               <Icon name="table" size={20} color="white" />
             </Pressable>
           ),

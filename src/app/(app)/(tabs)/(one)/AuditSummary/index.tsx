@@ -17,6 +17,8 @@ import { styles } from "./styles";
 import { Q } from "@nozbe/watermelondb";
 import { Worker } from "@stores/worker";
 import cloneDeep from "lodash.clonedeep";
+import { useLocalSearchParams } from "expo-router";
+import { boolean } from "yup";
 
 interface IAuditSummary {
   saved: number;
@@ -108,6 +110,9 @@ const AuditSummary = () => {
   const [summary, setSummary] = useState<IAuditSummary>(
     auditSummaryInitialState,
   );
+  const { hideFeedbackGiven = false } = useLocalSearchParams<{
+    hideFeedbackGiven: string;
+  }>();
 
   const transformToSendData = useCallback(() => {
     (async () => {
@@ -199,91 +204,95 @@ const AuditSummary = () => {
           {i18n.formatNumber(summary.sent, i18nOptions.countFormatOptions)}
         </Text>
       </View>
-      <View style={styles.handHygieneContainer}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.handHygieneText}>
-            {i18n.t("DL5", {
-              defaultValue: "Hand Hygiene Compliance",
-            })}
-          </Text>
-        </View>
-        <View style={styles.handHygienePercentContainer}>
-          <Text style={styles.handHygieneText}>%</Text>
-        </View>
-      </View>
-      <Controller
-        render={({ field: { onChange, value } }) => (
-          <View style={styles.feedbackContainer}>
-            <Pressable
-              style={styles.feedbackTextContainer}
-              onPress={() => onChange(!value)}
-            >
+      {!Boolean(hideFeedbackGiven) && (
+        <>
+          <View style={styles.handHygieneContainer}>
+            <View style={styles.titleContainer}>
               <Text style={styles.handHygieneText}>
-                {i18n.t("FEED1", {
-                  defaultValue: "Feedback Given?",
+                {i18n.t("DL5", {
+                  defaultValue: "Hand Hygiene Compliance",
                 })}
               </Text>
-            </Pressable>
-
-            <View style={styles.feedbackButtonContainer}>
-              <Switch
-                trackColor={{ true: colors.mediumPurple }}
-                thumbColor={value ? colors.lilyWhite : colors.textColor}
-                ios_backgroundColor={colors.cadetGrey}
-                style={styles.switchIndication}
-                onValueChange={async (v) => {
-                  onChange(v);
-                  if (!v) {
-                    // TODO KNOWN UI BUG, set here does not seem to work.
-                    // seems that we are hitting the limitation of react-hook-form
-                    // to make this work, it seems that we need to breakdown the form
-                    // but this is only a UI bug, the feedback to be sent to server is still empty when switch is turned to false
-                    setValue("feedback", "");
-                    await onFeedbackSave("");
-                  }
-                }}
-                value={value}
-                hitSlop={{ right: -30 }}
-              />
-
-              <Icon
-                name="edit"
-                size={20}
-                color={value ? colors.textColor : colors.cadetGrey}
-                onPress={() => {
-                  if (value) {
-                    setShowNoteModal(true);
-                  }
-                }}
-                hitSlop={{ left: 30, right: 10, top: 10, bottom: 10 }}
-              />
+            </View>
+            <View style={styles.handHygienePercentContainer}>
+              <Text style={styles.handHygieneText}>%</Text>
             </View>
           </View>
-        )}
-        name="feedbackEnabled"
-        control={control}
-      />
-      <Controller
-        render={({ field: { onChange, value } }) => (
-          <NoteModal
-            value={value}
-            visible={showNoteModal}
-            onClose={() => setShowNoteModal(false)}
-            title={i18n.t("FEED2", {
-              defaultValue: "Add Feedback Notes",
-            })}
-            cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
-            saveTitle={i18n.t("AE7", { defaultValue: "Send" })}
-            maxLength={150}
-            onSave={(feedback) => {
-              onChange(feedback);
-              onFeedbackSave(feedback);
-            }}
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <View style={styles.feedbackContainer}>
+                <Pressable
+                  style={styles.feedbackTextContainer}
+                  onPress={() => onChange(!value)}
+                >
+                  <Text style={styles.handHygieneText}>
+                    {i18n.t("FEED1", {
+                      defaultValue: "Feedback Given?",
+                    })}
+                  </Text>
+                </Pressable>
+
+                <View style={styles.feedbackButtonContainer}>
+                  <Switch
+                    trackColor={{ true: colors.mediumPurple }}
+                    thumbColor={value ? colors.lilyWhite : colors.textColor}
+                    ios_backgroundColor={colors.cadetGrey}
+                    style={styles.switchIndication}
+                    onValueChange={async (v) => {
+                      onChange(v);
+                      if (!v) {
+                        // TODO KNOWN UI BUG, set here does not seem to work.
+                        // seems that we are hitting the limitation of react-hook-form
+                        // to make this work, it seems that we need to breakdown the form
+                        // but this is only a UI bug, the feedback to be sent to server is still empty when switch is turned to false
+                        setValue("feedback", "");
+                        await onFeedbackSave("");
+                      }
+                    }}
+                    value={value}
+                    hitSlop={{ right: -30 }}
+                  />
+
+                  <Icon
+                    name="edit"
+                    size={20}
+                    color={value ? colors.textColor : colors.cadetGrey}
+                    onPress={() => {
+                      if (value) {
+                        setShowNoteModal(true);
+                      }
+                    }}
+                    hitSlop={{ left: 30, right: 10, top: 10, bottom: 10 }}
+                  />
+                </View>
+              </View>
+            )}
+            name="feedbackEnabled"
+            control={control}
           />
-        )}
-        name="feedback"
-        control={control}
-      />
+          <Controller
+            render={({ field: { onChange, value } }) => (
+              <NoteModal
+                value={value}
+                visible={showNoteModal}
+                onClose={() => setShowNoteModal(false)}
+                title={i18n.t("FEED2", {
+                  defaultValue: "Add Feedback Notes",
+                })}
+                cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
+                saveTitle={i18n.t("AE7", { defaultValue: "Send" })}
+                maxLength={150}
+                onSave={(feedback) => {
+                  onChange(feedback);
+                  onFeedbackSave(feedback);
+                }}
+              />
+            )}
+            name="feedback"
+            control={control}
+          />
+        </>
+      )}
       <View style={styles.titleLabelContainer}>
         <Text style={styles.healthCareTitle}>
           {i18n.t("ADD7", {

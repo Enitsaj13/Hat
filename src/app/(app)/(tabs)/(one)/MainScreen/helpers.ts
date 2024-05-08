@@ -435,6 +435,7 @@ export function useObservationSubmit() {
                     },
                     {
                       name: "AuditSummary",
+                      params: { hideFeedbackGiven: true },
                     },
                   ] as any,
                 }),
