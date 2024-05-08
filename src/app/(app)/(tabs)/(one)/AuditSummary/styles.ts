@@ -33,6 +33,7 @@ export const styles = createStyleSheet({
     fontSize: 14,
     color: colors.textColor,
     marginHorizontal: 14,
+    textAlign: "center",
   },
   countPercentTitleContainer: {
     flexDirection: "row",

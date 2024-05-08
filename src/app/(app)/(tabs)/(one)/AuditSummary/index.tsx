@@ -291,16 +291,28 @@ const AuditSummary = () => {
           })}
         </Text>
         <View style={styles.countPercentTitleContainer}>
-          <Text style={styles.textRow}>
-            {i18n.t("ADD8", {
-              defaultValue: "Count",
-            })}
-          </Text>
-          <Text style={styles.textRow}>
-            {i18n.t("W19", {
-              defaultValue: "Percent",
-            })}
-          </Text>
+          <View
+            style={{
+              width: "20%",
+            }}
+          >
+            <Text style={styles.textRow}>
+              {i18n.t("ADD8", {
+                defaultValue: "Count",
+              })}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "20%",
+            }}
+          >
+            <Text style={styles.textRow}>
+              {i18n.t("W19", {
+                defaultValue: "Percent",
+              })}
+            </Text>
+          </View>
         </View>
       </View>
       {Array.from(summary.hcwStatus).map(([serverId, hcwStat]) => (
@@ -333,10 +345,14 @@ const AuditSummary = () => {
           </Text>
         </View>
         <View style={styles.countPercentContainer}>
-          <Text style={styles.tableText}>{completed}</Text>
+          <Text style={styles.tableText}>
+            {i18n.formatNumber(completed, i18nOptions.countFormatOptions)}
+          </Text>
         </View>
         <View style={styles.countPercentContainer}>
-          <Text style={styles.tableText}>100%</Text>
+          <Text style={styles.tableText}>
+            {i18n.formatNumber(100, i18nOptions.percentageFormatOptions)}%
+          </Text>
         </View>
       </View>
       <View style={styles.titleLabelContainer}>
