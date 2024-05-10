@@ -404,7 +404,10 @@ export const translations = {
       "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
-    DONE: "Done", // TODO
+    DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
+
   },
 
   pt: {
@@ -814,6 +817,9 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
+
   },
 
   fr: {
@@ -1224,6 +1230,8 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
   },
 
   de: {
@@ -1635,6 +1643,8 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
   },
 
   br: {
@@ -2044,6 +2054,8 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
   },
 
   es: {
@@ -2454,6 +2466,8 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
   },
 
   id: {
@@ -2863,6 +2877,9 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
+
   },
 
   cs: {
@@ -3271,6 +3288,9 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
+
   },
 
   th: {
@@ -3678,5 +3698,8 @@ export const translations = {
     STOP_OBSERVATION_FAILURE:
       "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
+    REVISIT_INTRODUCTION: "Revisit Introduction"
+
+
   },
 };

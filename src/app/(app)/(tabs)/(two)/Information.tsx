@@ -10,6 +10,7 @@ import {
 import { Text } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { colors } from "@theme/index";
+import { i18n } from "@i18n/index";
 
 interface TileProps {
   imageSource: ImageSourcePropType;
@@ -49,30 +50,30 @@ function Information() {
       <View style={styles.infoContainer}>
         <Tile
           imageSource={require("@assets/images/hat-images/charts.png")}
-          label="Charts"
+          label={i18n.t("H3", { defaultValue: 'Charts'})}
           onPress={() => {}}
         />
         <Tile
           imageSource={require("@assets/images/hat-images/reports.png")}
-          label="Reports"
+          label={i18n.t("H4", { defaultValue: 'Reports'})}
           onPress={() => {}}
         />
         <Link href="/TrainingVideos" asChild>
           <Tile
             imageSource={require("@assets/images/hat-images/video.png")}
-            label="Training Videos"
+            label={i18n.t("H7", { defaultValue: 'Training Videos'})}
             onPress={() => {}}
           />
         </Link>
         <Tile
           imageSource={require("@assets/images/hat-images/faq.png")}
-          label="FAQ"
+          label={i18n.t("H8", { defaultValue: 'FAQ'})}
           onPress={() => {}}
         />
         <Link href="/Introduction" asChild>
           <Tile
             imageSource={require("@assets/images/hat-images/introduction.png")}
-            label="Revisit Introduction"
+            label={i18n.t("REVISIT_INTRODUCTION")}
             onPress={() => {}}
           />
         </Link>
