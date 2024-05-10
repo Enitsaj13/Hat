@@ -314,7 +314,7 @@ export async function saveFormToDB(
 
   let hhCompliance: HhCompliance = "rub";
   if (form.wash) {
-    hhCompliance = "washed";
+    hhCompliance = "wash";
   } else if (form.missed) {
     hhCompliance = "missed";
   }

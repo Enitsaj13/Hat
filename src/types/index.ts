@@ -41,7 +41,7 @@ export interface FieldJson {
   value?: boolean;
 }
 
-export type HhCompliance = "rub" | "missed" | "washed";
+export type HhCompliance = "rub" | "missed" | "wash";
 export type HhComplianceType = "Contact" | "Airborne" | "Droplet" | "";
 export type Answer = "YES" | "NO" | "";
 export type MaskType = "High Filtration" | "Surgical" | "Other" | "";
