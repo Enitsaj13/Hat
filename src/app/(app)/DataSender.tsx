@@ -4,7 +4,6 @@ import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import { useEffect, useState } from "react";
-import { Mutex } from "async-mutex";
 import NetInfo from "@react-native-community/netinfo";
 import { sendDataToServer } from "@services/sendDataToServer";
 
@@ -12,62 +11,20 @@ interface DataSenderProps {
   toSendData: ToSendDatus[];
 }
 
-const mutex = new Mutex();
 function Component({ toSendData }: DataSenderProps) {
   const [hasNetworkConnection, setHasNetworkConnection] = useState(true);
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
+    return NetInfo.addEventListener((state) => {
       setHasNetworkConnection(state.isInternetReachable === true);
     });
-
-    return unsubscribe;
   }, []);
 
   useEffect(() => {
     (async () => {
-      const release = await mutex.acquire();
       console.log("hasNetworkConnection", hasNetworkConnection);
       if (hasNetworkConnection) {
-        const operations: any[] = [];
-        for (const datus of toSendData || []) {
-          // ensure that the data has not been sent in fact
-          const freshDataFromDB = await database
-            .get<ToSendDatus>("to_send_data")
-            .query(Q.where("id", datus.id))
-            .fetch();
-          if (
-            freshDataFromDB?.length > 0 &&
-            freshDataFromDB[0].status === SendStatus.SENT
-          ) {
-            continue;
-          }
-          const freshDatusFromDB = freshDataFromDB[0];
-          try {
-            await sendDataToServer(freshDatusFromDB);
-            operations.push(
-              freshDatusFromDB.prepareUpdate(
-                (d) => (d.status = SendStatus.SENT),
-              ),
-            );
-          } catch (e) {
-            console.log("error while trying to send data to server", e);
-            operations.push(
-              freshDatusFromDB.prepareUpdate(
-                (d) => (d.status = SendStatus.ERROR),
-              ),
-            );
-          }
-        }
-
-        try {
-          await database.write(async () => {
-            await database.batch(operations);
-          });
-        } catch (e) {
-          console.log("error while trying to sync the db", e);
-        }
+        await sendDataToServer(toSendData);
       }
-      release();
     })();
   }, [toSendData, hasNetworkConnection]);
   return null;

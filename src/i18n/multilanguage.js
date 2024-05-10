@@ -399,9 +399,12 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
-    DONE: "Done",
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
+    DONE: "Done", // TODO
   },
 
   pt: {
@@ -805,8 +808,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 
@@ -1212,8 +1218,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 
@@ -1620,8 +1629,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 
@@ -2026,8 +2038,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 
@@ -2433,8 +2448,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 
@@ -2839,8 +2857,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 
@@ -3244,8 +3265,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 
@@ -3648,8 +3672,11 @@ export const translations = {
     SHOW: "Show", // TODO
     HIDE: "Hide", // TODO
     INDICATION_TITLE: "Without Indication", // TODO
-    UNSAVED_OBSERVATION_ON_MOVE_CONFIRMATION:
-      "Are you sure you want to move without submitting your current observation?", // TODO
+    STOP_OBSERVATION_CONFIRMATION:
+      "Are you sure you want to stop current observation progress? " +
+      "You will need to go to a place with stable network connection to sync the saved observations to server", // TODO
+    STOP_OBSERVATION_FAILURE:
+      "Cannot stop the current observation. Please move to a place with stable internet connection first before attempting to stop the current observation.", // TODO
     DONE: "Done",
   },
 };

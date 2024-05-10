@@ -21,6 +21,7 @@ import { database } from "@stores/index";
 import { SendStatus, ToSendDatus, ToSendDatusType } from "@stores/toSendDatus";
 import { useNavigation, useRouter } from "expo-router";
 import { Alert } from "react-native";
+import { NavigationProp } from "@react-navigation/core";
 
 export const OBLIGATORY_FIELD_VALUE_PREFIX = "obligatoryField-";
 
@@ -283,6 +284,142 @@ export function shouldShow(
   return false;
 }
 
+export async function saveFormToDB(
+  form: IMomentSchema,
+  guid: string,
+  locationServerId: number,
+  auditTypeId: number,
+) {
+  console.log("current form", form);
+  const moments: number[] = [];
+  if (form.beforeTouchingAPatient) {
+    moments.push(1);
+  }
+
+  if (form.beforeClean) {
+    moments.push(2);
+  }
+
+  if (form.afterBodyFluidExposureRisk) {
+    moments.push(3);
+  }
+
+  if (form.afterTouchingAPatient) {
+    moments.push(4);
+  }
+
+  if (form.afterTouchingPatientSurroundings) {
+    moments.push(5);
+  }
+
+  let hhCompliance: HhCompliance = "rub";
+  if (form.wash) {
+    hhCompliance = "washed";
+  } else if (form.missed) {
+    hhCompliance = "missed";
+  }
+
+  let maskType: MaskType = "";
+  if (form.donOnMask && form.maskType != null) {
+    maskType = form.maskType as MaskType;
+  }
+
+  const obligatoryFields: FieldJson[] = Object.keys(form.obligatoryFields)
+    .map((key) => ({
+      id: parseInt(
+        key.substring(
+          key.indexOf(OBLIGATORY_FIELD_VALUE_PREFIX) +
+            OBLIGATORY_FIELD_VALUE_PREFIX.length,
+        ),
+        10,
+      ),
+      option_id:
+        typeof form.obligatoryFields[key] === "number"
+          ? (form.obligatoryFields[key] as number)
+          : undefined,
+      value:
+        typeof form.obligatoryFields[key] === "boolean"
+          ? (form.obligatoryFields[key] as boolean)
+          : undefined,
+    }))
+    .filter(
+      (fieldJson) => fieldJson.option_id == null || fieldJson.value == null,
+    );
+
+  const optionalFields: FieldJson[] = Object.keys(form.optionalFields)
+    .map((key) => ({
+      id: parseInt(
+        key.substring(
+          key.indexOf(OPTIONAL_FIELD_VALUE_PREFIX) +
+            OPTIONAL_FIELD_VALUE_PREFIX.length,
+        ),
+        10,
+      ),
+      option_id:
+        typeof form.optionalFields[key] === "number"
+          ? (form.optionalFields[key] as number)
+          : undefined,
+      value:
+        typeof form.optionalFields[key] === "boolean"
+          ? (form.optionalFields[key] as boolean)
+          : undefined,
+    }))
+    .filter(
+      (fieldJson) => fieldJson.option_id == null || fieldJson.value == null,
+    );
+
+  const sendObservationDataRequest: SendObservationDataRequest = {
+    batch_uuid: guid,
+    resend_id: randomUUID(),
+    hcw_title: form.workerServerId,
+    moment: moments,
+    note: form.notes,
+    location_id: locationServerId,
+    hh_compliance: hhCompliance,
+    hh_compliance_type: form.occupationRisk as HhComplianceType,
+    glove_compliance: getAnswer(form.gloves),
+    gown_compliance: getAnswer(form.donOnGown),
+    mask_compliance: getAnswer(form.donOnMask),
+    mask_type: maskType,
+    date_registered: Date.now(),
+    without_indication: form.withoutIndication,
+    feedback_given: form.feedbackEnabled && !isEmpty(form.feedback),
+    audit_type_id: auditTypeId,
+    obligatory_fields: obligatoryFields,
+    optional_fields: optionalFields,
+  };
+
+  const db = database.get<ToSendDatus>("to_send_data");
+  await database.write(async () => {
+    await db.create((newToSendDatus) => {
+      newToSendDatus.body = sendObservationDataRequest;
+      newToSendDatus.url = "/mobile/save-observation";
+      newToSendDatus.type = ToSendDatusType.OBSERVATION;
+      newToSendDatus.status = SendStatus.IDLE;
+      newToSendDatus.key = guid;
+    });
+  });
+}
+
+export function resetRecordNavigationToSummary(
+  navigation: NavigationProp<any>,
+) {
+  setTimeout(() => {
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: "Record",
+        },
+        {
+          name: "AuditSummary",
+          params: { hideFeedbackGiven: true },
+        },
+      ] as any,
+    });
+  }, 200);
+}
+
 export function useObservationSubmit() {
   const { batchObservationState, setBatchObservationState } =
     useBatchObservation();
@@ -291,116 +428,12 @@ export function useObservationSubmit() {
 
   return useCallback(
     async (form: IMomentSchema) => {
-      console.log("current form", form);
-      const moments: number[] = [];
-      if (form.beforeTouchingAPatient) {
-        moments.push(1);
-      }
-
-      if (form.beforeClean) {
-        moments.push(2);
-      }
-
-      if (form.afterBodyFluidExposureRisk) {
-        moments.push(3);
-      }
-
-      if (form.afterTouchingAPatient) {
-        moments.push(4);
-      }
-
-      if (form.afterTouchingPatientSurroundings) {
-        moments.push(5);
-      }
-
-      let hhCompliance: HhCompliance = "rub";
-      if (form.wash) {
-        hhCompliance = "washed";
-      } else if (form.missed) {
-        hhCompliance = "missed";
-      }
-
-      let maskType: MaskType = "";
-      if (form.donOnMask && form.maskType != null) {
-        maskType = form.maskType as MaskType;
-      }
-
-      const obligatoryFields: FieldJson[] = Object.keys(form.obligatoryFields)
-        .map((key) => ({
-          id: parseInt(
-            key.substring(
-              key.indexOf(OBLIGATORY_FIELD_VALUE_PREFIX) +
-                OBLIGATORY_FIELD_VALUE_PREFIX.length,
-            ),
-            10,
-          ),
-          option_id:
-            typeof form.obligatoryFields[key] === "number"
-              ? (form.obligatoryFields[key] as number)
-              : undefined,
-          value:
-            typeof form.obligatoryFields[key] === "boolean"
-              ? (form.obligatoryFields[key] as boolean)
-              : undefined,
-        }))
-        .filter(
-          (fieldJson) => fieldJson.option_id == null || fieldJson.value == null,
-        );
-
-      const optionalFields: FieldJson[] = Object.keys(form.optionalFields)
-        .map((key) => ({
-          id: parseInt(
-            key.substring(
-              key.indexOf(OPTIONAL_FIELD_VALUE_PREFIX) +
-                OPTIONAL_FIELD_VALUE_PREFIX.length,
-            ),
-            10,
-          ),
-          option_id:
-            typeof form.optionalFields[key] === "number"
-              ? (form.optionalFields[key] as number)
-              : undefined,
-          value:
-            typeof form.optionalFields[key] === "boolean"
-              ? (form.optionalFields[key] as boolean)
-              : undefined,
-        }))
-        .filter(
-          (fieldJson) => fieldJson.option_id == null || fieldJson.value == null,
-        );
-
-      const sendObservationDataRequest: SendObservationDataRequest = {
-        batch_uuid: batchObservationState.guid,
-        resend_id: randomUUID(),
-        hcw_title: form.workerServerId,
-        moment: moments,
-        note: form.notes,
-        location_id: batchObservationState.location?.serverId!,
-        hh_compliance: hhCompliance,
-        hh_compliance_type: form.occupationRisk as HhComplianceType,
-        glove_compliance: getAnswer(form.gloves),
-        gown_compliance: getAnswer(form.donOnGown),
-        mask_compliance: getAnswer(form.donOnMask),
-        mask_type: maskType,
-        date_registered: Date.now(),
-        without_indication: form.withoutIndication,
-        feedback_given: form.feedbackEnabled && !isEmpty(form.feedback),
-        audit_type_id: batchObservationState.auditType,
-        obligatory_fields: obligatoryFields,
-        optional_fields: optionalFields,
-      };
-
-      const db = database.get<ToSendDatus>("to_send_data");
-      await database.write(async () => {
-        await db.create((newToSendDatus) => {
-          newToSendDatus.body = sendObservationDataRequest;
-          newToSendDatus.url = "/mobile/save-observation";
-          newToSendDatus.type = ToSendDatusType.OBSERVATION;
-          newToSendDatus.status = SendStatus.IDLE;
-          newToSendDatus.key = batchObservationState.guid;
-        });
-      });
-
+      await saveFormToDB(
+        form,
+        batchObservationState.guid,
+        batchObservationState.location!.serverId!,
+        batchObservationState.auditType,
+      );
       setTimeout(() => {
         setBatchObservationState((prevState) => ({
           ...prevState,
@@ -426,21 +459,7 @@ export function useObservationSubmit() {
           [
             {
               text: "OK",
-              onPress: () =>
-                setTimeout(() => {
-                  navigation.reset({
-                    index: 1,
-                    routes: [
-                      {
-                        name: "Record",
-                      },
-                      {
-                        name: "AuditSummary",
-                        params: { hideFeedbackGiven: true },
-                      },
-                    ] as any,
-                  });
-                }, 200),
+              onPress: () => resetRecordNavigationToSummary(navigation),
             },
           ],
         );

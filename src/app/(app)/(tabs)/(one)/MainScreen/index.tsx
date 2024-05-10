@@ -27,6 +27,8 @@ import { of, switchMap } from "rxjs";
 import { ObligatoryFieldsUI } from "@app/(app)/(tabs)/(one)/MainScreen/ObligatoryFieldsUI";
 import {
   IMomentSchema,
+  resetRecordNavigationToSummary,
+  saveFormToDB,
   useMomentSchema,
   useMomentSchemaFormRef,
   useObservationSubmit,
@@ -34,6 +36,9 @@ import {
 
 import { OptionalField } from "@stores/optionalField";
 import NoteModal from "@components/Notes";
+import NetInfo from "@react-native-community/netinfo";
+import { SendStatus, ToSendDatus } from "@stores/toSendDatus";
+import { sendDataToServer } from "@services/sendDataToServer";
 
 function Component({
   companyConfig,
@@ -72,6 +77,7 @@ function Component({
     resetField,
     handleSubmit,
     watch,
+    getValues,
     formState: { errors, isDirty },
   } = form;
   const isGloveSelected = watch("gloves");
@@ -194,6 +200,74 @@ function Component({
   }, [isDirty]);
 
   const onSubmitPressed = useObservationSubmit();
+
+  const onStopPress = useCallback(() => {
+    Alert.alert(
+      i18n.t("AG15", { defaultValue: "Confirmation" }),
+      i18n.t("STOP_OBSERVATION_CONFIRMATION"),
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            const network = await NetInfo.fetch();
+            if (network.isInternetReachable) {
+              async function forceSendData() {
+                try {
+                  const toSendData = await database
+                    .get<ToSendDatus>("to_send_data")
+                    .query(
+                      Q.where(
+                        "status",
+                        Q.notIn([SendStatus.SENT, SendStatus.DO_NOT_SEND]),
+                      ),
+                    )
+                    .fetch();
+                  await sendDataToServer(toSendData);
+                  resetRecordNavigationToSummary(navigation);
+                } catch (e) {
+                  console.log("error while force sending data to server", e);
+                  Alert.alert(
+                    i18n.t("V9", { defaultValue: "Connection Error" }),
+                    i18n.t("STOP_OBSERVATION_FAILURE"),
+                  );
+                }
+              }
+
+              if (isDirty) {
+                await saveFormToDB(
+                  getValues(),
+                  batchObservationState.guid,
+                  batchObservationState.location!.serverId!,
+                  batchObservationState.auditType,
+                );
+                await forceSendData();
+              } else {
+                await forceSendData();
+              }
+            } else {
+              Alert.alert(
+                i18n.t("V9", { defaultValue: "Connection Error" }),
+                i18n.t("STOP_OBSERVATION_FAILURE"),
+              );
+            }
+          },
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  }, [
+    isDirty,
+    errors,
+    batchObservationState.guid,
+    batchObservationState.location,
+    batchObservationState.auditType,
+  ]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -534,7 +608,19 @@ function Component({
           <ArrowIcon name="arrowleft" size={12} color="white" />
         </Pressable>
 
-        <Pressable style={styles.controlButton}>
+        <Pressable
+          style={styles.controlButton}
+          onPress={() => {
+            // console.log("isDirty", isDirty);
+            // console.log("getValue", getValues());
+            // TODO KNOWN issue, isDirty does not change it's value after reverting the form to it's original value
+            if (isDirty) {
+              handleSubmit(onStopPress)();
+            } else {
+              onStopPress();
+            }
+          }}
+        >
           <Text style={styles.controlButtonTitle}>
             {i18n.t("ADD29", { defaultValue: "Stop" })}
           </Text>
