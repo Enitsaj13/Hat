@@ -11,7 +11,6 @@ export interface AuditTypeResponse {
   is_deleted: number;
 }
 
-// TODO handle 422
 export async function getAuditTypes() {
   const result = await axiosInstance.get<AuditTypeResponse[]>(
     "/mobile/audit-types",
