@@ -1,5 +1,7 @@
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { i18n } from "@i18n/index";
+import { Pressable } from "react-native";
+import { FontAwesome as Icon } from "@expo/vector-icons";
 
 export default function Layout() {
   return (
@@ -52,6 +54,38 @@ export default function Layout() {
         options={{
           title: i18n.t("A1", {
             defaultValue: "Introduction",
+          }),
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="Reports"
+        options={{
+          title: i18n.t("AI5", {
+            defaultValue: "Reports",
+          }),
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="ObservationRecords"
+        options={{
+          title: i18n.t("S1", {
+            defaultValue: "Observation Records",
+          }),
+          headerBackTitleVisible: false,
+          headerRight: () => (
+            <Pressable onPress={() => router.navigate("FilterReport")}>
+              <Icon name="calendar-o" size={20} color="white" />
+            </Pressable>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="FilterReport"
+        options={{
+          title: i18n.t("T1", {
+            defaultValue: "Filter Options",
           }),
           headerBackTitleVisible: false,
         }}
