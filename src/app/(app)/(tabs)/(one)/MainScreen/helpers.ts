@@ -427,18 +427,20 @@ export function useObservationSubmit() {
             {
               text: "OK",
               onPress: () =>
-                navigation.reset({
-                  index: 1,
-                  routes: [
-                    {
-                      name: "Record",
-                    },
-                    {
-                      name: "AuditSummary",
-                      params: { hideFeedbackGiven: true },
-                    },
-                  ] as any,
-                }),
+                setTimeout(() => {
+                  navigation.reset({
+                    index: 1,
+                    routes: [
+                      {
+                        name: "Record",
+                      },
+                      {
+                        name: "AuditSummary",
+                        params: { hideFeedbackGiven: true },
+                      },
+                    ] as any,
+                  });
+                }, 200),
             },
           ],
         );

@@ -15,7 +15,6 @@ export enum ToSendDatusType {
 
 export enum SendStatus {
   IDLE = "IDLE",
-  SENDING = "SENDING",
   SENT = "SENT",
   ERROR = "ERROR",
   DO_NOT_SEND = "DO_NOT_SEND",
@@ -42,10 +41,4 @@ export class ToSendDatus extends Model {
 
   // @ts-expect-error
   @readonly @date("updated_at") updatedAt: Date;
-  @writer
-  async updateStatus(status: SendStatus) {
-    await this.update((user) => {
-      user.status = status;
-    });
-  }
 }

@@ -28,27 +28,43 @@ function Component({ toSendData }: DataSenderProps) {
       const release = await mutex.acquire();
       console.log("hasNetworkConnection", hasNetworkConnection);
       if (hasNetworkConnection) {
+        const operations: any[] = [];
         for (const datus of toSendData || []) {
           // ensure that the data has not been sent in fact
-          const freshDatusFromDB = await database
+          const freshDataFromDB = await database
             .get<ToSendDatus>("to_send_data")
             .query(Q.where("id", datus.id))
             .fetch();
           if (
-            freshDatusFromDB?.length > 0 &&
-            freshDatusFromDB[0].status === SendStatus.SENT
+            freshDataFromDB?.length > 0 &&
+            freshDataFromDB[0].status === SendStatus.SENT
           ) {
             continue;
           }
-
-          // TODO when sent set the datus status to SENDING
+          const freshDatusFromDB = freshDataFromDB[0];
           try {
-            await sendDataToServer(datus);
-            // TODO when sent set the datus status to SENT
+            await sendDataToServer(freshDatusFromDB);
+            operations.push(
+              freshDatusFromDB.prepareUpdate(
+                (d) => (d.status = SendStatus.SENT),
+              ),
+            );
           } catch (e) {
-            // TODO when sent set the datus status to ERROR
             console.log("error while trying to send data to server", e);
+            operations.push(
+              freshDatusFromDB.prepareUpdate(
+                (d) => (d.status = SendStatus.ERROR),
+              ),
+            );
           }
+        }
+
+        try {
+          await database.write(async () => {
+            await database.batch(operations);
+          });
+        } catch (e) {
+          console.log("error while trying to sync the db", e);
         }
       }
       release();
@@ -64,14 +80,7 @@ const DataSender = withObservables(
     toSendData: database
       .get<ToSendDatus>("to_send_data")
       .query(
-        Q.where(
-          "status",
-          Q.notIn([
-            SendStatus.SENT,
-            SendStatus.DO_NOT_SEND,
-            SendStatus.SENDING,
-          ]),
-        ),
+        Q.where("status", Q.notIn([SendStatus.SENT, SendStatus.DO_NOT_SEND])),
       ),
   }),
 )(Component as any); // as any here is workaround on typescript complaining between Observable<AppSetting> and AppSetting
