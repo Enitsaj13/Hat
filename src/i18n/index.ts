@@ -38,5 +38,4 @@ export const i18nOptions: I18nOptions = {
     minute: "numeric",
     hour12: true,
   },
-}
-
+};
