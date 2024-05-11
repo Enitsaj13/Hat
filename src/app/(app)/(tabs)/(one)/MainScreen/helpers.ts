@@ -467,7 +467,7 @@ export function useObservationSubmit() {
             defaultValue: "This observation is saved on your device.",
           }),
           autoHide: true,
-          visibilityTime: 1400,
+          visibilityTime: 3000,
         });
         router.replace("/(app)/(tabs)/(one)/MainScreen");
       } else {

@@ -257,7 +257,7 @@ export const translations = {
     AG18: "You have successfully completed the trial observation. To create an actual observation, go to Home and tap Record.",
     AG19: "Practice Complete",
     AG20: "No Internet Connection!",
-    AG21: "This observation is saved on your device. The system will automatically attempt to submit this to the server once stable Internet connection is detected.",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Successful Submission!",
     AG23: "This observation was successfully sent to the server.",
     AG24: "COMPLETED!",
@@ -671,7 +671,7 @@ export const translations = {
     AG18: "Concluiu com êxito a observação do ensaio. Para registar a observação, clique em Página inicial e em Gravar.",
     AG19: "Prática Completa",
     AG20: "Sem conexão com a internet!",
-    AG21: "Esta observação é guardada no dispositivo. O sistema tentará enviar automaticamente para o servidor assim que a conexão de Internet for detetada.",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Submissão efetuada com sucesso!",
     AG23: "Esta observação foi enviada com sucesso para o servidor.",
     AG24: "CONCLUÍDO!",
@@ -1086,7 +1086,7 @@ export const translations = {
     AG18: "Vous avez terminé avec succès l'observation d'essai. Pour créer une observation réelle, allez à la page d'accueil et appuyez sur Enregistrer",
     AG19: "Pratique terminée",
     AG20: "Pas de connexion Internet",
-    AG21: "Cette observation est enregistrée sur votre appareil. Le système essaiera automatiquement de la soumettre au serveur une fois qu'une connexion Internet stable sera détectée",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Soumission réussie !",
     AG23: "Cette observation a été envoyée avec succès au serveur",
     AG24: "TERMINÉ !",
@@ -1502,7 +1502,7 @@ export const translations = {
     AG18: 'Sie haben die Testbeobachtung erfolgreich abgeschlossen. Um eine echte Beobachtung zu starten, kehren Sie zurück zu"Home" und wählen Sie Aufnehmen" aus.',
     AG19: "Training beendet",
     AG20: "Keine Internet Verbindung!",
-    AG21: "Diese Obeservation wurde auf Ihrem Gerät gespeichert. Das System wird automatisch versuchen Diese hochzuladen, sobald einen stabile Internetverbindung erkannt wird.",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Erfolgereich eingesandt!",
     AG23: "Diese Beobachtung wurde erfolgreich zum server hochgeladen.",
     AG24: "ABGESCHLOSSEN!",
@@ -1919,7 +1919,7 @@ export const translations = {
     AG18: "Você concluiu com êxito a observação do ensaio. Para criar uma observação real, vá para Página inicial e toque em Gravar.",
     AG19: "Prática Completa",
     AG20: "Sem conexão com a internet!",
-    AG21: "Esta observação é guardada no dispositivo. O sistema tentará automaticamente submeter isto ao servidor uma vez que a conexão de Internet estável for detectada.",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Submissão feita com sucesso!",
     AG23: "Esta observação foi enviada com sucesso para o servidor.",
     AG24: "CONCLUÍDO!",
@@ -2334,7 +2334,7 @@ export const translations = {
     AG18: "Ha completado con éxito la observación de prueba. Para crear una observación real, vaya a Inicio y pulse Registro.",
     AG19: "Práctica Completa",
     AG20: "No hay conexión a internet",
-    AG21: "Esta observación se guarda en el dispositivo. El sistema intentará automáticamente enviarlo al servidor una vez se detecte una conexión a Internet estable.",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Enviado con éxito",
     AG23: "La observación fue enviada con éxito al servidor",
     AG24: "¡COMPLETADO!",
@@ -2750,7 +2750,7 @@ export const translations = {
     AG18: "Anda telah berhasil menyelesaikan observasi percobaan. Untuk membuat observasi yang sebenarnya, buka Halaman utama dan tekan Merekam .",
     AG19: "Latihan Lengkap",
     AG20: "Tidak ada koneksi internet!",
-    AG21: "Observasi ini tersimpan di perangkat anda. Sistem akan secara otomatis mencoba mengirimkannya ke server begitu koneksi Internet yang stabil terdeteksi. ",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Pengiriman Berhasil!",
     AG23: "Observasi ini berhasil dikirim ke server.",
     AG24: "LENGKAP!",
@@ -3165,7 +3165,7 @@ export const translations = {
     AG18: "Úspěšně jste absolvovali zkušební pozorování. Pro spuštění skutečného pozorování klikněte na Domů a začněte zápis.",
     AG19: "Cvičení dokončeno",
     AG20: "Bez připojení k internetu. ",
-    AG21: "Toto pozorování bylo uloženo ve vašem zařízení. Jakmile bude detekováno připojení k internetu, systém se automaticky pokusí data odeslat.",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "Úspěšně odesláno!",
     AG23: "Toto pozorování bylo úspěšně odesláno na server.",
     AG24: "HOTOVO!",
@@ -3577,7 +3577,7 @@ export const translations = {
     AG18: "คุณได้ทำการทดลองสังเกตการณ์สำเร็จแล้ว โปรดไปที่หน้าหลักและกดบันทึกเพื่อสร้างการสังเกตการณ์จริง",
     AG19: "การฝึกใช้งานสำเร็จแล้ว",
     AG20: "ไม่มีสัญญาณอินเตอร์เน็ต!",
-    AG21: "การสังเกตการณ์นี้ได้ถูกบันทึกลงในเครื่องของคุณเรียบร้อยแล้ว เราจะส่งข้อมูลนี้ไปยังเซิรฟ์เวอร์โดยอัตโนมัตเมื่อมีการตรวจพบสัญญาณอินเตอร์เน็ตที่คงที่",
+    AG21: "Observation saved. The system will automatically submit this.", // TODO
     AG22: "ส่งข้อมูลสำเร็จ!",
     AG23: "การสังเกตการณ์นี้ได้ถูกส่งไปที่เซิรฟ์เวอร์เรียบร้อยแล้ว",
     AG24: "สำเร็จ!",
