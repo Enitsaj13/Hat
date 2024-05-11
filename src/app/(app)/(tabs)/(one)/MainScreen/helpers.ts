@@ -22,6 +22,7 @@ import { SendStatus, ToSendDatus, ToSendDatusType } from "@stores/toSendDatus";
 import { useNavigation, useRouter } from "expo-router";
 import { Alert } from "react-native";
 import { NavigationProp } from "@react-navigation/core";
+import Toast from "react-native-toast-message";
 
 export const OBLIGATORY_FIELD_VALUE_PREFIX = "obligatoryField-";
 
@@ -54,10 +55,12 @@ export interface IMomentSchema {
   feedback?: string;
 }
 
+// TODO, since 2nd screen should be detached, this should be unnecessary
 function useMomentSchemaFormRefHolder() {
   return useRef<UseFormReturn<IMomentSchema> | undefined>();
 }
 
+// TODO, since 2nd screen should be detached, this should be unnecessary
 export function useMomentSchemaFormRef() {
   return useBetween(useMomentSchemaFormRefHolder);
 }
@@ -223,7 +226,7 @@ export function useMomentSchema(
       obligatoryFields: object(obligatoryFieldsSchema)
         .default({})
         .test({
-          name: "required", // bugged
+          name: "required",
           test(value) {
             const { obligatoryFieldRequired } = this.parent;
             // console.log("this.parent", this.parent);
@@ -237,8 +240,17 @@ export function useMomentSchema(
       optionalFields: object(optionalFieldSchema).default({}),
       notes: string().optional().max(150),
 
+      // TODO put these two outside this validator and create its own form
       feedbackEnabled: boolean().default(false),
-      feedback: string().optional(),
+      feedback: string().test({
+        name: "required", // bugged
+        message: i18n.t("FEEDBACK_REQUIRED"),
+        test(value) {
+          const { feedbackEnabled } = this.parent;
+          // console.log("this.parent", this.parent);
+          return !feedbackEnabled || !isEmpty(value);
+        },
+      }),
     });
   }, [companyConfig, obligatoryFields, optionalFields]);
 }
@@ -413,7 +425,7 @@ export function resetRecordNavigationToSummary(
         },
         {
           name: "AuditSummary",
-          params: { hideFeedbackGiven: true },
+          params: { hideFeedbackGiven: "false" },
         },
       ] as any,
     });
@@ -448,6 +460,17 @@ export function useObservationSubmit() {
         currentTargetOpportunities - 1,
       );
       if (currentTargetOpportunities - 1 > 0) {
+        Toast.show({
+          type: "success",
+          text1: i18n.t("AH4", {
+            defaultValue: "Saved in Device",
+          }),
+          text2: i18n.t("AG21", {
+            defaultValue: "This observation is saved on your device.",
+          }),
+          autoHide: true,
+          visibilityTime: 1000,
+        });
         router.replace("/(app)/(tabs)/(one)/MainScreen");
       } else {
         // TODO trial mode
@@ -462,6 +485,9 @@ export function useObservationSubmit() {
               onPress: () => resetRecordNavigationToSummary(navigation),
             },
           ],
+          {
+            cancelable: false,
+          },
         );
       }
     },

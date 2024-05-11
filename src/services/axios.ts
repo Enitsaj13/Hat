@@ -106,6 +106,7 @@ export function useAxiosResponseInterceptor(
             .destroyAllPermanently();
           await database.get("optional_fields").query().destroyAllPermanently();
           await database.get("workers").query().destroyAllPermanently();
+          await database.get("to_send_data").query().destroyAllPermanently();
         });
       }
     }

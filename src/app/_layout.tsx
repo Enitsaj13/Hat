@@ -18,6 +18,7 @@ import { of, switchMap } from "rxjs";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import { SessionProvider } from "../auth";
+import Toast from "react-native-toast-message";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -52,19 +53,22 @@ export function Component({ appSetting }: RootProps) {
 
   // Set up the auth context and render our layout inside of it.
   return (
-    <QueryClientProvider client={queryClient}>
-      <PaperProvider theme={CombinedDefaultTheme}>
-        <ThemeProvider value={CombinedDefaultTheme}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <BottomSheetModalProvider>
-              <SessionProvider>
-                <Slot />
-              </SessionProvider>
-            </BottomSheetModalProvider>
-          </GestureHandlerRootView>
-        </ThemeProvider>
-      </PaperProvider>
-    </QueryClientProvider>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <PaperProvider theme={CombinedDefaultTheme}>
+          <ThemeProvider value={CombinedDefaultTheme}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <BottomSheetModalProvider>
+                <SessionProvider>
+                  <Slot />
+                </SessionProvider>
+              </BottomSheetModalProvider>
+            </GestureHandlerRootView>
+          </ThemeProvider>
+        </PaperProvider>
+      </QueryClientProvider>
+      <Toast />
+    </>
   );
 }
 

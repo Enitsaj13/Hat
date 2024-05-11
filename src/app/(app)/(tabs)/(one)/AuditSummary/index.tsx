@@ -110,7 +110,7 @@ const AuditSummary = () => {
   const [summary, setSummary] = useState<IAuditSummary>(
     auditSummaryInitialState,
   );
-  const { hideFeedbackGiven = false } = useLocalSearchParams<{
+  const { hideFeedbackGiven } = useLocalSearchParams<{
     hideFeedbackGiven: string;
   }>();
 
@@ -204,7 +204,7 @@ const AuditSummary = () => {
           {i18n.formatNumber(summary.sent, i18nOptions.countFormatOptions)}
         </Text>
       </View>
-      {!hideFeedbackGiven && (
+      {hideFeedbackGiven == "false" && (
         <>
           <View style={styles.handHygieneContainer}>
             <View style={styles.titleContainer}>

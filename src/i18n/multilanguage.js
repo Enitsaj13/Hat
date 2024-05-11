@@ -243,6 +243,7 @@ export const translations = {
     AG5: "Moment warning!",
     AG6: "Please select a healthcare worker type!",
     AG7: "Healthcare worker is required!",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: "Please select at least 1 moment!",
     AG9: "Moment is required!",
     AG10: "Please select action either rub, wash or missed!",
@@ -385,6 +386,8 @@ export const translations = {
     FEED1: "Feedback Given?",
     FEED2: "Add Feedback Notes",
     FEED3: "Feedback Notes saved.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "EMAIL DATA",
     SUM2: "Summary data sent to your email.",
     SUM3: "Are you sure you want to send this to your email?",
@@ -654,6 +657,7 @@ export const translations = {
     AG5: "Atenção para a momento!",
     AG6: "Por favor selecione o tipo de profissional de saúde!",
     AG7: "Profissional de saúde é obrigatório!",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: "Por favor selecione pelo menos 1 momento!",
     AG9: "O momento é obrigatório!",
     AG10: "Por favor selecione a ação (fricção com antisséptico, lavar ou sem ação)!",
@@ -797,6 +801,8 @@ export const translations = {
     FEED1: "Feedback fornecido?",
     FEED2: "Adicionar notas de feedback",
     FEED3: "Notas de feedback guardadas.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "DADOS DE E-MAIL",
     SUM2: "Dados resumidos enviados para seu e-mail.",
     SUM3: "Tem a certeza que deseja enviar para o seu e-mail?",
@@ -1066,6 +1072,7 @@ export const translations = {
     AG5: "Attention au moment !",
     AG6: "Veuillez sélectionner un type de personnel de santé !",
     AG7: "Le personnel de santé est requis!",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: "Veuillez sélectionner au moins un moment!",
     AG9: "Le moment est requis!",
     AG10: "Veuillez sélectionner une action, soit frotter, laver ou manquer !",
@@ -1210,6 +1217,8 @@ export const translations = {
     FEED1: "Feedback donné ?",
     FEED2: "Ajouter une note dans le feedback",
     FEED3: "Feedback pas sauvé.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "EMAIL DATA",
     SUM2: "Résumé des données envoyé à votre email",
     SUM3: "Êtes-vous sûr de vouloir envoyer ces données à votre adresse e-mail ?",
@@ -1479,6 +1488,7 @@ export const translations = {
     AG5: "Moment Wanung!",
     AG6: "Bitte wählen Sie die Fahrichtung der/des Pflegenden!",
     AG7: "Fahrichtung der/des Pflegenden! Ist erforderlich!",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: 'Bitte wählen Sie mindestens "1 Moment"!',
     AG9: "Moment ist erforderlich!",
     AG10: "Bitte wählen Sie eine Aktivität: Desinfektion/ Waschen oder Verpasst!",
@@ -1624,6 +1634,8 @@ export const translations = {
     FEED1: "Haben Sie Feedback gegeben?",
     FEED2: "Hinzufügen von Feedback",
     FEED3: "Feedback gespeichert.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "DATEN VERSENDEN",
     SUM2: "Eine Zusammenfassung der Daten wurde an Ihre E-Mail Adresse gesandt.",
     SUM3: "Sind Sie sicher, dass Sie dies an Ihre E-Mail Adresse senden möchten?",
@@ -1893,6 +1905,7 @@ export const translations = {
     AG5: "Atenção para o momento!",
     AG6: "Por favor selecione o tipo de profissional de assitência a saúde!",
     AG7: "Profissional de saúde é obrigatório!",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: "Por favor selecione pelo menos 1 momento!",
     AG9: "O momento é obrigatório!",
     AG10: "Por favor selecione a ação (fricção com álcool, lavar ou sem ação)!",
@@ -2036,6 +2049,8 @@ export const translations = {
     FEED1: "Feedback fornecido?",
     FEED2: "Adicionar notas de feedback",
     FEED3: "Notas de feedback salvas.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "DADOS DE E-MAIL",
     SUM2: "Dados resumidos enviados para seu e-mail.",
     SUM3: "Tem certeza que deseja enviar isso para o seu e-mail?",
@@ -2305,6 +2320,7 @@ export const translations = {
     AG5: "Alerta de momento",
     AG6: "Por favor seleccione la categoría de profesional de la salud",
     AG7: "La categoría de profesional de la salud es necesaria",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: "Por favor seleccione al menos un momento",
     AG9: "El momento es necesario.",
     AG10: "Por favor seleccione una acción: Fricción, lavado u omisión.",
@@ -2449,6 +2465,8 @@ export const translations = {
     FEED1: "¿Comentarios recibidos?",
     FEED2: "Agregar notas de comentarios",
     FEED3: "Comentarios Notas guardadas.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "DATOS DE CORREO ELECTRÓNICO",
     SUM2: "Datos resumidos enviados a su correo electrónico.",
     SUM3: "¿Está seguro de que quiere enviar esto a tu correo electrónico?",
@@ -2718,6 +2736,7 @@ export const translations = {
     AG5: "Peringatan momen!",
     AG6: "Silakan pilih tipe petugas kesehatan!",
     AG7: " Dibutuhkan petugas kesehatan!",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: "Silakan pilih minimal 1 momen!",
     AG9: "Dibutuhkan momen!",
     AG10: "Silakan pilih tindakan baik rub, wash atau terlewat !",
@@ -2861,6 +2880,8 @@ export const translations = {
     FEED1: "Umpan Balik Diberikan?",
     FEED2: "Tambahkan Catatan Umpan Balik",
     FEED3: "Catatan Umpan Balik disimpan.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "EMAIL DATA",
     SUM2: "Data ringkasan dikirim ke email Anda.",
     SUM3: "Apakah Anda yakin ingin mengirim ini ke email Anda?",
@@ -3130,6 +3151,7 @@ export const translations = {
     AG5: "Moment varování!",
     AG6: "Prosím, zvolte typ zaměstnance!",
     AG7: "Uveďte zaměstnance.",
+    SELECT_HCW: "Select HCW", // TODO
     AG8: "Prosím, zvolte alespoň 1 moment!",
     AG9: "Moment je vyžadován.",
     AG10: "Prosím, zvolte buď dezinfekci, mytí nebo vynecháno!",
@@ -3272,6 +3294,8 @@ export const translations = {
     FEED1: "Zpětná vazba poskytnuta?",
     FEED2: "Přidejte poznámky ke zpětné vazbě",
     FEED3: "Poznámky ke zpětné vazbě uloženy.",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "E-MAIL DATA",
     SUM2: "Souhrnné údaje byly zaslány na váš e-mail.",
     SUM3: "Jste si jistý/á, že chcete tyto údaje zaslat na váš e-mail?",
@@ -3682,6 +3706,8 @@ export const translations = {
     FEED1: "มีการแจ้งข้อมูลการติชมหรือยัง?",
     FEED2: "เพิ่มการติชม",
     FEED3: "การติดชมถูกบันทึกเรียบร้อยแล้ว",
+    FEEDBACK_REQUIRED:
+      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
     SUM1: "อีเมลข้อมูล",
     SUM2: "ส่งข้อมูลสรุปผลไปที่อีเมลของคุณ",
     SUM3: "คุณมั่นใจใช่ไหมว่าจะส่งข้อมูลนี้ไปที่อีเมลของคุณ",

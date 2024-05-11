@@ -7,6 +7,7 @@ import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Worker } from "@stores/worker";
 import { Q } from "@nozbe/watermelondb";
+import { i18n } from "@i18n/index";
 
 interface WorkerDropdownProps {
   workers?: Worker[];
@@ -33,6 +34,7 @@ function Component({
       onOptionSelected={(key, value) =>
         onWorkerSelected && onWorkerSelected(key as number, value)
       }
+      noOptionSelectedText={i18n.t("SELECT_HCW")}
     />
   );
 }
