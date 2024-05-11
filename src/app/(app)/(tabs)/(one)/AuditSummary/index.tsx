@@ -204,7 +204,7 @@ const AuditSummary = () => {
           {i18n.formatNumber(summary.sent, i18nOptions.countFormatOptions)}
         </Text>
       </View>
-      {!Boolean(hideFeedbackGiven) && (
+      {!hideFeedbackGiven && (
         <>
           <View style={styles.handHygieneContainer}>
             <View style={styles.titleContainer}>
@@ -434,7 +434,7 @@ const AuditSummary = () => {
             <Text style={styles.tableText}>
               {i18n.formatNumber(
                 (momentStat.passed / (momentStat.passed + momentStat.failed)) *
-                100,
+                  100,
                 i18nOptions.countFormatOptions,
               )}
               %
