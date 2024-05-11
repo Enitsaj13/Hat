@@ -12,7 +12,30 @@ export function getDefaultLanguage(appSetting: AppSetting) {
   );
 }
 
-export const i18nOptions = {
+interface DateFormatOptions {
+  month: "numeric" | "2-digit" | "short" | "long";
+  day: "numeric" | "2-digit";
+  year: "numeric" | "2-digit";
+  hour?: "numeric" | "2-digit";
+  minute?: "numeric" | "2-digit";
+  hour12?: boolean;
+}
+
+interface I18nOptions {
+  countFormatOptions: { precision: number };
+  percentageFormatOptions: { precision: number };
+  dateFormatOptions: DateFormatOptions;
+}
+
+export const i18nOptions: I18nOptions = {
   countFormatOptions: { precision: 0 },
   percentageFormatOptions: { precision: 2 },
+  dateFormatOptions: {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  },
 };
