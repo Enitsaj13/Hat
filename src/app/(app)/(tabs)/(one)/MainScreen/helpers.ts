@@ -55,12 +55,10 @@ export interface IMomentSchema {
   feedback?: string;
 }
 
-// TODO, since 2nd screen should be detached, this should be unnecessary
 function useMomentSchemaFormRefHolder() {
   return useRef<UseFormReturn<IMomentSchema> | undefined>();
 }
 
-// TODO, since 2nd screen should be detached, this should be unnecessary
 export function useMomentSchemaFormRef() {
   return useBetween(useMomentSchemaFormRefHolder);
 }
@@ -469,7 +467,7 @@ export function useObservationSubmit() {
             defaultValue: "This observation is saved on your device.",
           }),
           autoHide: true,
-          visibilityTime: 1000,
+          visibilityTime: 1400,
         });
         router.replace("/(app)/(tabs)/(one)/MainScreen");
       } else {
