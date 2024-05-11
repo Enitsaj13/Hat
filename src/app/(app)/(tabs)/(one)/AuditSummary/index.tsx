@@ -204,7 +204,7 @@ const AuditSummary = () => {
           {i18n.formatNumber(summary.sent, i18nOptions.countFormatOptions)}
         </Text>
       </View>
-      {!hideFeedbackGiven && (
+      {!Boolean(hideFeedbackGiven) && (
         <>
           <View style={styles.handHygieneContainer}>
             <View style={styles.titleContainer}>
