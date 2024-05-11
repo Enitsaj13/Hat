@@ -63,7 +63,7 @@ const FilterReport = () => {
                 color="gray"
               />
             }
-            noOptionSelectedText="--All--"
+            noOptionSelectedText={i18n.t("T12", { defaultValue: "All" })}
           />
         </View>
         <View style={styles.selectorContainer}>
@@ -82,7 +82,7 @@ const FilterReport = () => {
                 color="gray"
               />
             }
-            noOptionSelectedText="--All--"
+            noOptionSelectedText={i18n.t("T12", { defaultValue: "All" })}
           />
         </View>
         <View style={[styles.selectorContainer, styles.locationHeader]}>
