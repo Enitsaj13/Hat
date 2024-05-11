@@ -113,7 +113,7 @@ const FilterReport = () => {
                 color="gray"
               />
             }
-            noOptionSelectedText="Select"
+            noOptionSelectedText={i18n.t("LC3", { defaultValue: 'Select' })}
           />
         </View>
       </View>
