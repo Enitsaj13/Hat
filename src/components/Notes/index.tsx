@@ -9,6 +9,7 @@ interface NoteModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: (note: string | undefined) => void;
+  disableSave?: boolean;
   cancelTitle: string;
   saveTitle: string;
   maxLength: number;
@@ -23,6 +24,7 @@ function NoteModal({
   saveTitle,
   maxLength,
   onSave,
+  disableSave = false,
 }: NoteModalProps) {
   const [note, setNote] = useState(value);
 
@@ -67,6 +69,7 @@ function NoteModal({
               onPress={handleSaveNote}
               style={styles.saveButton}
               labelStyle={{ color: colors.textColor }}
+              disabled={disableSave}
             >
               {saveTitle}
             </Button>

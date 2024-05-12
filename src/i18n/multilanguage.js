@@ -386,8 +386,8 @@ export const translations = {
     FEED1: "Feedback Given?",
     FEED2: "Add Feedback Notes",
     FEED3: "Feedback Notes saved.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "EMAIL DATA",
     SUM2: "Summary data sent to your email.",
     SUM3: "Are you sure you want to send this to your email?",
@@ -801,8 +801,8 @@ export const translations = {
     FEED1: "Feedback fornecido?",
     FEED2: "Adicionar notas de feedback",
     FEED3: "Notas de feedback guardadas.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "DADOS DE E-MAIL",
     SUM2: "Dados resumidos enviados para seu e-mail.",
     SUM3: "Tem a certeza que deseja enviar para o seu e-mail?",
@@ -1217,8 +1217,8 @@ export const translations = {
     FEED1: "Feedback donné ?",
     FEED2: "Ajouter une note dans le feedback",
     FEED3: "Feedback pas sauvé.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "EMAIL DATA",
     SUM2: "Résumé des données envoyé à votre email",
     SUM3: "Êtes-vous sûr de vouloir envoyer ces données à votre adresse e-mail ?",
@@ -1634,8 +1634,8 @@ export const translations = {
     FEED1: "Haben Sie Feedback gegeben?",
     FEED2: "Hinzufügen von Feedback",
     FEED3: "Feedback gespeichert.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "DATEN VERSENDEN",
     SUM2: "Eine Zusammenfassung der Daten wurde an Ihre E-Mail Adresse gesandt.",
     SUM3: "Sind Sie sicher, dass Sie dies an Ihre E-Mail Adresse senden möchten?",
@@ -2049,8 +2049,8 @@ export const translations = {
     FEED1: "Feedback fornecido?",
     FEED2: "Adicionar notas de feedback",
     FEED3: "Notas de feedback salvas.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "DADOS DE E-MAIL",
     SUM2: "Dados resumidos enviados para seu e-mail.",
     SUM3: "Tem certeza que deseja enviar isso para o seu e-mail?",
@@ -2465,8 +2465,8 @@ export const translations = {
     FEED1: "¿Comentarios recibidos?",
     FEED2: "Agregar notas de comentarios",
     FEED3: "Comentarios Notas guardadas.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "DATOS DE CORREO ELECTRÓNICO",
     SUM2: "Datos resumidos enviados a su correo electrónico.",
     SUM3: "¿Está seguro de que quiere enviar esto a tu correo electrónico?",
@@ -2880,8 +2880,8 @@ export const translations = {
     FEED1: "Umpan Balik Diberikan?",
     FEED2: "Tambahkan Catatan Umpan Balik",
     FEED3: "Catatan Umpan Balik disimpan.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "EMAIL DATA",
     SUM2: "Data ringkasan dikirim ke email Anda.",
     SUM3: "Apakah Anda yakin ingin mengirim ini ke email Anda?",
@@ -3294,8 +3294,8 @@ export const translations = {
     FEED1: "Zpětná vazba poskytnuta?",
     FEED2: "Přidejte poznámky ke zpětné vazbě",
     FEED3: "Poznámky ke zpětné vazbě uloženy.",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "E-MAIL DATA",
     SUM2: "Souhrnné údaje byly zaslány na váš e-mail.",
     SUM3: "Jste si jistý/á, že chcete tyto údaje zaslat na váš e-mail?",
@@ -3706,8 +3706,8 @@ export const translations = {
     FEED1: "มีการแจ้งข้อมูลการติชมหรือยัง?",
     FEED2: "เพิ่มการติชม",
     FEED3: "การติดชมถูกบันทึกเรียบร้อยแล้ว",
-    FEEDBACK_REQUIRED:
-      "Feedback has been toggled on. Please add the feedback note from Precaution screen.", // TODO
+    FEEDBACK_REQUIRED: "Feedback notes should not be empty", // TODO
+    FEEDBACK_CONFIRMATION: "Are you sure you want to send the feedback?", // TODO
     SUM1: "อีเมลข้อมูล",
     SUM2: "ส่งข้อมูลสรุปผลไปที่อีเมลของคุณ",
     SUM3: "คุณมั่นใจใช่ไหมว่าจะส่งข้อมูลนี้ไปที่อีเมลของคุณ",

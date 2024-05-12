@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, Switch, Text, View } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { i18n, i18nOptions } from "@i18n/index";
 import { colors } from "@theme/index";
 import NoteModal from "@components/Notes";
 import { useMomentSchemaFormRef } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useBatchObservation } from "@hooks/useBatchObservation";
 import {
   SendFeedbackRequest,
@@ -17,8 +17,14 @@ import { styles } from "./styles";
 import { Q } from "@nozbe/watermelondb";
 import { Worker } from "@stores/worker";
 import cloneDeep from "lodash.clonedeep";
-import { useLocalSearchParams } from "expo-router";
-import { boolean } from "yup";
+import { router, useLocalSearchParams } from "expo-router";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  IFeedbackSchema,
+  useFeedbackSchema,
+  useFeedbackSchemaFormRef,
+} from "@app/(app)/(tabs)/(one)/AuditSummary/schema";
+import Toast from "react-native-toast-message";
 
 interface IAuditSummary {
   saved: number;
@@ -100,9 +106,21 @@ async function transformToSendDataToReport(toSendData: ToSendDatus[]) {
 }
 
 const AuditSummary = () => {
-  const formRef = useMomentSchemaFormRef();
-  const form = formRef.current!;
-  const { control, setValue, watch } = form;
+  const schema = useFeedbackSchema();
+  const formRef = useFeedbackSchemaFormRef();
+  const form = useForm<IFeedbackSchema>({
+    resolver: yupResolver(schema),
+    mode: "all",
+  });
+  formRef.current = form;
+
+  const {
+    control,
+    setValue,
+    formState: { isSubmitSuccessful },
+    handleSubmit,
+  } = form;
+
   const [showNoteModal, setShowNoteModal] = useState(false);
 
   const { batchObservationState } = useBatchObservation();
@@ -135,21 +153,56 @@ const AuditSummary = () => {
   useEffect(transformToSendData, []);
 
   const onFeedbackSave = useCallback(
-    async (feedback?: string) => {
-      const sendObservationDataRequest: SendFeedbackRequest = {
-        batch_uuid: batchObservationState.guid,
-        notes: feedback,
-      };
+    async (form: IFeedbackSchema) => {
+      return new Promise((resolve, reject) => {
+        console.log("here 2");
+        Alert.alert(
+          i18n.t("AG15", { defaultValue: "Confirmation" }),
+          i18n.t("FEEDBACK_CONFIRMATION"),
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => reject("user canceled"),
+            },
+            {
+              text: "OK",
+              onPress: async () => {
+                const sendObservationDataRequest: SendFeedbackRequest = {
+                  batch_uuid: batchObservationState.guid,
+                  notes: form.feedback,
+                };
 
-      const db = database.get<ToSendDatus>("to_send_data");
-      await database.write(async () => {
-        await db.create((newToSendDatus) => {
-          newToSendDatus.body = sendObservationDataRequest;
-          newToSendDatus.url = "/mobile/update-feedback-given";
-          newToSendDatus.type = ToSendDatusType.FEEDBACK;
-          newToSendDatus.status = SendStatus.IDLE;
-          newToSendDatus.key = batchObservationState.guid;
-        });
+                const db = database.get<ToSendDatus>("to_send_data");
+                await database.write(async () => {
+                  await db.create((newToSendDatus) => {
+                    newToSendDatus.body = sendObservationDataRequest;
+                    newToSendDatus.url = "/mobile/update-feedback-given";
+                    newToSendDatus.type = ToSendDatusType.FEEDBACK;
+                    newToSendDatus.status = SendStatus.IDLE;
+                    newToSendDatus.key = batchObservationState.guid;
+                  });
+                });
+                Toast.show({
+                  type: "success",
+                  text1: i18n.t("AH4", {
+                    defaultValue: "Saved in Device",
+                  }),
+                  text2: i18n.t("FEED3", {
+                    defaultValue: "Feedback Notes saved.",
+                  }),
+                  autoHide: true,
+                  visibilityTime: 3000,
+                });
+                resolve(undefined);
+              },
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => reject("user canceled"),
+          },
+        );
       });
     },
     [batchObservationState.guid],
@@ -239,14 +292,11 @@ const AuditSummary = () => {
                     ios_backgroundColor={colors.cadetGrey}
                     style={styles.switchIndication}
                     onValueChange={async (v) => {
-                      onChange(v);
-                      if (!v) {
-                        // TODO KNOWN UI BUG, set here does not seem to work.
-                        // seems that we are hitting the limitation of react-hook-form
-                        // to make this work, it seems that we need to breakdown the form
-                        // but this is only a UI bug, the feedback to be sent to server is still empty when switch is turned to false
-                        setValue("feedback", "");
-                        await onFeedbackSave("");
+                      if (!isSubmitSuccessful) {
+                        onChange(v);
+                        if (!v) {
+                          setValue("feedback", "");
+                        }
                       }
                     }}
                     value={value}
@@ -258,7 +308,7 @@ const AuditSummary = () => {
                     size={20}
                     color={value ? colors.textColor : colors.cadetGrey}
                     onPress={() => {
-                      if (value) {
+                      if (!isSubmitSuccessful && value) {
                         setShowNoteModal(true);
                       }
                     }}
@@ -271,7 +321,10 @@ const AuditSummary = () => {
             control={control}
           />
           <Controller
-            render={({ field: { onChange, value } }) => (
+            render={({
+              field: { onChange, value },
+              fieldState: { invalid },
+            }) => (
               <NoteModal
                 value={value}
                 visible={showNoteModal}
@@ -282,9 +335,12 @@ const AuditSummary = () => {
                 cancelTitle={i18n.t("I3", { defaultValue: "Cancel" })}
                 saveTitle={i18n.t("AE7", { defaultValue: "Send" })}
                 maxLength={150}
-                onSave={(feedback) => {
+                onSave={async (feedback) => {
                   onChange(feedback);
-                  onFeedbackSave(feedback);
+                  setTimeout(() => {
+                    console.log("here 1");
+                    handleSubmit(onFeedbackSave)();
+                  }, 0);
                 }}
               />
             )}

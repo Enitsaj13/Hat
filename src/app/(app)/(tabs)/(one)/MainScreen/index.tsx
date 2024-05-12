@@ -39,6 +39,7 @@ import NoteModal from "@components/Notes";
 import NetInfo from "@react-native-community/netinfo";
 import { SendStatus, ToSendDatus } from "@stores/toSendDatus";
 import { sendDataToServer } from "@services/sendDataToServer";
+import { useFeedbackSchemaFormRef } from "@app/(app)/(tabs)/(one)/AuditSummary/schema";
 
 function Component({
   companyConfig,
@@ -201,6 +202,7 @@ function Component({
 
   const onSubmitPressed = useObservationSubmit();
 
+  const feedbackFormRef = useFeedbackSchemaFormRef();
   const onStopPress = useCallback(() => {
     Alert.alert(
       i18n.t("AG15", { defaultValue: "Confirmation" }),
@@ -240,6 +242,7 @@ function Component({
               if (isDirty) {
                 await saveFormToDB(
                   getValues(),
+                  feedbackFormRef.current?.getValues(),
                   batchObservationState.guid,
                   batchObservationState.location!.serverId!,
                   batchObservationState.auditType,

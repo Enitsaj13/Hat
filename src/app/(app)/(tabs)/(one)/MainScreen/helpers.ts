@@ -23,6 +23,10 @@ import { useNavigation, useRouter } from "expo-router";
 import { Alert } from "react-native";
 import { NavigationProp } from "@react-navigation/core";
 import Toast from "react-native-toast-message";
+import {
+  IFeedbackSchema,
+  useFeedbackSchemaFormRef,
+} from "@app/(app)/(tabs)/(one)/AuditSummary/schema";
 
 export const OBLIGATORY_FIELD_VALUE_PREFIX = "obligatoryField-";
 
@@ -51,8 +55,6 @@ export interface IMomentSchema {
   optionalFields: Record<string, number | boolean | null | undefined>;
 
   notes?: string;
-  feedbackEnabled: boolean;
-  feedback?: string;
 }
 
 function useMomentSchemaFormRefHolder() {
@@ -237,18 +239,6 @@ export function useMomentSchema(
       maskType: string().optional(),
       optionalFields: object(optionalFieldSchema).default({}),
       notes: string().optional().max(150),
-
-      // TODO put these two outside this validator and create its own form
-      feedbackEnabled: boolean().default(false),
-      feedback: string().test({
-        name: "required", // bugged
-        message: i18n.t("FEEDBACK_REQUIRED"),
-        test(value) {
-          const { feedbackEnabled } = this.parent;
-          // console.log("this.parent", this.parent);
-          return !feedbackEnabled || !isEmpty(value);
-        },
-      }),
     });
   }, [companyConfig, obligatoryFields, optionalFields]);
 }
@@ -295,46 +285,47 @@ export function shouldShow(
 }
 
 export async function saveFormToDB(
-  form: IMomentSchema,
+  mainForm: IMomentSchema,
+  feedbackForm: IFeedbackSchema | null | undefined,
   guid: string,
   locationServerId: number,
   auditTypeId: number,
 ) {
-  console.log("current form", form);
+  console.log("current form", mainForm);
   const moments: number[] = [];
-  if (form.beforeTouchingAPatient) {
+  if (mainForm.beforeTouchingAPatient) {
     moments.push(1);
   }
 
-  if (form.beforeClean) {
+  if (mainForm.beforeClean) {
     moments.push(2);
   }
 
-  if (form.afterBodyFluidExposureRisk) {
+  if (mainForm.afterBodyFluidExposureRisk) {
     moments.push(3);
   }
 
-  if (form.afterTouchingAPatient) {
+  if (mainForm.afterTouchingAPatient) {
     moments.push(4);
   }
 
-  if (form.afterTouchingPatientSurroundings) {
+  if (mainForm.afterTouchingPatientSurroundings) {
     moments.push(5);
   }
 
   let hhCompliance: HhCompliance = "rub";
-  if (form.wash) {
+  if (mainForm.wash) {
     hhCompliance = "wash";
-  } else if (form.missed) {
+  } else if (mainForm.missed) {
     hhCompliance = "missed";
   }
 
   let maskType: MaskType = "";
-  if (form.donOnMask && form.maskType != null) {
-    maskType = form.maskType as MaskType;
+  if (mainForm.donOnMask && mainForm.maskType != null) {
+    maskType = mainForm.maskType as MaskType;
   }
 
-  const obligatoryFields: FieldJson[] = Object.keys(form.obligatoryFields)
+  const obligatoryFields: FieldJson[] = Object.keys(mainForm.obligatoryFields)
     .map((key) => ({
       id: parseInt(
         key.substring(
@@ -344,19 +335,19 @@ export async function saveFormToDB(
         10,
       ),
       option_id:
-        typeof form.obligatoryFields[key] === "number"
-          ? (form.obligatoryFields[key] as number)
+        typeof mainForm.obligatoryFields[key] === "number"
+          ? (mainForm.obligatoryFields[key] as number)
           : undefined,
       value:
-        typeof form.obligatoryFields[key] === "boolean"
-          ? (form.obligatoryFields[key] as boolean)
+        typeof mainForm.obligatoryFields[key] === "boolean"
+          ? (mainForm.obligatoryFields[key] as boolean)
           : undefined,
     }))
     .filter(
       (fieldJson) => fieldJson.option_id == null || fieldJson.value == null,
     );
 
-  const optionalFields: FieldJson[] = Object.keys(form.optionalFields)
+  const optionalFields: FieldJson[] = Object.keys(mainForm.optionalFields)
     .map((key) => ({
       id: parseInt(
         key.substring(
@@ -366,12 +357,12 @@ export async function saveFormToDB(
         10,
       ),
       option_id:
-        typeof form.optionalFields[key] === "number"
-          ? (form.optionalFields[key] as number)
+        typeof mainForm.optionalFields[key] === "number"
+          ? (mainForm.optionalFields[key] as number)
           : undefined,
       value:
-        typeof form.optionalFields[key] === "boolean"
-          ? (form.optionalFields[key] as boolean)
+        typeof mainForm.optionalFields[key] === "boolean"
+          ? (mainForm.optionalFields[key] as boolean)
           : undefined,
     }))
     .filter(
@@ -381,19 +372,21 @@ export async function saveFormToDB(
   const sendObservationDataRequest: SendObservationDataRequest = {
     batch_uuid: guid,
     resend_id: randomUUID(),
-    hcw_title: form.workerServerId,
+    hcw_title: mainForm.workerServerId,
     moment: moments,
-    note: form.notes,
+    note: mainForm.notes,
     location_id: locationServerId,
     hh_compliance: hhCompliance,
-    hh_compliance_type: form.occupationRisk as HhComplianceType,
-    glove_compliance: getAnswer(form.gloves),
-    gown_compliance: getAnswer(form.donOnGown),
-    mask_compliance: getAnswer(form.donOnMask),
+    hh_compliance_type: mainForm.occupationRisk as HhComplianceType,
+    glove_compliance: getAnswer(mainForm.gloves),
+    gown_compliance: getAnswer(mainForm.donOnGown),
+    mask_compliance: getAnswer(mainForm.donOnMask),
     mask_type: maskType,
     date_registered: Date.now(),
-    without_indication: form.withoutIndication,
-    feedback_given: form.feedbackEnabled && !isEmpty(form.feedback),
+    without_indication: mainForm.withoutIndication,
+    feedback_given:
+      (feedbackForm?.feedbackEnabled && !isEmpty(feedbackForm?.feedback)) ||
+      false,
     audit_type_id: auditTypeId,
     obligatory_fields: obligatoryFields,
     optional_fields: optionalFields,
@@ -435,11 +428,13 @@ export function useObservationSubmit() {
     useBatchObservation();
   const router = useRouter();
   const navigation = useNavigation();
+  const feedbackFormRef = useFeedbackSchemaFormRef();
 
   return useCallback(
     async (form: IMomentSchema) => {
       await saveFormToDB(
         form,
+        feedbackFormRef.current?.getValues(),
         batchObservationState.guid,
         batchObservationState.location!.serverId!,
         batchObservationState.auditType,
