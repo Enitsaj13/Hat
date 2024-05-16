@@ -27,6 +27,7 @@ export interface UserJson {
   web_privacy_accepted_flag: number;
   app_privacy_accepted_flag: number;
   decrypted_email: string;
+  group_code: string;
 }
 
 export interface BaseResponse {

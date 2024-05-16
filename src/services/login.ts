@@ -61,6 +61,7 @@ function updateUser(user: User, userResponse: UserJson) {
   user.email = userResponse.decrypted_email;
   user.companyName = userResponse.company;
   user.hasAcceptedAppPrivacy = userResponse.app_privacy_accepted_flag === 1;
+  user.groupCode = userResponse.group_code;
 }
 
 function updateAppSetting(appSetting: AppSetting, response: LoginResponse) {
@@ -145,6 +146,7 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       hasAcceptedAppPrivacy: userResponse.app_privacy_accepted_flag === 1,
     };
   } catch (e: any) {
+    console.log("e", e);
     const message =
       e.code === "ERR_BAD_REQUEST"
         ? i18n.t("INVALID_CREDENTIALS")

@@ -53,7 +53,7 @@ function Information() {
           label={i18n.t("H3", { defaultValue: "Charts" })}
           onPress={() => {}}
         />
-        <Link href="/ObservationRecords" asChild>
+        <Link href="ObservationRecords" asChild>
           <Tile
             imageSource={require("@assets/images/hat-images/reports.png")}
             label={i18n.t("H4", { defaultValue: "Reports" })}

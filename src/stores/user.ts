@@ -19,6 +19,9 @@ export class User extends Model {
   // @ts-expect-error
   @field("has_accepted_app_privacy") hasAcceptedAppPrivacy: boolean;
 
+  // @ts-expect-error
+  @text("group_code") groupCode: string;
+
   @writer
   async updateUserHasAcceptedAppPrivacy(hasAcceptedAppPrivacy: boolean) {
     await this.update((user) => {

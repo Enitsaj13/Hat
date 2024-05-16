@@ -96,8 +96,6 @@ const stylesheet = createStyleSheet({
     width: "100%",
     height: "100%",
     zIndex: 999999,
-    borderColor: "red",
-    borderWidth: 1,
   },
 });
 

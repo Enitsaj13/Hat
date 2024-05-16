@@ -11,6 +11,7 @@ export const dbSchema = appSchema({
         { name: "email", type: "string" },
         { name: "company_name", type: "string" },
         { name: "has_accepted_app_privacy", type: "boolean" },
+        { name: "group_code", type: "string" },
       ],
     }),
     tableSchema({
