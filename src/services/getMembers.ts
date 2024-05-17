@@ -9,5 +9,6 @@ export interface MemberResponse {
 }
 
 export async function getMembers() {
-  return await axiosInstance.get<MemberResponse[]>("/mobile/members");
+  const result = await axiosInstance.get<MemberResponse[]>("/mobile/members");
+  return result.data;
 }

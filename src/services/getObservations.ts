@@ -42,9 +42,11 @@ export interface ObservationResponse {
 export interface IGetObservationsSchema {
   dateFrom: Date;
   dateTo: Date;
-  locationId?: number;
   hcwTitle?: number;
   auditor?: number;
+
+  // TODO change this to object
+  locationId?: number;
 }
 
 export interface ObservationRecords {
