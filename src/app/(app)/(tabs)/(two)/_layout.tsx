@@ -103,6 +103,15 @@ export default function Layout() {
           }),
         }}
       />
+      <Stack.Screen
+        name="WHOMy5MomentsForHandHygiene"
+        options={{
+          title: i18n.t("K4", {
+            defaultValue: 'WHO - "My 5 Moments for Hand Hygiene"',
+          }),
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack>
   );
 }

@@ -18,7 +18,7 @@ const TrainingVideos = () => {
       </View>
       {/* Item 1 */}
       <Link href="/VideosLanguage" asChild>
-        <TouchableRipple onPress={() => {}} style={styles.itemContainer}>
+        <TouchableRipple onPress={() => { }} style={styles.itemContainer}>
           <List.Item
             titleStyle={styles.titleColor}
             title={i18n.t("K3", {
@@ -30,19 +30,21 @@ const TrainingVideos = () => {
       </Link>
 
       {/* Item 2 */}
-      <TouchableRipple onPress={() => {}} style={styles.itemContainer}>
-        <List.Item
-          titleStyle={styles.titleColor}
-          title={i18n.t("K4", {
-            defaultValue: 'WHO - "My 5 Moments for Hand Hygiene"',
-          })}
-          titleNumberOfLines={1}
-        />
-      </TouchableRipple>
+      <Link href="/WHOMy5MomentsForHandHygiene" asChild>
+        <TouchableRipple onPress={() => { }} style={styles.itemContainer}>
+          <List.Item
+            titleStyle={styles.titleColor}
+            title={i18n.t("K4", {
+              defaultValue: 'WHO - "My 5 Moments for Hand Hygiene"',
+            })}
+            titleNumberOfLines={1}
+          />
+        </TouchableRipple>
+      </Link>
 
       {/* Item 3 */}
       <Link href="/GlobalHandHygieneExcellenceAward" asChild>
-        <TouchableRipple onPress={() => {}} style={styles.itemContainer}>
+        <TouchableRipple onPress={() => { }} style={styles.itemContainer}>
           <List.Item
             titleStyle={styles.titleColor}
             title={i18n.t("K5", {
