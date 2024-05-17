@@ -20,6 +20,11 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { SessionProvider } from "../auth";
 import Toast from "react-native-toast-message";
 
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
+dayjs.extend(localizedFormat);
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,

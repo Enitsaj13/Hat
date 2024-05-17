@@ -2,40 +2,29 @@ import { useState } from "react";
 import { Button } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { colors } from "@theme/index";
+import dayjs from "dayjs";
+import { i18n } from "@i18n/index";
 
 interface CustomDatePickerProps {
-  initialDate: Date;
+  value: Date;
   onDateChange: (selectedDate: Date) => void;
 }
 
-function CustomDatePicker({
-  initialDate,
-  onDateChange,
-}: CustomDatePickerProps) {
+function CustomDatePicker({ value, onDateChange }: CustomDatePickerProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(initialDate);
-
-  const showDatePicker = () => setDatePickerVisibility(true);
-  const hideDatePicker = () => setDatePickerVisibility(false);
-
   const handleConfirm = (date: Date) => {
-    setSelectedDate(date);
-    onDateChange(date);
-    hideDatePicker();
+    setDatePickerVisibility(false);
+    setTimeout(() => onDateChange(date), 0);
   };
 
-  const buttonTitle = selectedDate.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const buttonTitle = dayjs(value, i18n.locale).format("LL");
 
   return (
     <>
       <Button
         mode="text"
         textColor={colors.midNight}
-        onPress={showDatePicker}
+        onPress={() => setDatePickerVisibility(true)}
         labelStyle={{ fontSize: 16 }}
       >
         {buttonTitle || "(MMM/dd/yyyy)"}
@@ -43,9 +32,9 @@ function CustomDatePicker({
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
-        date={selectedDate}
+        date={value}
         onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
+        onCancel={() => setDatePickerVisibility(false)}
       />
     </>
   );

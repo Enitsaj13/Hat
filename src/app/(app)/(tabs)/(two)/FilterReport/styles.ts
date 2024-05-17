@@ -11,7 +11,7 @@ export const styles = createStyleSheet({
   borderContainer: {
     borderWidth: 0.4,
     borderColor: colors.steelGrey,
-    height: "72%",
+    paddingVertical: 20,
   },
   selectorContainer: {
     flexDirection: "row",
@@ -60,6 +60,7 @@ export const styles = createStyleSheet({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
+    padding: 20,
   },
   cancelButton: {
     backgroundColor: "#fafafa",
@@ -96,5 +97,8 @@ export const styles = createStyleSheet({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "white",
+    opacity: 0.6,
+    zIndex: 99,
   },
 });

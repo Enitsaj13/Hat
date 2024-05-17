@@ -21,6 +21,7 @@ import { useQuery } from "react-query";
 import { getMembers } from "@services/getMembers";
 import { ActivityIndicator } from "react-native-paper";
 import WorkerDropdown from "@app/(app)/(tabs)/(two)/FilterReport/WorkerDropdown";
+import { colors } from "@theme/index";
 
 interface FilterReportProps {
   user: User;
@@ -42,7 +43,7 @@ const Component = ({ user }: FilterReportProps) => {
           </Text>
           <Controller
             render={({ field: { onChange, value } }) => (
-              <CustomDatePicker initialDate={value} onDateChange={onChange} />
+              <CustomDatePicker value={value} onDateChange={onChange} />
             )}
             name={"dateFrom"}
             control={control}
@@ -54,7 +55,7 @@ const Component = ({ user }: FilterReportProps) => {
           </Text>
           <Controller
             render={({ field: { onChange, value } }) => (
-              <CustomDatePicker initialDate={value} onDateChange={onChange} />
+              <CustomDatePicker value={value} onDateChange={onChange} />
             )}
             name={"dateTo"}
             control={control}
@@ -62,6 +63,11 @@ const Component = ({ user }: FilterReportProps) => {
         </View>
         {user.groupCode !== "AUDITOR" && (
           <View style={styles.selectorContainer}>
+            {isLoading && (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="small" color={colors.green} />
+              </View>
+            )}
             <Text style={styles.text}>
               {i18n.t("T4", { defaultValue: "Auditor:" })}:
             </Text>
@@ -90,11 +96,6 @@ const Component = ({ user }: FilterReportProps) => {
           </View>
         )}
         <View style={styles.selectorContainer}>
-          {isLoading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" />
-            </View>
-          )}
           <Text style={styles.text}>
             {i18n.t("T5", { defaultValue: "HCW:" })}:
           </Text>

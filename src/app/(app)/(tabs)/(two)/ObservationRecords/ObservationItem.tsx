@@ -60,7 +60,7 @@ function Component({ data, worker }: ObservationItemProps) {
                 data.created_timestamp,
                 "YYYY-MM-DD hh:mm AA",
                 i18n.locale,
-              ).format("LTS")}
+              ).format("lll")}
             </Text>
             <Text style={styles.grayText}>| Moments {moments.join(" ")} </Text>
             <Text style={styles.grayText}>

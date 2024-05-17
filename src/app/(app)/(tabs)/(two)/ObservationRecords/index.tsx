@@ -43,7 +43,7 @@ export function ObservationRecords() {
         auditor,
       }),
   );
-  console.log("error", JSON.stringify(error));
+  console.log("observation error", JSON.stringify(error));
 
   const observationSections = useMemo(
     () =>
