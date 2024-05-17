@@ -94,6 +94,12 @@ export default function Layout() {
         name="Locations/[serverId]"
         options={{ headerBackTitleVisible: false }}
       />
+         <Stack.Screen
+        name="FAQ"
+        options={{ headerBackTitleVisible: false,  title: i18n.t("AI9", {
+          defaultValue: "FAQ",
+        }), }}
+      />
     </Stack>
   );
 }
