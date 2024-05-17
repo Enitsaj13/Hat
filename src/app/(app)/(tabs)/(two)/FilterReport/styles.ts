@@ -11,7 +11,6 @@ export const styles = createStyleSheet({
   borderContainer: {
     borderWidth: 0.4,
     borderColor: colors.steelGrey,
-    paddingVertical: 20,
   },
   selectorContainer: {
     flexDirection: "row",
@@ -38,13 +37,6 @@ export const styles = createStyleSheet({
   },
   arrowIcon: {
     marginLeft: 15,
-  },
-  locationHeader: {
-    backgroundColor: "#fafafa",
-  },
-  locationContainer: {
-    marginTop: 10,
-    borderBottomWidth: 0,
   },
   repeatIcon: {
     marginRight: 5,
@@ -101,4 +93,18 @@ export const styles = createStyleSheet({
     opacity: 0.6,
     zIndex: 99,
   },
+  locationButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: "#fafafa",
+    shadowColor: colors.midNight,
+    shadowOffset: {
+      width: 0.5,
+      height: -0.25,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 0.5,
+    elevation: 5,
+  },
+  locationText: { color: colors.steelGrey, textAlign: "right" },
 });

@@ -41,7 +41,7 @@ function Component({ user, appSetting }: RootLayoutProps) {
     }
   }, [isLoading]);
 
-  console.log("session in (app)/_layout", session);
+  // console.log("session in (app)/_layout", session);
   const router = useRouter();
   useEffect(() => {
     if (isLoading) {

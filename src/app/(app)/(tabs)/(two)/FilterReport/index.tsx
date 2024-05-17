@@ -1,12 +1,12 @@
-import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import DropdownList from "@components/DropdownList";
 import {
   AntDesign as Icon,
   FontAwesome as FontAwesomeIcon,
 } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import CustomDatePicker from "@components/CustomDatePicker";
 import { useGetObservationsFormRef } from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
 import { styles } from "./styles";
@@ -19,7 +19,7 @@ import { of, switchMap } from "rxjs";
 import { Controller } from "react-hook-form";
 import { useQuery } from "react-query";
 import { getMembers } from "@services/getMembers";
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, Button } from "react-native-paper";
 import WorkerDropdown from "@app/(app)/(tabs)/(two)/FilterReport/WorkerDropdown";
 import { colors } from "@theme/index";
 
@@ -30,7 +30,15 @@ interface FilterReportProps {
 const Component = ({ user }: FilterReportProps) => {
   const formRef = useGetObservationsFormRef();
   const form = formRef.current;
-  const { control, reset } = form!;
+  const { control, reset, watch } = form!;
+  const location = watch("location");
+
+  const [, setFakeCtr] = useState(0);
+  useFocusEffect(
+    useCallback(() => setFakeCtr((prevState) => prevState + 1), []),
+  );
+
+  console.log("location", location);
 
   const { data: members = [], isLoading } = useQuery("getMembers", getMembers);
 
@@ -110,36 +118,23 @@ const Component = ({ user }: FilterReportProps) => {
             control={control}
           />
         </View>
-        <View style={[styles.selectorContainer, styles.locationHeader]}>
+        <View style={styles.selectorContainer}>
           <Text style={styles.text}>
             {i18n.t("LC1", { defaultValue: "Location" })}:
           </Text>
-        </View>
-
-        <View style={[styles.selectorContainer, styles.locationContainer]}>
-          <Text style={styles.text}>-{i18n.t("NO_LOCATION_SELECTED")}-</Text>
-          <TouchableOpacity style={styles.repeatIcon}>
-            <FontAwesomeIcon name="repeat" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-        <View style={[styles.selectorContainer, styles.dropdownlistLocation]}>
-          <Text style={styles.text}>
-            {i18n.t("LC2", { defaultValue: "Location:" })}:
-          </Text>
-          <DropdownList
-            options={[]}
-            dropdownlistStyle={styles.dropdownlistContainer}
-            selectedValueStyle={styles.selectedValue}
-            right={
-              <Icon
-                name="caretdown"
-                size={10}
-                style={styles.arrowIcon}
-                color="gray"
-              />
+          <Pressable
+            style={styles.locationButton}
+            onPress={() =>
+              router.navigate({
+                pathname: "/(app)/(tabs)/(two)/Locations/[serverId]",
+                params: { serverId: -1 },
+              })
             }
-            noOptionSelectedText={i18n.t("LC3", { defaultValue: "Select" })}
-          />
+          >
+            <Text style={styles.locationText}>
+              {location?.name || i18n.t("NO_LOCATION_SELECTED")}
+            </Text>
+          </Pressable>
         </View>
       </View>
       <View style={styles.filterButtonContainer}>
@@ -150,7 +145,7 @@ const Component = ({ user }: FilterReportProps) => {
               dateFrom: new Date(),
               dateTo: new Date(),
               auditor: undefined,
-              locationId: undefined,
+              location: undefined,
               hcwTitle: undefined,
             })
           }

@@ -2,7 +2,7 @@ import { axiosInstance } from "@services/axios";
 import { database } from "@stores/index";
 import { Location } from "@stores/location";
 import { LocationResponse } from "@services/getLocations";
-import { date, number, object } from "yup";
+import { date, number, object, string } from "yup";
 import dayjs from "dayjs";
 import { map } from "rxjs";
 
@@ -44,9 +44,10 @@ export interface IGetObservationsSchema {
   dateTo: Date;
   hcwTitle?: number;
   auditor?: number;
-
-  // TODO change this to object
-  locationId?: number;
+  location?: {
+    serverId: number;
+    name: string;
+  };
 }
 
 export interface ObservationRecords {
@@ -57,9 +58,12 @@ export interface ObservationRecords {
 export const getObservationSchema = object({
   dateFrom: date().default(new Date()),
   dateTo: date().default(new Date()),
-  locationId: number().optional(),
   hcwTitle: number().optional(),
   auditor: number().optional(),
+  location: object({
+    serverId: number().optional(),
+    name: string().optional(),
+  }).optional(),
 });
 
 const DATE_FORMAT = "YYYY-MM-DD";
@@ -77,8 +81,8 @@ export async function getObservations(
     params.dateTo = dayjs(observationParams.dateTo).format(DATE_FORMAT);
   }
 
-  if (observationParams.locationId) {
-    params.locationId = observationParams.locationId.toString();
+  if (observationParams.location?.serverId) {
+    params.locationId = observationParams.location.serverId.toString();
   }
 
   if (observationParams.auditor) {

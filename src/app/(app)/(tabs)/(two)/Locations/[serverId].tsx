@@ -12,6 +12,7 @@ import isEmpty from "lodash.isempty";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
 import { Entypo as Icon } from "@expo/vector-icons";
+import { useGetObservationsFormRef } from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
 
 export default function Locations() {
   const { styles } = useStyles(stylesheet);
@@ -19,29 +20,57 @@ export default function Locations() {
     serverId: string;
     parentName?: string;
   }>();
-  console.log("serverId", serverId);
+
+  const formRef = useGetObservationsFormRef();
+  const form = formRef.current;
+  const { setValue, trigger } = form!;
 
   const router = useRouter();
-  const onLocationPress = useCallback(async (location: Location) => {
-    const childrenCount = await database
-      .get<Location>("locations")
-      .query(Q.where("parent_server_id", location.serverId))
-      .fetchCount();
-
-    // TODO include if condition -> && location.serverId !== serverId
-    if (childrenCount > 0) {
-      router.navigate({
-        pathname: "/(app)/(tabs)/(one)/Locations/[serverId]",
-        params: { serverId: location.serverId, parentName: location.name },
-      });
-    } else {
-      const loc = { serverId: location.serverId, name: location.name };
-      console.log("No more children, should go back TODO: ", loc);
-      // TODO navigation reset here
-    }
-  }, []);
-
   const navigation = useNavigation();
+
+  console.log("at tab two locations, serverId", serverId);
+  const onLocationPress = useCallback(
+    async (location: Location) => {
+      const childrenCount = await database
+        .get<Location>("locations")
+        .query(Q.where("parent_server_id", location.serverId))
+        .fetchCount();
+
+      if (childrenCount > 0 && location.serverId !== parseInt(serverId, 10)) {
+        router.navigate({
+          pathname: "/(app)/(tabs)/(two)/Locations/[serverId]",
+          params: { serverId: location.serverId, parentName: location.name },
+        });
+      } else {
+        const loc =
+          parseInt(serverId, 10) !== -1
+            ? { serverId: location.serverId, name: location.name }
+            : undefined;
+        console.log("No more children, should go back: ", loc);
+        setValue("location", loc, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+        await trigger("location");
+        setTimeout(() => {
+          navigation.reset({
+            index: 1,
+            routes: [
+              {
+                name: "ObservationRecords",
+              },
+              {
+                name: "FilterReport",
+              },
+            ] as any,
+          });
+        }, 200);
+      }
+    },
+    [serverId],
+  );
+
   useEffect(() => {
     navigation.setOptions({
       title: !isEmpty(parentName)
@@ -56,6 +85,7 @@ export default function Locations() {
     <View style={styles.container}>
       <LocationList
         parentServerId={parseInt(serverId, 10)}
+        parentName={parentName}
         onLocationPress={onLocationPress}
       />
     </View>
@@ -64,11 +94,14 @@ export default function Locations() {
 
 interface LocationListProps {
   parentServerId: number;
+  parentName: string;
   locations?: Location[];
-  onLocationPress: (location: Location) => void;
+  onLocationPress: (location: { serverId: number; name: string }) => void;
 }
 
 function LocationListComponent({
+  parentServerId,
+  parentName,
   locations,
   onLocationPress,
 }: LocationListProps) {
@@ -76,7 +109,10 @@ function LocationListComponent({
   const { styles } = useStyles(stylesheet);
   return (
     <FlatList
-      data={locations}
+      data={[
+        { serverId: parentServerId, name: parentName, isParent: true },
+        ...(locations || []),
+      ]}
       renderItem={({ item }) => (
         <TouchableRipple
           key={item.serverId}
@@ -84,7 +120,11 @@ function LocationListComponent({
           style={styles.itemContainer}
         >
           <List.Item
-            title={item.name}
+            title={
+              !Object.hasOwn(item, "isParent")
+                ? item.name
+                : i18n.t("T12", { defaultValue: "--All--" })
+            }
             titleStyle={[styles.title, { color: theme.colors.onPrimary }]}
             right={() => (
               <Icon

@@ -28,17 +28,17 @@ export function ObservationRecords() {
   const { watch, control } = form;
   const dateFrom = watch("dateFrom");
   const dateTo = watch("dateTo");
-  const locationId = watch("locationId");
+  const location = watch("location");
   const hcwTitle = watch("hcwTitle");
   const auditor = watch("auditor");
 
   const { data, isLoading, error } = useQuery(
-    ["userTargetSettings", dateFrom, dateTo, locationId, hcwTitle, auditor],
+    ["userTargetSettings", dateFrom, dateTo, location, hcwTitle, auditor],
     () =>
       getObservations({
         dateFrom,
         dateTo,
-        locationId,
+        location,
         hcwTitle,
         auditor,
       }),
