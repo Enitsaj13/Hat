@@ -31,7 +31,7 @@ export const changePasswordSchema = object({
 export async function changePassword(
     formData: IChangePasswordSchema,
 ): Promise<BaseResponse> {
-    await changePasswordSchema.validate(formData); // defensive programming to ensure users of this function does not pass invalid credentials
+    await changePasswordSchema.validate(formData);
     const url = `${process.env.EXPO_PUBLIC_API_URL}/mobile/change-password`;
     const toSend = {
         current_password: formData.currentPassword,

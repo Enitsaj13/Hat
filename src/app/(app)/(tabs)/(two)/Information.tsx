@@ -51,34 +51,34 @@ function Information() {
         <Tile
           imageSource={require("@assets/images/hat-images/charts.png")}
           label={i18n.t("H3", { defaultValue: "Charts" })}
-          onPress={() => {}}
+          onPress={() => { }}
         />
         <Link href="/(app)/(tabs)/(two)/ObservationRecords" asChild>
           <Tile
             imageSource={require("@assets/images/hat-images/reports.png")}
             label={i18n.t("H4", { defaultValue: "Reports" })}
-            onPress={() => {}}
+            onPress={() => { }}
           />
         </Link>
         <Link href="/TrainingVideos" asChild>
           <Tile
             imageSource={require("@assets/images/hat-images/video.png")}
             label={i18n.t("H7", { defaultValue: "Training Videos" })}
-            onPress={() => {}}
+            onPress={() => { }}
           />
         </Link>
         <Link href="/FAQ" asChild>
-        <Tile
-          imageSource={require("@assets/images/hat-images/faq.png")}
-          label={i18n.t("H8", { defaultValue: "FAQ" })}
-          onPress={() => {}}
-        />
+          <Tile
+            imageSource={require("@assets/images/hat-images/faq.png")}
+            label={i18n.t("H8", { defaultValue: "FAQ" })}
+            onPress={() => { }}
+          />
         </Link>
         <Link href="/Introduction" asChild>
           <Tile
             imageSource={require("@assets/images/hat-images/introduction.png")}
             label={i18n.t("REVISIT_INTRODUCTION")}
-            onPress={() => {}}
+            onPress={() => { }}
           />
         </Link>
       </View>
