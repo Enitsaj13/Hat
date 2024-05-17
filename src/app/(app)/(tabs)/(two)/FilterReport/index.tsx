@@ -53,7 +53,7 @@ const Component = ({ user }: FilterReportProps) => {
             render={({ field: { onChange, value } }) => (
               <CustomDatePicker value={value} onDateChange={onChange} />
             )}
-            name={"dateFrom"}
+            name="dateFrom"
             control={control}
           />
         </View>
@@ -65,7 +65,7 @@ const Component = ({ user }: FilterReportProps) => {
             render={({ field: { onChange, value } }) => (
               <CustomDatePicker value={value} onDateChange={onChange} />
             )}
-            name={"dateTo"}
+            name="dateTo"
             control={control}
           />
         </View>
@@ -98,7 +98,7 @@ const Component = ({ user }: FilterReportProps) => {
                   onOptionSelected={onChange}
                 />
               )}
-              name={"auditor"}
+              name="auditor"
               control={control}
             />
           </View>
@@ -114,7 +114,7 @@ const Component = ({ user }: FilterReportProps) => {
                 onWorkerSelected={onChange}
               />
             )}
-            name={"hcwTitle"}
+            name="hcwTitle"
             control={control}
           />
         </View>

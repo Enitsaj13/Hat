@@ -97,7 +97,8 @@ export default function Layout() {
       <Stack.Screen
         name="FAQ"
         options={{
-          headerBackTitleVisible: false, title: i18n.t("AI9", {
+          headerBackTitleVisible: false,
+          title: i18n.t("AI9", {
             defaultValue: "FAQ",
           }),
         }}
