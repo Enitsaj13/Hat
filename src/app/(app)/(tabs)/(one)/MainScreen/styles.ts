@@ -12,7 +12,7 @@ export const styles = createStyleSheet({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 6,
-    width: "40%",
+    width: "35%",
   },
   dropdownlistActionContainer: {
     width: "80%",
