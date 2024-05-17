@@ -137,4 +137,3 @@ export const styles = createStyleSheet({
     transform: [{ scaleX: 0.6 }, { scaleY: 0.6 }],
   },
 });
-
