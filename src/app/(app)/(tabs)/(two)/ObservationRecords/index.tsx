@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { SectionList, StyleSheet, Text, View } from "react-native";
 import { i18n } from "@i18n/index";
 import {
@@ -9,7 +9,10 @@ import {
 import dayjs from "dayjs";
 import { formatDate } from "@utils/index";
 import { useQuery } from "react-query";
-import { useGetObservationsFormRef } from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
+import {
+  useGetObservationsFormRef,
+  useSharedLocation,
+} from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { styles } from "@app/(app)/(tabs)/(two)/ObservationRecords/styles";
@@ -20,7 +23,7 @@ import { ActivityIndicator } from "react-native-paper";
 export function ObservationRecords() {
   const formRef = useGetObservationsFormRef();
   const form = useForm<IGetObservationsSchema>({
-    resolver: yupResolver(getObservationSchema),
+    resolver: yupResolver(getObservationSchema as any),
     defaultValues: getObservationSchema.getDefault(),
   });
   formRef.current = form;
@@ -28,7 +31,11 @@ export function ObservationRecords() {
   const { watch, control } = form;
   const dateFrom = watch("dateFrom");
   const dateTo = watch("dateTo");
-  const location = watch("location");
+
+  // TODO issue with RHF
+  // const location = watch("location");
+  const [location, setLocation] = useSharedLocation();
+
   const hcwTitle = watch("hcwTitle");
   const auditor = watch("auditor");
 

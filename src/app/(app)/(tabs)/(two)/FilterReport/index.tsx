@@ -8,7 +8,10 @@ import {
 import { i18n } from "@i18n/index";
 import { router, useFocusEffect } from "expo-router";
 import CustomDatePicker from "@components/CustomDatePicker";
-import { useGetObservationsFormRef } from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
+import {
+  useGetObservationsFormRef,
+  useSharedLocation,
+} from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
 import { styles } from "./styles";
 import { User } from "@stores/user";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
@@ -31,7 +34,10 @@ const Component = ({ user }: FilterReportProps) => {
   const formRef = useGetObservationsFormRef();
   const form = formRef.current;
   const { control, reset, watch } = form!;
-  const location = watch("location");
+  const [location, setLocation] = useSharedLocation();
+
+  // TODO issue with RHF
+  // const location = watch("location");
 
   const [, setFakeCtr] = useState(0);
   useFocusEffect(

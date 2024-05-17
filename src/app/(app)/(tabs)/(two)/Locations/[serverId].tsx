@@ -12,7 +12,10 @@ import isEmpty from "lodash.isempty";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
 import { Entypo as Icon } from "@expo/vector-icons";
-import { useGetObservationsFormRef } from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
+import {
+  useGetObservationsFormRef,
+  useSharedLocation,
+} from "@app/(app)/(tabs)/(two)/ObservationRecords/report-commons";
 
 export default function Locations() {
   const { styles } = useStyles(stylesheet);
@@ -27,6 +30,7 @@ export default function Locations() {
 
   const router = useRouter();
   const navigation = useNavigation();
+  const [, setLocation] = useSharedLocation();
 
   console.log("at tab two locations, serverId", serverId);
   const onLocationPress = useCallback(
@@ -47,12 +51,16 @@ export default function Locations() {
             ? { serverId: location.serverId, name: location.name }
             : undefined;
         console.log("No more children, should go back: ", loc);
+
+        // TODO issue with RHF
         setValue("location", loc, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
         await trigger("location");
+
+        setLocation(location);
         setTimeout(() => {
           navigation.reset({
             index: 1,
