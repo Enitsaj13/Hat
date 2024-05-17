@@ -41,6 +41,56 @@ vulnerabilities.
 1. Install **Snyk** in local to enable pushing to central git repo. Use the corresponding package manager of your OS.
    Follow the installation prompts for it to setup the correct API key.
 
+## Non-prod build:
+
+This project uses **local EAS** to build the project.
+
+### Pre-requisite
+
+1. In _.env_ or _.env.qas_ file, change the url to the correct value. note that the `/api` should always be the suffix
+2. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
+
+### Android build
+
+1. Execute `npm run build:android:dev` / `npm run build:android:qas` command. This will generate an apk file in the root folder.
+2. Use the generated APK file for internal testing.
+
+### iOS build
+
+1. Execute `npm run build:ios:dev` / `npm run build:ios:qas` command. It will ask you to login your apple account via CLI. follow the instructions in there. It will generate an IPA file in the root folder
+2. If the CLI is complaining about the package name, change the app package to something different. Look for **ph.rocketspin.hat** in app.json and then change it to **ph.rocketspin.hat2**
+3. Use the IPA file for internal testing using Testflight etc.
+
+## Production build:
+
+This project uses **local EAS** to build the project.
+
+### Pre-requisite
+
+1. In _.env.prod_ file, change the url to the correct value. note that the `/api` should always be the suffix
+2. Change the app package to the correct value. Look for **ph.rocketspin.hat** in app.json and then change it
+3. Increment the **buildNumber** for iOS and **versionCode** for android in app.json as well on every app store update
+   of the app
+4. Update both version fields in app.json and package.json to the intended version that will be publicly viewable in
+   respective app stores of each platform
+5. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
+
+### Android build
+
+1. If not yet done. [Generate a production keystore file](https://reactnative.dev/docs/signed-apk-android#generating-an-upload-key). You are free to ignore the other instructions in this page.
+2. Create a copy of credentials.json file in the root folder of this project. There is a _credentials.json.example_ file
+   that you can use.
+3. Execute `npm run build:android:prod` command. This will generate an aab file in the root folder.
+4. Upload this file to Google Playstore using Play Console website. Follow the instructions on the said website on how
+   to do so.
+
+### iOS build
+
+1. Execute `npm run build:ios:prod` command. It will ask you to login your apple account via CLI. follow the
+   instructions in there. It will generate an IPA file in the root folder
+2. Upload the said IPA file to App store using App store connect. Follow the instructions on the said website on how to
+   do so.
+
 ## Production build:
 
 This project uses **local EAS** to build the project.
@@ -57,9 +107,37 @@ This project uses **local EAS** to build the project.
 
 ### Android build
 
-1. If not yet
-   done. [Generate a production keystore file](https://reactnative.dev/docs/signed-apk-android#generating-an-upload-key).
-   You are free to ignore the other instructions in this page.
+1. If not yet done. [Generate a production keystore file](https://reactnative.dev/docs/signed-apk-android#generating-an-upload-key). You are free to ignore the other instructions in this page.
+2. Create a copy of credentials.json file in the root folder of this project. There is a _credentials.json.example_ file
+   that you can use.
+3. Execute `npm run build:android:prod` command. This will generate an aab file in the root folder.
+4. Upload this file to Google Playstore using Play Console website. Follow the instructions on the said website on how
+   to do so.
+
+### iOS build
+
+1. Execute `npm run build:ios:prod` command. It will ask you to login your apple account via CLI. follow the
+   instructions in there. It will generate an IPA file in the root folder
+2. Upload the said IPA file to App store using App store connect. Follow the instructions on the said website on how to
+   do so.
+
+## Production build:
+
+This project uses **local EAS** to build the project.
+
+### Pre-requisite
+
+1. In _env.prod_ file, change the url to the correct value. note that the `/api` should always be the suffix
+2. Change the app package to the correct value. Look for **ph.rocketspin.hat** in app.json and then change it
+3. Increment the **buildNumber** for iOS and **versionCode** for android in app.json as well on every app store update
+   of the app
+4. Update both version fields in app.json and package.json to the intended version that will be publicly viewable in
+   respective app stores of each platform
+5. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
+
+### Android build
+
+1. If not yet done. [Generate a production keystore file](https://reactnative.dev/docs/signed-apk-android#generating-an-upload-key). You are free to ignore the other instructions in this page.
 2. Create a copy of credentials.json file in the root folder of this project. There is a _credentials.json.example_ file
    that you can use.
 3. Execute `npm run build:android:prod` command. This will generate an aab file in the root folder.
