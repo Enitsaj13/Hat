@@ -16,7 +16,7 @@ const ChangePassword = () => {
       <TextInput
         label={i18n.t("Q8", { defaultValue: "Current Password" })}
         value=""
-        onChangeText={() => { }}
+        onChangeText={() => {}}
         theme={{
           colors: {
             placeholder: colors.steelGrey,
@@ -32,7 +32,7 @@ const ChangePassword = () => {
       <TextInput
         label={i18n.t("Q9", { defaultValue: "New Password" })}
         value=""
-        onChangeText={() => { }}
+        onChangeText={() => {}}
         theme={{
           colors: {
             placeholder: colors.steelGrey,
@@ -48,7 +48,7 @@ const ChangePassword = () => {
       <TextInput
         label={i18n.t("Q10", { defaultValue: "Retype Password" })}
         value=""
-        onChangeText={() => { }}
+        onChangeText={() => {}}
         theme={{
           colors: {
             placeholder: colors.steelGrey,
@@ -66,7 +66,7 @@ const ChangePassword = () => {
         <Button
           mode="outlined"
           style={styles.changePasswordButton}
-          onPress={() => { }}
+          onPress={() => {}}
         >
           <Text variant="bodyLarge">
             {i18n.t("Q11", { defaultValue: "Save Changes" })}
