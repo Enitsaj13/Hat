@@ -9,11 +9,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   changePassword,
   changePasswordSchema,
-  IChangePasswordSchema
+  IChangePasswordSchema,
 } from "@services/changePassword";
 
 const ChangePassword = () => {
-
   const {
     control,
     reset,
@@ -40,7 +39,7 @@ const ChangePassword = () => {
               reset({
                 currentPassword: "",
                 newPassword: "",
-                retypePassword: ""
+                retypePassword: "",
               });
             },
           },

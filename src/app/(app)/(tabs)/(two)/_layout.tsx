@@ -116,7 +116,7 @@ export default function Layout() {
         name="Charts"
         options={{
           title: i18n.t("H3", {
-            defaultValue: 'Charts',
+            defaultValue: "Charts",
           }),
           headerBackTitleVisible: false,
         }}
