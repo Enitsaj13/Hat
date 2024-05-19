@@ -48,11 +48,13 @@ function Information() {
   return (
     <View style={styles.container}>
       <View style={styles.infoContainer}>
+      <Link href="/Charts" asChild>
         <Tile
           imageSource={require("@assets/images/hat-images/charts.png")}
           label={i18n.t("H3", { defaultValue: "Charts" })}
           onPress={() => {}}
         />
+        </Link>
         <Link href="/(app)/(tabs)/(two)/ObservationRecords" asChild>
           <Tile
             imageSource={require("@assets/images/hat-images/reports.png")}

@@ -112,6 +112,15 @@ export default function Layout() {
           headerBackTitleVisible: false,
         }}
       />
+      <Stack.Screen
+        name="Charts"
+        options={{
+          title: i18n.t("H3", {
+            defaultValue: 'Charts',
+          }),
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack>
   );
 }

@@ -1,11 +1,56 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useCallback } from "react";
+import { View, Alert } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
 import { i18n } from "@i18n/index";
 import { colors } from "@theme/index";
 import { Button, TextInput, Text } from "react-native-paper";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  changePassword,
+  changePasswordSchema,
+  IChangePasswordSchema
+} from "@services/changePassword";
 
 const ChangePassword = () => {
+
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: { isLoading, isValid, isSubmitSuccessful },
+  } = useForm<IChangePasswordSchema>({
+    resolver: yupResolver(changePasswordSchema),
+  });
+
+  if (isSubmitSuccessful) {
+    reset();
+  }
+
+  const submitForm = useCallback(async (form: IChangePasswordSchema) => {
+    try {
+      await changePassword(form);
+      Alert.alert(
+        i18n.t("R3", { defaultValue: "Successful" }),
+        i18n.t("ADD12", { defaultValue: "Your message successfully sent." }),
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              reset({
+                currentPassword: "",
+                newPassword: "",
+                retypePassword: ""
+              });
+            },
+          },
+        ],
+      );
+    } catch (e) {
+      console.log("error occurred while submitting a subscribe now form", e);
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -13,60 +58,104 @@ const ChangePassword = () => {
           {i18n.t("Q7", { defaultValue: "Change Password" })}
         </Text>
       </View>
-      <TextInput
-        label={i18n.t("Q8", { defaultValue: "Current Password" })}
-        value=""
-        onChangeText={() => {}}
-        theme={{
-          colors: {
-            placeholder: colors.steelGrey,
-            primary: colors.steelGrey,
-          },
-        }}
-        secureTextEntry
-        underlineColor={colors.whiteSmoke}
-        underlineColorAndroid={colors.whiteSmoke}
-        textColor={colors.midNight}
-        contentStyle={styles.textInput}
+
+      <Controller
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { invalid, error },
+        }) => (
+          <TextInput
+            label={
+              i18n.t("Q8", { defaultValue: "Current Password" }) +
+              (invalid ? `(${error?.message})` : "")
+            }
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={invalid}
+            theme={{
+              colors: {
+                placeholder: colors.steelGrey,
+                primary: colors.steelGrey,
+              },
+            }}
+            secureTextEntry
+            underlineColor={colors.whiteSmoke}
+            underlineColorAndroid={colors.whiteSmoke}
+            textColor={colors.midNight}
+            contentStyle={styles.textInput}
+          />
+        )}
+        name="currentPassword"
+        control={control}
       />
-      <TextInput
-        label={i18n.t("Q9", { defaultValue: "New Password" })}
-        value=""
-        onChangeText={() => {}}
-        theme={{
-          colors: {
-            placeholder: colors.steelGrey,
-            primary: colors.steelGrey,
-          },
-        }}
-        secureTextEntry
-        underlineColor={colors.whiteSmoke}
-        underlineColorAndroid={colors.whiteSmoke}
-        textColor={colors.midNight}
-        contentStyle={styles.textInput}
+      <Controller
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { invalid, error },
+        }) => (
+          <TextInput
+            label={
+              i18n.t("Q9", { defaultValue: "New Password" }) +
+              (invalid ? `(${error?.message})` : "")
+            }
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={invalid}
+            theme={{
+              colors: {
+                placeholder: colors.steelGrey,
+                primary: colors.steelGrey,
+              },
+            }}
+            secureTextEntry
+            underlineColor={colors.whiteSmoke}
+            underlineColorAndroid={colors.whiteSmoke}
+            textColor={colors.midNight}
+            contentStyle={styles.textInput}
+          />
+        )}
+        name="newPassword"
+        control={control}
       />
-      <TextInput
-        label={i18n.t("Q10", { defaultValue: "Retype Password" })}
-        value=""
-        onChangeText={() => {}}
-        theme={{
-          colors: {
-            placeholder: colors.steelGrey,
-            primary: colors.steelGrey,
-          },
-        }}
-        secureTextEntry
-        keyboardType="email-address"
-        underlineColor={colors.whiteSmoke}
-        underlineColorAndroid={colors.whiteSmoke}
-        textColor={colors.midNight}
-        contentStyle={styles.textInput}
+      <Controller
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { invalid, error },
+        }) => (
+          <TextInput
+            label={
+              i18n.t("Q10", { defaultValue: "Retype Password" }) +
+              (invalid ? `(${error?.message})` : "")
+            }
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={invalid}
+            theme={{
+              colors: {
+                placeholder: colors.steelGrey,
+                primary: colors.steelGrey,
+              },
+            }}
+            secureTextEntry
+            underlineColor={colors.whiteSmoke}
+            underlineColorAndroid={colors.whiteSmoke}
+            textColor={colors.midNight}
+            contentStyle={styles.textInput}
+          />
+        )}
+        name="retypePassword"
+        control={control}
       />
       <View style={styles.buttonContainer}>
         <Button
           mode="outlined"
           style={styles.changePasswordButton}
-          onPress={() => {}}
+          onPress={handleSubmit(submitForm)}
+          loading={isLoading}
+          disabled={isLoading && !isValid}
         >
           <Text variant="bodyLarge">
             {i18n.t("Q11", { defaultValue: "Save Changes" })}
