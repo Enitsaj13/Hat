@@ -32,7 +32,7 @@ export const changePasswordSchema = object({
   newPassword: passwordValidation,
   retypePassword: passwordValidation.oneOf(
     [ref("newPassword")],
-    i18n.t("PASSWORD_MATCH"),
+    i18n.t("PASSWORD_MUST_MATCH")
   ),
 });
 
