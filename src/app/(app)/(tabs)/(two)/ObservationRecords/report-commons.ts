@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useBetween } from "use-between";
 import { IGetObservationsSchema } from "@services/getObservations";
-import { string } from "yup";
 
 function useGetObservationsFormRefHolder() {
   return useRef<UseFormReturn<IGetObservationsSchema> | undefined>();

@@ -3,10 +3,8 @@ import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Mutex } from "async-mutex";
-import NetInfo from "@react-native-community/netinfo";
-import { sendDataToServer } from "@services/sendDataToServer";
 
 interface DataSenderProps {
   oldToSendData: ToSendDatus[];

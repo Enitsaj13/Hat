@@ -1,10 +1,6 @@
 import { axiosInstance } from "@services/axios";
-import { database } from "@stores/index";
-import { Location } from "@stores/location";
-import { LocationResponse } from "@services/getLocations";
 import { date, number, object, string } from "yup";
 import dayjs from "dayjs";
-import { map } from "rxjs";
 
 export interface RawDatus {
   id: number;

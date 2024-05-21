@@ -2,10 +2,9 @@ import { Model } from "@nozbe/watermelondb";
 import {
   date,
   json,
+  nochange,
   readonly,
   text,
-  writer,
-  nochange,
 } from "@nozbe/watermelondb/decorators";
 
 export enum ToSendDatusType {

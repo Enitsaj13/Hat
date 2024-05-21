@@ -4,7 +4,6 @@ import { i18n } from "@i18n/index";
 import isEmpty from "lodash.isempty";
 import { UseFormReturn } from "react-hook-form";
 import { useBetween } from "use-between";
-import { IMomentSchema } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 
 export interface IFeedbackSchema {
   feedbackEnabled: boolean;

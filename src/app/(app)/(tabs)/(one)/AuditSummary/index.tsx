@@ -4,7 +4,6 @@ import { Feather as Icon } from "@expo/vector-icons";
 import { i18n, i18nOptions } from "@i18n/index";
 import { colors } from "@theme/index";
 import NoteModal from "@components/Notes";
-import { useMomentSchemaFormRef } from "@app/(app)/(tabs)/(one)/MainScreen/helpers";
 import { Controller, useForm } from "react-hook-form";
 import { useBatchObservation } from "@hooks/useBatchObservation";
 import {
@@ -17,7 +16,7 @@ import { styles } from "./styles";
 import { Q } from "@nozbe/watermelondb";
 import { Worker } from "@stores/worker";
 import cloneDeep from "lodash.clonedeep";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   IFeedbackSchema,

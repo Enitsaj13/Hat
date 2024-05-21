@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from "react";
-import { SectionList, StyleSheet, Text, View } from "react-native";
+import React, { useMemo } from "react";
+import { SectionList, Text, View } from "react-native";
 import { i18n } from "@i18n/index";
 import {
   getObservations,

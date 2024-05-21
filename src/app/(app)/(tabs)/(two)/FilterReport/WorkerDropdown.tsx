@@ -1,4 +1,4 @@
-import { AntDesign as Icon, AntDesign as ArrowIcon } from "@expo/vector-icons";
+import { AntDesign as Icon } from "@expo/vector-icons";
 import DropdownList, { DropDownOption } from "@components/DropdownList";
 import React, { useMemo } from "react";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
