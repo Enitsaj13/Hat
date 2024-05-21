@@ -1,12 +1,9 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import DropdownList from "@components/DropdownList";
-import {
-  AntDesign as Icon,
-  FontAwesome as FontAwesomeIcon,
-} from "@expo/vector-icons";
+import { AntDesign as Icon } from "@expo/vector-icons";
 import { i18n } from "@i18n/index";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import CustomDatePicker from "@components/CustomDatePicker";
 import {
   useGetObservationsFormRef,
@@ -19,10 +16,10 @@ import { withObservables } from "@nozbe/watermelondb/react";
 import { database } from "@stores/index";
 import { Q } from "@nozbe/watermelondb";
 import { of, switchMap } from "rxjs";
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 import { useQuery } from "react-query";
 import { getMembers } from "@services/getMembers";
-import { ActivityIndicator, Button } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 import WorkerDropdown from "@app/(app)/(tabs)/(two)/FilterReport/WorkerDropdown";
 import { colors } from "@theme/index";
 
@@ -34,20 +31,19 @@ const Component = ({ user }: FilterReportProps) => {
   const formRef = useGetObservationsFormRef();
   const form = formRef.current;
   const { control, reset, watch } = form!;
+
+  const dateFrom = useWatch({ control, name: "dateFrom" });
+  const dateTo = useWatch({ control, name: "dateTo" });
   const [location, setLocation] = useSharedLocation();
 
   // TODO issue with RHF
-  // const location = watch("location");
+  // const location = useWatch({ control, name: "location" });
 
-  const [, setFakeCtr] = useState(0);
-  useFocusEffect(
-    useCallback(() => setFakeCtr((prevState) => prevState + 1), []),
-  );
-
-  console.log("location", location);
-
-  const { data: members = [], isLoading } = useQuery("getMembers", getMembers);
-
+  const {
+    data: members = [],
+    isLoading,
+    isError,
+  } = useQuery("getMembers", getMembers);
   return (
     <View style={styles.container}>
       <View style={styles.borderContainer}>
@@ -57,7 +53,11 @@ const Component = ({ user }: FilterReportProps) => {
           </Text>
           <Controller
             render={({ field: { onChange, value } }) => (
-              <CustomDatePicker value={value} onDateChange={onChange} />
+              <CustomDatePicker
+                value={value}
+                onDateChange={onChange}
+                maxDate={dateTo}
+              />
             )}
             name={"dateFrom"}
             control={control}
@@ -69,13 +69,18 @@ const Component = ({ user }: FilterReportProps) => {
           </Text>
           <Controller
             render={({ field: { onChange, value } }) => (
-              <CustomDatePicker value={value} onDateChange={onChange} />
+              <CustomDatePicker
+                value={value}
+                onDateChange={onChange}
+                minDate={dateFrom}
+                maxDate={new Date()}
+              />
             )}
             name={"dateTo"}
             control={control}
           />
         </View>
-        {user.groupCode !== "AUDITOR" && (
+        {!isError && user.groupCode !== "AUDITOR" && (
           <View style={styles.selectorContainer}>
             {isLoading && (
               <View style={styles.loadingContainer}>

@@ -8,9 +8,16 @@ import { i18n } from "@i18n/index";
 interface CustomDatePickerProps {
   value: Date;
   onDateChange: (selectedDate: Date) => void;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
-function CustomDatePicker({ value, onDateChange }: CustomDatePickerProps) {
+function CustomDatePicker({
+  value,
+  onDateChange,
+  minDate,
+  maxDate,
+}: CustomDatePickerProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const handleConfirm = (date: Date) => {
     setDatePickerVisibility(false);
@@ -35,6 +42,8 @@ function CustomDatePicker({ value, onDateChange }: CustomDatePickerProps) {
         date={value}
         onConfirm={handleConfirm}
         onCancel={() => setDatePickerVisibility(false)}
+        minimumDate={minDate}
+        maximumDate={maxDate}
       />
     </>
   );
