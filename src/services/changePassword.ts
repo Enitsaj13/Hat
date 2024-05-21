@@ -5,7 +5,6 @@ import { BaseResponse } from "../types";
 import { axiosInstance } from "@services/axios";
 import { database } from "@stores/index";
 
-
 export interface IChangePasswordSchema {
   currentPassword: string;
   newPassword: string;
@@ -34,7 +33,7 @@ export const changePasswordSchema = object({
   newPassword: passwordValidation,
   retypePassword: passwordValidation.oneOf(
     [ref('newPassword')],
-    i18n.t("AG36", { defaultValue: "Passwords must match" })
+    i18n.t("PASSWORD_MATCH")
   ),
 });
 

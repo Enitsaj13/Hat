@@ -119,6 +119,11 @@ export default function Layout() {
             defaultValue: "Charts",
           }),
           headerBackTitleVisible: false,
+          headerRight: () => (
+            <Pressable onPress={() => router.navigate("FilterChart")}>
+              <Icon name="calendar-o" size={20} color="white" />
+            </Pressable>
+          ),
         }}
       />
     </Stack>

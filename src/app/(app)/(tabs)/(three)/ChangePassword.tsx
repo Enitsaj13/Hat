@@ -34,7 +34,7 @@ const ChangePassword = () => {
       await changePassword(form);
       Alert.alert(
         i18n.t("R3", { defaultValue: "Successful" }),
-        i18n.t("ADD12", { defaultValue: "Your message successfully sent." }),
+        i18n.t("ADD12", { defaultValue: "" }),
         [
           {
             text: "OK",
@@ -49,7 +49,7 @@ const ChangePassword = () => {
         ],
       );
     } catch (e) {
-      console.log("error occurred while submitting a subscribe now form", e);
+      console.log("", e);
     }
   }, []);
 

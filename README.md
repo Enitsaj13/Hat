@@ -75,10 +75,11 @@ This project uses **local EAS** to build the project.
    respective app stores of each platform
 5. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
 6. Install the latest EAS CLI by running `npm install -g eas-cli`.
-7. Log in to your Expo account by running the command `eas login`.
-8. After logging in, go to the Projects tab and click the "+ Create a Project" button.
+7. Log in to your Expo Account run this command `eas-login`.
+8. Using your browser, open the `https://expo.dev` 
+9. Click "Project" at the sidebar then click the "+ Create a Project" button.
 9. Enter 'Hat' as the display name, then click Create.
-10. After the project is created, run the command that appears on the screen in the terminal: `eas init --id "example"`.
+10. After the project is created, run the command that appears on the screen in the terminal: `eas init --id "uuid-you-see-from-instructions"`.
 
 ### Android build
 
@@ -110,10 +111,11 @@ This project uses **local EAS** to build the project.
    respective app stores of each platform
 5. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
 6. Install the latest EAS CLI by running `npm install -g eas-cli`.
-7. Log in to your Expo account by running the command `eas login`.
-8. After logging in, go to the Projects tab and click the "+ Create a Project" button.
+7. Log in to your Expo Account run this command `eas-login`.
+8. Using your browser, open the `https://expo.dev` 
+9. Click "Project" at the sidebar then click the "+ Create a Project" button.
 9. Enter 'Hat' as the display name, then click Create.
-10. After the project is created, run the command that appears on the screen in the terminal: `eas init --id "example"`.
+10. After the project is created, run the command that appears on the screen in the terminal: `eas init --id "uuid-you-see-from-instructions"`.
 
 ### Android build
 
