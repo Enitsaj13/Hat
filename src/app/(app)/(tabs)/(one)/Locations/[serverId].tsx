@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { FlatList, View } from "react-native";
-import { List, TouchableRipple, useTheme } from "react-native-paper";
+import { List, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { Location } from "@stores/location";
 import { ObservableifyProps } from "@nozbe/watermelondb/react/withObservables";
@@ -12,7 +12,10 @@ import isEmpty from "lodash.isempty";
 import { i18n } from "@i18n/index";
 import { useBatchObservation } from "@hooks/useBatchObservation";
 import { colors } from "@theme/index";
-import { Entypo as Icon } from "@expo/vector-icons";
+import {
+  Entypo as EntypoIcon,
+  AntDesign as AntDesignIcon,
+} from "@expo/vector-icons";
 
 export default function Locations() {
   const { styles } = useStyles(stylesheet);
@@ -67,6 +70,14 @@ export default function Locations() {
 
   return (
     <View style={styles.container}>
+      {batchObservationState.practiceMode && (
+        <View style={styles.practiceModeContainer}>
+          <AntDesignIcon name="infocirlce" color={colors.cerulean} size={25} />
+          <Text variant="bodyLarge" style={styles.practiceNoteText}>
+            {i18n.t("P1", { defaultValue: "NOTE: You are on practice mode." })}
+          </Text>
+        </View>
+      )}
       <LocationList
         parentServerId={parseInt(serverId, 10)}
         onLocationPress={onLocationPress}
@@ -100,7 +111,7 @@ function LocationListComponent({
             title={item.name}
             titleStyle={[styles.title, { color: theme.colors.onPrimary }]}
             right={() => (
-              <Icon
+              <EntypoIcon
                 name="chevron-thin-right"
                 size={16}
                 color={colors.midNight}
@@ -141,5 +152,16 @@ const stylesheet = createStyleSheet({
     color: colors.charcoal,
     fontSize: 16,
     fontWeight: "300",
+  },
+  practiceModeContainer: {
+    flexDirection: "row",
+    backgroundColor: colors.babyBlue,
+    paddingVertical: 15,
+    width: "100%",
+    paddingHorizontal: 20,
+  },
+  practiceNoteText: {
+    color: colors.cerulean,
+    marginLeft: 10,
   },
 });

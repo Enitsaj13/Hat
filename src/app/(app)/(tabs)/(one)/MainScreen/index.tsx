@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { colors } from "@theme/index";
 import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import {
+  AntDesign as AntDesignIcon,
   AntDesign as ArrowIcon,
   Entypo as EntypoIcon,
   Feather as EditIcon,
@@ -40,6 +41,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { SendStatus, ToSendDatus } from "@stores/toSendDatus";
 import { sendDataToServer } from "@services/sendDataToServer";
 import { useFeedbackSchemaFormRef } from "@app/(app)/(tabs)/(one)/AuditSummary/schema";
+import { Text as RNPText } from "react-native-paper";
 
 function Component({
   companyConfig,
@@ -203,77 +205,99 @@ function Component({
   const onSubmitPressed = useObservationSubmit();
 
   const feedbackFormRef = useFeedbackSchemaFormRef();
-  const onStopPress = useCallback(() => {
-    Alert.alert(
-      i18n.t("AG15", { defaultValue: "Confirmation" }),
-      i18n.t("STOP_OBSERVATION_CONFIRMATION"),
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: async () => {
-            const network = await NetInfo.fetch();
-            if (network.isInternetReachable) {
-              async function forceSendData() {
-                try {
-                  const toSendData = await database
-                    .get<ToSendDatus>("to_send_data")
-                    .query(
-                      Q.where(
-                        "status",
-                        Q.notIn([SendStatus.SENT, SendStatus.DO_NOT_SEND]),
-                      ),
-                    )
-                    .fetch();
-                  await sendDataToServer(toSendData);
-                  resetRecordNavigationToSummary(navigation);
-                } catch (e) {
-                  console.log("error while force sending data to server", e);
-                  Alert.alert(
-                    i18n.t("V9", { defaultValue: "Connection Error" }),
-                    i18n.t("STOP_OBSERVATION_FAILURE"),
-                  );
-                }
-              }
-
-              if (isDirty) {
-                await saveFormToDB(
-                  getValues(),
-                  feedbackFormRef.current?.getValues(),
-                  batchObservationState.guid,
-                  batchObservationState.location!.serverId!,
-                  batchObservationState.auditType,
-                );
-                await forceSendData();
-              } else {
-                await forceSendData();
-              }
-            } else {
-              Alert.alert(
-                i18n.t("V9", { defaultValue: "Connection Error" }),
-                i18n.t("STOP_OBSERVATION_FAILURE"),
-              );
-            }
+  const onStopPress = useCallback(async () => {
+    if (!batchObservationState.practiceMode) {
+      Alert.alert(
+        i18n.t("AG15", { defaultValue: "Confirmation" }),
+        i18n.t("STOP_OBSERVATION_CONFIRMATION"),
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
           },
+          {
+            text: "OK",
+            onPress: async () => {
+              const network = await NetInfo.fetch();
+              if (network.isInternetReachable) {
+                async function forceSendData() {
+                  try {
+                    const toSendData = await database
+                      .get<ToSendDatus>("to_send_data")
+                      .query(
+                        Q.where(
+                          "status",
+                          Q.notIn([SendStatus.SENT, SendStatus.DO_NOT_SEND]),
+                        ),
+                      )
+                      .fetch();
+                    await sendDataToServer(toSendData);
+                    resetRecordNavigationToSummary(navigation);
+                  } catch (e) {
+                    console.log("error while force sending data to server", e);
+                    Alert.alert(
+                      i18n.t("V9", { defaultValue: "Connection Error" }),
+                      i18n.t("STOP_OBSERVATION_FAILURE"),
+                    );
+                  }
+                }
+
+                if (isDirty) {
+                  await saveFormToDB(
+                    getValues(),
+                    feedbackFormRef.current?.getValues(),
+                    batchObservationState.guid,
+                    batchObservationState.location!.serverId!,
+                    batchObservationState.auditType,
+                    batchObservationState.practiceMode,
+                  );
+                  await forceSendData();
+                } else {
+                  await forceSendData();
+                }
+              } else {
+                Alert.alert(
+                  i18n.t("V9", { defaultValue: "Connection Error" }),
+                  i18n.t("STOP_OBSERVATION_FAILURE"),
+                );
+              }
+            },
+          },
+        ],
+        {
+          cancelable: true,
         },
-      ],
-      {
-        cancelable: true,
-      },
-    );
+      );
+    } else {
+      await saveFormToDB(
+        getValues(),
+        feedbackFormRef.current?.getValues(),
+        batchObservationState.guid,
+        batchObservationState.location!.serverId!,
+        batchObservationState.auditType,
+        batchObservationState.practiceMode,
+      );
+      resetRecordNavigationToSummary(navigation);
+    }
   }, [
     isDirty,
     errors,
     batchObservationState.guid,
     batchObservationState.location,
     batchObservationState.auditType,
+    batchObservationState.practiceMode,
   ]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {batchObservationState.practiceMode && (
+        <View style={styles.practiceModeContainer}>
+          <AntDesignIcon name="infocirlce" color={colors.cerulean} size={25} />
+          <RNPText variant="bodyLarge" style={styles.practiceNoteText}>
+            {i18n.t("P1", { defaultValue: "NOTE: You are on practice mode." })}
+          </RNPText>
+        </View>
+      )}
       <Controller
         render={({ field: { onChange, value } }) => (
           <WorkerDropdown

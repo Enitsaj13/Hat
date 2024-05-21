@@ -20,15 +20,6 @@ export default function Layout() {
         options={{ headerBackTitleVisible: false }}
       />
       <Stack.Screen
-        name="PracticeMode"
-        options={{
-          title: i18n.t("H6", {
-            defaultValue: "Practice Mode",
-          }),
-          headerBackTitleVisible: false,
-        }}
-      />
-      <Stack.Screen
         name="AuditSummary"
         options={{
           title: i18n.t("AH1", {

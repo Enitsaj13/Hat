@@ -290,6 +290,7 @@ export async function saveFormToDB(
   guid: string,
   locationServerId: number,
   auditTypeId: number,
+  practiceMode: boolean,
 ) {
   console.log("current form", mainForm);
   const moments: number[] = [];
@@ -398,7 +399,9 @@ export async function saveFormToDB(
       newToSendDatus.body = sendObservationDataRequest;
       newToSendDatus.url = "/mobile/save-observation";
       newToSendDatus.type = ToSendDatusType.OBSERVATION;
-      newToSendDatus.status = SendStatus.IDLE;
+      newToSendDatus.status = !practiceMode
+        ? SendStatus.IDLE
+        : SendStatus.DO_NOT_SEND;
       newToSendDatus.key = guid;
     });
   });
@@ -438,6 +441,7 @@ export function useObservationSubmit() {
         batchObservationState.guid,
         batchObservationState.location!.serverId!,
         batchObservationState.auditType,
+        batchObservationState.practiceMode,
       );
       setTimeout(() => {
         setBatchObservationState((prevState) => ({
@@ -452,21 +456,23 @@ export function useObservationSubmit() {
         "currentTargetOpportunities - 1",
         currentTargetOpportunities - 1,
       );
+
       if (currentTargetOpportunities - 1 > 0) {
-        Toast.show({
-          type: "success",
-          text1: i18n.t("AH4", {
-            defaultValue: "Saved in Device",
-          }),
-          text2: i18n.t("AG21", {
-            defaultValue: "This observation is saved on your device.",
-          }),
-          autoHide: true,
-          visibilityTime: 3000,
-        });
+        if (!batchObservationState.practiceMode) {
+          Toast.show({
+            type: "success",
+            text1: i18n.t("AH4", {
+              defaultValue: "Saved in Device",
+            }),
+            text2: i18n.t("AG21", {
+              defaultValue: "This observation is saved on your device.",
+            }),
+            autoHide: true,
+            visibilityTime: 3000,
+          });
+        }
         router.replace("/(app)/(tabs)/(one)/MainScreen");
-      } else {
-        // TODO trial mode
+      } else if (!batchObservationState.practiceMode) {
         Alert.alert(
           i18n.t("AG24", { defaultValue: "COMPLETED!" }),
           i18n.t("AG25", {
@@ -482,6 +488,8 @@ export function useObservationSubmit() {
             cancelable: false,
           },
         );
+      } else {
+        resetRecordNavigationToSummary(navigation);
       }
     },
     [
@@ -489,6 +497,7 @@ export function useObservationSubmit() {
       batchObservationState.guid,
       batchObservationState.auditType,
       batchObservationState.targetOpportunities,
+      batchObservationState.practiceMode,
     ],
   );
 }

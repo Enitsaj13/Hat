@@ -192,4 +192,15 @@ export const styles = createStyleSheet({
     marginTop: 10,
     marginBottom: 20,
   },
+  practiceModeContainer: {
+    flexDirection: "row",
+    backgroundColor: colors.babyBlue,
+    paddingVertical: 15,
+    width: "100%",
+    paddingHorizontal: 20,
+  },
+  practiceNoteText: {
+    color: colors.cerulean,
+    marginLeft: 10,
+  },
 });

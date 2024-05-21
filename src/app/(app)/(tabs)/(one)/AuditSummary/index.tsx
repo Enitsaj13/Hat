@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Alert, Pressable, ScrollView, Switch, Text, View } from "react-native";
-import { Feather as Icon } from "@expo/vector-icons";
+import {
+  AntDesign as AntDesignIcon,
+  Feather as Icon,
+} from "@expo/vector-icons";
 import { i18n, i18nOptions } from "@i18n/index";
 import { colors } from "@theme/index";
 import NoteModal from "@components/Notes";
@@ -24,6 +27,7 @@ import {
   useFeedbackSchemaFormRef,
 } from "@app/(app)/(tabs)/(one)/AuditSummary/schema";
 import Toast from "react-native-toast-message";
+import { Text as RNPText } from "react-native-paper";
 
 interface IAuditSummary {
   saved: number;
@@ -62,7 +66,7 @@ async function transformToSendDataToReport(toSendData: ToSendDatus[]) {
     const hcwStat = s.hcwStatus.get(body.hcw_title)!;
     s.hcwStatus.set(body.hcw_title, {
       ...hcwStat,
-      count: hcwStat!.count + 1,
+      count: (hcwStat?.count || 0) + 1,
     });
     if (body.hh_compliance !== "missed") {
       body.moment.forEach((m) => {
@@ -213,6 +217,14 @@ const AuditSummary = () => {
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator
     >
+      {batchObservationState.practiceMode && (
+        <View style={styles.practiceModeContainer}>
+          <AntDesignIcon name="infocirlce" color={colors.cerulean} size={25} />
+          <RNPText variant="bodyLarge" style={styles.practiceNoteText}>
+            {i18n.t("P1", { defaultValue: "NOTE: You are on practice mode." })}
+          </RNPText>
+        </View>
+      )}
       <View style={styles.rowContainer}>
         <Text style={styles.textTable}>
           {i18n.t("AH2", {
@@ -386,13 +398,16 @@ const AuditSummary = () => {
           </View>
           <View style={styles.countPercentContainer}>
             <Text style={styles.tableText}>
-              {i18n.formatNumber(hcwStat.count, i18nOptions.countFormatOptions)}
+              {i18n.formatNumber(
+                hcwStat?.count || 0,
+                i18nOptions.countFormatOptions,
+              )}
             </Text>
           </View>
           <View style={styles.countPercentContainer}>
             <Text style={styles.tableText}>
               {i18n.formatNumber(
-                (hcwStat.count / completed) * 100,
+                ((hcwStat?.count || 0) / completed) * 100,
                 i18nOptions.percentageFormatOptions,
               )}
               %

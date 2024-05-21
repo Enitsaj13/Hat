@@ -26,6 +26,7 @@ import { useCallback, useEffect } from "react";
 import { createBatchObservationGuid } from "@services/createBatchObservationGuid";
 import { showRetryAlert } from "@utils/showRetryAlert";
 import { AppSetting } from "@stores/appSetting";
+import { randomUUID } from "expo-crypto";
 
 interface IBatchObservationSchema {
   targetOpportunities: number;
@@ -98,7 +99,7 @@ function Component({ auditTypes, companyConfig, appSetting }: RecordProps) {
       try {
         const guid = await createBatchObservationGuid();
         setBatchObservationState((prev) => {
-          const newState = { ...prev, ...form, guid };
+          const newState = { ...prev, ...form, guid, practiceMode: false };
           console.log("newState after onBeginAuditPress", newState);
           return newState;
         });
@@ -113,6 +114,20 @@ function Component({ auditTypes, companyConfig, appSetting }: RecordProps) {
         console.log("error while call create batch endpoint", e);
         showRetryAlert();
       }
+    },
+    [],
+  );
+
+  const onTryPracticeModePress = useCallback(
+    (form: IBatchObservationSchema) => {
+      const guid = randomUUID();
+      setBatchObservationState((prev) => {
+        return { ...prev, ...form, guid, practiceMode: true };
+      });
+      router.navigate({
+        pathname: "/(app)/(tabs)/(one)/Locations/[serverId]",
+        params: { serverId: -1 },
+      });
     },
     [],
   );
@@ -225,13 +240,11 @@ function Component({ auditTypes, companyConfig, appSetting }: RecordProps) {
         )}
         {!appSetting?.disablePracticeMode && (
           <View style={styles.practiceButtonContainer}>
-            <Link href="/PracticeMode" asChild>
-              <Button mode="text" onPress={() => {}}>
-                <Text style={styles.practiceButton}>
-                  {i18n.t("TRY_ON_PRACTICE_MODE")}
-                </Text>
-              </Button>
-            </Link>
+            <Button mode="text" onPress={handleSubmit(onTryPracticeModePress)}>
+              <Text style={styles.practiceButton}>
+                {i18n.t("TRY_ON_PRACTICE_MODE")}
+              </Text>
+            </Button>
           </View>
         )}
       </View>
