@@ -13,7 +13,6 @@ import {
 } from "@services/changePassword";
 
 const ChangePassword = () => {
-
   const {
     control,
     reset,
@@ -21,8 +20,8 @@ const ChangePassword = () => {
     formState: { isLoading, isValid, isSubmitSuccessful },
   } = useForm<IChangePasswordSchema>({
     resolver: yupResolver(changePasswordSchema),
-    mode: 'onChange', // Validate on change
-    criteriaMode: 'all', // Show all validation errors
+    mode: "onChange", // Validate on change
+    criteriaMode: "all", // Show all validation errors
   });
 
   if (isSubmitSuccessful) {
@@ -224,10 +223,10 @@ const styles = createStyleSheet({
   },
   errorContainer: {
     backgroundColor: colors.textColor,
-    padding: 10
+    padding: 10,
   },
   errorText: {
     color: colors.red,
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });

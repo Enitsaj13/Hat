@@ -23,7 +23,6 @@ const passwordValidation = string()
   .matches(/\d/, i18n.t("PASSWORD_MUST_HAVE_NUMBER"))
   .matches(/[!@#$%^&*(),.?":{}|<>]/, i18n.t("PASSWORD_MUST_HAVE_SPECIAL_CHAR"));
 
-
 export const changePasswordSchema = object({
   currentPassword: string().required(
     i18n.t("AG32", {
@@ -32,8 +31,8 @@ export const changePasswordSchema = object({
   ),
   newPassword: passwordValidation,
   retypePassword: passwordValidation.oneOf(
-    [ref('newPassword')],
-    i18n.t("PASSWORD_MATCH")
+    [ref("newPassword")],
+    i18n.t("PASSWORD_MATCH"),
   ),
 });
 
