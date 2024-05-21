@@ -10,12 +10,14 @@ export interface UseBatchObservationState {
     serverId: number;
     name: string;
   };
+  practiceMode: boolean;
 }
 
 export const emptyBatchObservation: UseBatchObservationState = {
   guid: "",
   targetOpportunities: 0,
   auditType: 0,
+  practiceMode: false,
 };
 
 function useBatchObservationHolder() {
