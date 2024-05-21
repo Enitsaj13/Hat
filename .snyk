@@ -2,25 +2,4 @@
 version: v1.25.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-INFLIGHT-6095116:
-    - '*':
-        reason: >-
-          used in globe which in turn used in @expo/config-plugins which lives
-          only in development
-        created: 2024-03-18T10:11:45.445Z
-  SNYK-JS-TAR-6476909:
-    - '*':
-        reason: Used in @expo/cli@0.17.8 which lives in development only
-        expires: 2024-04-22T07:35:27.286Z
-        created: 2024-03-23T07:35:27.290Z
-  SNYK-JS-BRACES-6838727:
-    - '*':
-        reason: Used in @expo/metro-config which lives on development only
-        expires: 2024-06-15T12:48:30.251Z
-        created: 2024-05-16T12:48:30.258Z
-  SNYK-JS-MICROMATCH-6838728:
-      - '*':
-          reason: Used in @expo/metro-config which lives on development only
-          expires: 2024-06-15T12:48:30.251Z
-          created: 2024-05-16T12:48:30.258Z
 patch: {}
