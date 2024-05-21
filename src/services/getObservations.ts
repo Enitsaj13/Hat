@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 
 export interface RawDatus {
   id: number;
-  hcw_title: number;
+  hcw_title: string;
   moment1: string;
   moment2: string;
   moment3: string;

@@ -89,8 +89,8 @@ export function ObservationRecords() {
           </Text>
           <Text style={styles.text}>{data?.summary.total_opportunities}</Text>
         </View>
-        {data?.summary.hcw_opportunities.map((o) => (
-          <View style={styles.rowContainer}>
+        {data?.summary.hcw_opportunities.map((o, index) => (
+          <View style={styles.rowContainer} key={`observation-${index}`}>
             <View style={styles.hcwTypeContainer}>
               <Text style={styles.text}>{o.label}</Text>
               <Text style={styles.text}>{o.passed}</Text>

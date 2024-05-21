@@ -83,7 +83,10 @@ const ObservationItem = withObservables(
   (props: WithObservableProps) => ({
     worker: database
       .get<AppSetting>("workers")
-      .query(Q.where("serverId", props.data.hcw_title), Q.take(1))
+      .query(
+        Q.where("server_id", parseInt(props.data.hcw_title, 10)),
+        Q.take(1),
+      )
       .observe()
       .pipe(
         switchMap((workers) =>
