@@ -412,7 +412,15 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
 
   pt: {
@@ -829,7 +837,16 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter",
+    PASSWORD_MATCH: "Passwords must match",
+>>>>>>> Stashed changes
   },
 
   fr: {
@@ -1247,7 +1264,15 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
 
   de: {
@@ -1666,7 +1691,15 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
 
   br: {
@@ -2083,7 +2116,15 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
 
   es: {
@@ -2501,7 +2542,15 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
   id: {
     A1: "Pendahuluan",
@@ -2917,7 +2966,15 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
 
   cs: {
@@ -3333,7 +3390,15 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
 
   th: {
@@ -3747,6 +3812,14 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+<<<<<<< Updated upstream
     TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
+=======
+    PASSWORD_LENGTH: "Password must be a minumum of 8 characters", // TODO
+    PASSWORD_MUST_HAVE_NUMBER: "Password must contain at least one number",
+    PASSWORD_MUST_HAVE_LOWERCASE: "Password must contain at least one lowercase",
+    PASSWORD_MUST_HAVE_UPPERCASE: "Password must contain at least one uppercase",
+    PASSWORD_MUST_HAVE_SPECIAL_CHAR: "Password must contain at least one special chararter"
+>>>>>>> Stashed changes
   },
 };

@@ -13,6 +13,7 @@ import {
 } from "@services/changePassword";
 
 const ChangePassword = () => {
+
   const {
     control,
     reset,
@@ -20,6 +21,8 @@ const ChangePassword = () => {
     formState: { isLoading, isValid, isSubmitSuccessful },
   } = useForm<IChangePasswordSchema>({
     resolver: yupResolver(changePasswordSchema),
+    mode: 'onChange', // Validate on change
+    criteriaMode: 'all', // Show all validation errors
   });
 
   if (isSubmitSuccessful) {
@@ -63,27 +66,32 @@ const ChangePassword = () => {
           field: { onChange, onBlur, value },
           fieldState: { invalid, error },
         }) => (
-          <TextInput
-            label={
-              i18n.t("Q8", { defaultValue: "Current Password" }) +
-              (invalid ? `(${error?.message})` : "")
-            }
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            error={invalid}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            secureTextEntry
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
-          />
+          <>
+            <TextInput
+              label={i18n.t("Q8", { defaultValue: "Current Password" })}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              theme={{
+                colors: {
+                  placeholder: colors.steelGrey,
+                  primary: colors.steelGrey,
+                },
+              }}
+              secureTextEntry
+              underlineColor={colors.whiteSmoke}
+              underlineColorAndroid={colors.whiteSmoke}
+              textColor={colors.midNight}
+              contentStyle={styles.textInput}
+            />
+            {invalid && (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>
+                  {invalid ? ` (${error?.message})` : ""}
+                </Text>
+              </View>
+            )}
+          </>
         )}
         name="currentPassword"
         control={control}
@@ -93,27 +101,32 @@ const ChangePassword = () => {
           field: { onChange, onBlur, value },
           fieldState: { invalid, error },
         }) => (
-          <TextInput
-            label={
-              i18n.t("Q9", { defaultValue: "New Password" }) +
-              (invalid ? `(${error?.message})` : "")
-            }
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            error={invalid}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            secureTextEntry
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
-          />
+          <>
+            <TextInput
+              label={i18n.t("Q9", { defaultValue: "New Password" })}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              theme={{
+                colors: {
+                  placeholder: colors.steelGrey,
+                  primary: colors.steelGrey,
+                },
+              }}
+              secureTextEntry
+              underlineColor={colors.whiteSmoke}
+              underlineColorAndroid={colors.whiteSmoke}
+              textColor={colors.midNight}
+              contentStyle={styles.textInput}
+            />
+            {invalid === true ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>
+                  {invalid ? ` (${error?.message})` : ""}
+                </Text>
+              </View>
+            ) : null}
+          </>
         )}
         name="newPassword"
         control={control}
@@ -123,27 +136,32 @@ const ChangePassword = () => {
           field: { onChange, onBlur, value },
           fieldState: { invalid, error },
         }) => (
-          <TextInput
-            label={
-              i18n.t("Q10", { defaultValue: "Retype Password" }) +
-              (invalid ? `(${error?.message})` : "")
-            }
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            error={invalid}
-            theme={{
-              colors: {
-                placeholder: colors.steelGrey,
-                primary: colors.steelGrey,
-              },
-            }}
-            secureTextEntry
-            underlineColor={colors.whiteSmoke}
-            underlineColorAndroid={colors.whiteSmoke}
-            textColor={colors.midNight}
-            contentStyle={styles.textInput}
-          />
+          <>
+            <TextInput
+              label={i18n.t("Q10", { defaultValue: "Retype Password" })}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              theme={{
+                colors: {
+                  placeholder: colors.steelGrey,
+                  primary: colors.steelGrey,
+                },
+              }}
+              secureTextEntry
+              underlineColor={colors.whiteSmoke}
+              underlineColorAndroid={colors.whiteSmoke}
+              textColor={colors.midNight}
+              contentStyle={styles.textInput}
+            />
+            {invalid && (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>
+                  {invalid ? ` (${error?.message})` : ""}
+                </Text>
+              </View>
+            )}
+          </>
         )}
         name="retypePassword"
         control={control}
@@ -204,4 +222,12 @@ const styles = createStyleSheet({
     paddingHorizontal: 20,
     paddingVertical: 2,
   },
+  errorContainer: {
+    backgroundColor: colors.textColor,
+    padding: 10
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: 16
+  }
 });

@@ -1,8 +1,10 @@
 import { i18n } from "@i18n/index";
-import { object, string } from "yup";
+import { object, string, ref } from "yup";
 
 import { BaseResponse } from "../types";
 import { axiosInstance } from "@services/axios";
+import { database } from "@stores/index";
+
 
 export interface IChangePasswordSchema {
   currentPassword: string;
@@ -10,21 +12,29 @@ export interface IChangePasswordSchema {
   retypePassword: string;
 }
 
+const passwordValidation = string()
+  .required(
+    i18n.t("AG32", {
+      defaultValue: "Required",
+    }),
+  )
+  .min(8, i18n.t("PASSWORD_LENGTH"))
+  .matches(/[a-z]/, i18n.t("PASSWORD_MUST_HAVE_LOWERCASE"))
+  .matches(/[A-Z]/, i18n.t("PASSWORD_MUST_HAVE_UPPERCASE"))
+  .matches(/\d/, i18n.t("PASSWORD_MUST_HAVE_NUMBER"))
+  .matches(/[!@#$%^&*(),.?":{}|<>]/, i18n.t("PASSWORD_MUST_HAVE_SPECIAL_CHAR"));
+
+
 export const changePasswordSchema = object({
   currentPassword: string().required(
     i18n.t("AG32", {
       defaultValue: "Required",
     }),
   ),
-  newPassword: string().required(
-    i18n.t("AG32", {
-      defaultValue: "Required",
-    }),
-  ),
-  retypePassword: string().required(
-    i18n.t("AG32", {
-      defaultValue: "Required",
-    }),
+  newPassword: passwordValidation,
+  retypePassword: passwordValidation.oneOf(
+    [ref('newPassword')],
+    i18n.t("AG36", { defaultValue: "Passwords must match" })
   ),
 });
 

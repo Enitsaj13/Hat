@@ -103,6 +103,8 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       const operations = [];
       const users = await database.get<User>("users").query(Q.take(1)).fetch();
 
+      console.log("TAE KA USER", users)
+
       if (users.length === 0) {
         operations.push(
           database
@@ -151,9 +153,9 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       e.code === "ERR_BAD_REQUEST"
         ? i18n.t("INVALID_CREDENTIALS")
         : i18n.t("ADD13", {
-            defaultValue:
-              "Login: An error occurred while processing, Please try again.",
-          });
+          defaultValue:
+            "Login: An error occurred while processing, Please try again.",
+        });
     return {
       status: LoginStatus.FAILED,
       message,
