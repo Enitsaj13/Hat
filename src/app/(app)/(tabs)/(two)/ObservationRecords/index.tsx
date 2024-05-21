@@ -28,18 +28,18 @@ export function ObservationRecords() {
   });
   formRef.current = form;
 
-  const { watch, control } = form;
+  const { watch } = form;
   const dateFrom = watch("dateFrom");
   const dateTo = watch("dateTo");
 
   // TODO issue with RHF
   // const location = watch("location");
-  const [location, setLocation] = useSharedLocation();
+  const [location] = useSharedLocation();
 
   const hcwTitle = watch("hcwTitle");
   const auditor = watch("auditor");
 
-  const { data, isLoading, error } = useQuery(
+  const { data, isLoading } = useQuery(
     ["userTargetSettings", dateFrom, dateTo, location, hcwTitle, auditor],
     () =>
       getObservations({

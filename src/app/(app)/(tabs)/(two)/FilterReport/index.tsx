@@ -76,7 +76,7 @@ const Component = ({ user }: FilterReportProps) => {
                 maxDate={new Date()}
               />
             )}
-            name={"dateTo"}
+            name="dateTo"
             control={control}
           />
         </View>
@@ -109,7 +109,7 @@ const Component = ({ user }: FilterReportProps) => {
                   onOptionSelected={onChange}
                 />
               )}
-              name={"auditor"}
+              name="auditor"
               control={control}
             />
           </View>
@@ -125,7 +125,7 @@ const Component = ({ user }: FilterReportProps) => {
                 onWorkerSelected={onChange}
               />
             )}
-            name={"hcwTitle"}
+            name="hcwTitle"
             control={control}
           />
         </View>
