@@ -49,6 +49,12 @@ This project uses **local EAS** to build the project.
 
 1. In _.env_ or _.env.qas_ file, change the url to the correct value. note that the `/api` should always be the suffix
 2. Run `npm run prebuild:clean` to ensure that the expo configurations are reflected to the app
+3. Install the latest EAS CLI by running `npm install -g eas-cli`.
+4. Log in to your Expo Account run this command `eas-login`.
+5. Using your browser, open the `https://expo.dev` 
+6. Click "Project" at the sidebar then click the "+ Create a Project" button.
+7. Enter 'Hat' as the display name, then click Create.
+8. After the project is created, run the command that appears on the screen in the terminal: `eas init --id "uuid-you-see-from-instructions"`.
 
 ### Android build
 
@@ -78,8 +84,8 @@ This project uses **local EAS** to build the project.
 7. Log in to your Expo Account run this command `eas-login`.
 8. Using your browser, open the `https://expo.dev` 
 9. Click "Project" at the sidebar then click the "+ Create a Project" button.
-9. Enter 'Hat' as the display name, then click Create.
-10. After the project is created, run the command that appears on the screen in the terminal: `eas init --id "uuid-you-see-from-instructions"`.
+10. Enter 'Hat' as the display name, then click Create.
+11. After the project is created, run the command that appears on the screen in the terminal: `eas init --id "uuid-you-see-from-instructions"`.
 
 ### Android build
 
