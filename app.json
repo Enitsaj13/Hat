@@ -53,8 +53,7 @@
           }
         }
       ],
-      "expo-secure-store",
-      "expo-font"
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
