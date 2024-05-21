@@ -94,6 +94,24 @@ export default function Layout() {
         name="Locations/[serverId]"
         options={{ headerBackTitleVisible: false }}
       />
+      <Stack.Screen
+        name="FAQ"
+        options={{
+          headerBackTitleVisible: false,
+          title: i18n.t("AI9", {
+            defaultValue: "FAQ",
+          }),
+        }}
+      />
+      <Stack.Screen
+        name="WHOMy5MomentsForHandHygiene"
+        options={{
+          title: i18n.t("K4", {
+            defaultValue: 'WHO - "My 5 Moments for Hand Hygiene"',
+          }),
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack>
   );
 }

@@ -32,7 +32,6 @@ export const styles = createStyleSheet({
   textRow: {
     fontSize: 14,
     color: colors.textColor,
-    marginHorizontal: 14,
     textAlign: "center",
   },
   countPercentTitleContainer: {
@@ -76,7 +75,8 @@ export const styles = createStyleSheet({
   },
   complianceDetailsContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    paddingHorizontal: 13,
     marginTop: 14,
     width: "100%",
   },

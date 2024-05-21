@@ -59,7 +59,7 @@ const Component = ({ user }: FilterReportProps) => {
                 maxDate={dateTo}
               />
             )}
-            name={"dateFrom"}
+            name="dateFrom"
             control={control}
           />
         </View>
