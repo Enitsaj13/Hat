@@ -25,13 +25,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect } from "react";
 import { createBatchObservationGuid } from "@services/createBatchObservationGuid";
 import { showRetryAlert } from "@utils/showRetryAlert";
+import { AppSetting } from "@stores/appSetting";
 
 interface IBatchObservationSchema {
   targetOpportunities: number;
   auditType?: number;
 }
 
-function Component({ auditTypes, companyConfig }: RecordProps) {
+function Component({ auditTypes, companyConfig, appSetting }: RecordProps) {
   const { styles } = useStyles(stylesheet);
 
   const validationSchema = object({
@@ -222,15 +223,17 @@ function Component({ auditTypes, companyConfig }: RecordProps) {
             </View>
           </View>
         )}
-        <View style={styles.practiceButtonContainer}>
-          <Link href="/PracticeMode" asChild>
-            <Button mode="text" onPress={() => {}}>
-              <Text style={styles.practiceButton}>
-                Try on {i18n.t("H6", { defaultValue: "Practice Mode" })}
-              </Text>
-            </Button>
-          </Link>
-        </View>
+        {!appSetting?.disablePracticeMode && (
+          <View style={styles.practiceButtonContainer}>
+            <Link href="/PracticeMode" asChild>
+              <Button mode="text" onPress={() => {}}>
+                <Text style={styles.practiceButton}>
+                  {i18n.t("TRY_ON_PRACTICE_MODE")}
+                </Text>
+              </Button>
+            </Link>
+          </View>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -301,6 +304,7 @@ const stylesheet = createStyleSheet({
 interface ObservableProps {
   auditTypes: AuditType[];
   companyConfig?: CompanyConfig | undefined;
+  appSetting: AppSetting;
 }
 
 const getObservables = (props: ObservableProps) => ({
@@ -314,13 +318,22 @@ const getObservables = (props: ObservableProps) => ({
         companyConfig.length > 0 ? companyConfig[0].observe() : of(null),
       ),
     ),
+  appSetting: database
+    .get<AppSetting>("app_settings")
+    .query(Q.take(1))
+    .observe()
+    .pipe(
+      switchMap((appSettings) =>
+        appSettings.length > 0 ? appSettings[0].observe() : of(null),
+      ),
+    ),
 });
 
 interface RecordProps
   extends ExtractedObservables<ReturnType<typeof getObservables>> {}
 
 const Record = withObservables(
-  ["auditTypes", "companyConfig"],
+  ["auditTypes", "companyConfig", "appSetting"],
   getObservables,
 )(Component);
 

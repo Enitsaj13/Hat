@@ -32,4 +32,11 @@ export class AppSetting extends Model {
       appSetting.isIntroductionViewed = isIntroductionViewed;
     });
   }
+
+  @writer
+  async updateDisablePracticeMode(disablePracticeMode: boolean) {
+    await this.update((appSetting) => {
+      appSetting.disablePracticeMode = disablePracticeMode;
+    });
+  }
 }

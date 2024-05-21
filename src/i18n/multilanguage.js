@@ -412,6 +412,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 
   pt: {
@@ -828,6 +829,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 
   fr: {
@@ -1245,6 +1247,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 
   de: {
@@ -1663,6 +1666,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 
   br: {
@@ -2079,6 +2083,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 
   es: {
@@ -2496,6 +2501,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
   id: {
     A1: "Pendahuluan",
@@ -2911,6 +2917,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 
   cs: {
@@ -3326,6 +3333,7 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 
   th: {
@@ -3739,5 +3747,6 @@ export const translations = {
     SEARCH_PLACEHOLDER: "Search...", // TODO
     NO_LOCATION_SELECTED: "No location selected", // TODO
     RESET: "Reset", // TODO
+    TRY_ON_PRACTICE_MODE: "Try on Practice Mode", // TODO
   },
 };

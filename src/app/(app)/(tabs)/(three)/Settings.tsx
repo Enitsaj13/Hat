@@ -40,13 +40,6 @@ const Component = ({ user, appSetting }: SettingsProps) => {
   const { styles: dropdownStyles } = useStyles(dropdownStylesheet);
   const { signOut } = useSession();
 
-  const [mode, setMode] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = (value: boolean) => {
-    setMode(value);
-    setIsEnabled((previousState) => !previousState);
-  };
-
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const renderBackdrop = useCallback(
@@ -316,21 +309,36 @@ const Component = ({ user, appSetting }: SettingsProps) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {}} style={styles.listItemContainer}>
+        <TouchableOpacity
+          onPress={() =>
+            appSetting.updateDisablePracticeMode(
+              !appSetting.disablePracticeMode,
+            )
+          }
+          style={styles.listItemContainer}
+        >
           <List.Item
             title={i18n.t("H6", { defaultValue: "Practice Mode" })}
             titleStyle={styles.settingsText}
             right={() => (
               <View style={styles.switchContainer}>
                 <Text style={styles.switchTitle}>
-                  {`${mode === true ? i18n.t("SHOW") : i18n.t("HIDE")}`}
+                  {`${appSetting.disablePracticeMode ? i18n.t("HIDE") : i18n.t("SHOW")}`}
                 </Text>
                 <Switch
                   trackColor={{ true: colors.bgColor }}
-                  thumbColor={isEnabled ? colors.lilyWhite : colors.textColor}
+                  thumbColor={
+                    appSetting.disablePracticeMode
+                      ? colors.textColor
+                      : colors.lilyWhite
+                  }
                   ios_backgroundColor={colors.steelGrey}
-                  value={mode}
-                  onValueChange={toggleSwitch}
+                  value={!appSetting.disablePracticeMode}
+                  onValueChange={async (v) =>
+                    appSetting.updateDisablePracticeMode(
+                      !appSetting.disablePracticeMode,
+                    )
+                  }
                 />
               </View>
             )}
