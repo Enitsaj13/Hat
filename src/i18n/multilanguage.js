@@ -421,7 +421,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 
   pt: {
@@ -847,7 +847,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 
   fr: {
@@ -1274,7 +1274,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 
   de: {
@@ -1702,7 +1702,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 
   br: {
@@ -2128,7 +2128,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 
   es: {
@@ -2555,7 +2555,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
   id: {
     A1: "Pendahuluan",
@@ -2980,7 +2980,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 
   cs: {
@@ -3405,7 +3405,7 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 
   th: {
@@ -3828,6 +3828,6 @@ export const translations = {
       "Password must contain at least one uppercase",
     PASSWORD_MUST_HAVE_SPECIAL_CHAR:
       "Password must contain at least one special character",
-    PASSWORD_MUST_MATCH: "Password must match"
+    PASSWORD_MUST_MATCH: "Password must match",
   },
 };
