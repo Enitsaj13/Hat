@@ -1,6 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
 import { field, text, writer } from "@nozbe/watermelondb/decorators";
-
 export class User extends Model {
   static table = "users";
 
@@ -22,10 +21,20 @@ export class User extends Model {
   // @ts-expect-error
   @text("group_code") groupCode: string;
 
+  // @ts-expect-error
+  @text("password") password: string;
+
   @writer
   async updateUserHasAcceptedAppPrivacy(hasAcceptedAppPrivacy: boolean) {
     await this.update((user) => {
       user.hasAcceptedAppPrivacy = hasAcceptedAppPrivacy;
+    });
+  }
+
+  @writer
+  async updatePassword(newPassword: string) {
+    await this.update((user) => {
+      user.password = newPassword;
     });
   }
 }

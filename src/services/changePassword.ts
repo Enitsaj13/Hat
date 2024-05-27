@@ -3,12 +3,23 @@ import { object, string, ref } from "yup";
 
 import { BaseResponse } from "../types";
 import { axiosInstance } from "@services/axios";
-import { database } from "@stores/index";
+import axios from "axios/index";
 
 export interface IChangePasswordSchema {
   currentPassword: string;
   newPassword: string;
   retypePassword: string;
+}
+
+export enum ChangePasswordStatus {
+  SUCCESS,
+  FAILED,
+  INCORRECT_CURRENT_PASSWORD,
+}
+
+export interface ChangePasswordResult {
+  status: ChangePasswordStatus;
+  message?: string;
 }
 
 const passwordValidation = string()
@@ -38,15 +49,24 @@ export const changePasswordSchema = object({
 
 export async function changePassword(
   formData: IChangePasswordSchema,
-): Promise<BaseResponse> {
-  await changePasswordSchema.validate(formData); // defensive programming to ensure users of this function does not pass invalid credentials
-  const url = `${process.env.EXPO_PUBLIC_API_URL}/mobile/change-password`;
-  const toSend = {
-    current_password: formData.currentPassword,
-    new_password: formData.newPassword,
-    retype_password: formData.retypePassword,
-  };
-  console.log("toSend", toSend);
-  const result = await axiosInstance.post<BaseResponse>(url, toSend);
-  return result.data;
+): Promise<ChangePasswordResult | undefined> {
+  try {
+    await changePasswordSchema.validate(formData); // defensive programming to ensure users of this function does not pass invalid credentials
+
+    const url = `${process.env.EXPO_PUBLIC_API_URL}/mobile/change-password`;
+    const toSend = {
+      current_password: formData.currentPassword,
+      new_password: formData.newPassword,
+      retype_password: formData.retypePassword,
+    };
+    await axiosInstance.post<BaseResponse>(url, toSend);
+    return { status: ChangePasswordStatus.SUCCESS };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return { status: ChangePasswordStatus.INCORRECT_CURRENT_PASSWORD };
+    } else {
+      const errorMessage = (error as Error).message;
+      return { status: ChangePasswordStatus.FAILED, message: errorMessage };
+    }
+  }
 }

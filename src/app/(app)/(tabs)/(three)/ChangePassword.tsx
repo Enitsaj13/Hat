@@ -10,6 +10,7 @@ import {
   changePassword,
   changePasswordSchema,
   IChangePasswordSchema,
+  ChangePasswordStatus
 } from "@services/changePassword";
 
 const ChangePassword = () => {
@@ -20,8 +21,6 @@ const ChangePassword = () => {
     formState: { isLoading, isValid, isSubmitSuccessful },
   } = useForm<IChangePasswordSchema>({
     resolver: yupResolver(changePasswordSchema),
-    mode: "onChange", // Validate on change
-    criteriaMode: "all", // Show all validation errors
   });
 
   if (isSubmitSuccessful) {
@@ -30,27 +29,43 @@ const ChangePassword = () => {
 
   const submitForm = useCallback(async (form: IChangePasswordSchema) => {
     try {
-      await changePassword(form);
-      Alert.alert(
-        i18n.t("R3", { defaultValue: "Successful" }),
-        i18n.t("ADD12", { defaultValue: "" }),
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              reset({
-                currentPassword: "",
-                newPassword: "",
-                retypePassword: "",
-              });
+      const result = await changePassword(form);
+      if (result && result.status === ChangePasswordStatus.SUCCESS) {
+        Alert.alert(
+          i18n.t("R3", { defaultValue: "Successful" }),
+          i18n.t("ADD12", { defaultValue: "" }),
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                reset({
+                  currentPassword: "",
+                  newPassword: "",
+                  retypePassword: "",
+                });
+              },
             },
-          },
-        ],
-      );
+          ],
+        );
+      } else if (result && result.status === ChangePasswordStatus.INCORRECT_CURRENT_PASSWORD) {
+        Alert.alert(
+          'Failed',
+          'Incorrect Password',
+        );
+      } else {
+        Alert.alert(
+          'Failed',
+          i18n.t("ADD13", { defaultValue: "An error occurred while processing. Please try again." }),
+        );
+      }
     } catch (e) {
-      console.log("", e);
+      console.log("Error:", e);
+      Alert.alert(
+        'Failed',
+        i18n.t("ADD13", { defaultValue: "An error occurred while processing. Please try again." }),
+      );
     }
-  }, []);
+  }, [reset]);
 
   return (
     <View style={styles.container}>

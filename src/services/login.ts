@@ -151,9 +151,9 @@ export async function login(credentials: ILoginSchema): Promise<LoginResult> {
       e.code === "ERR_BAD_REQUEST"
         ? i18n.t("INVALID_CREDENTIALS")
         : i18n.t("ADD13", {
-            defaultValue:
-              "Login: An error occurred while processing, Please try again.",
-          });
+          defaultValue:
+            "Login: An error occurred while processing, Please try again.",
+        });
     return {
       status: LoginStatus.FAILED,
       message,
